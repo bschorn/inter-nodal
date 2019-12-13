@@ -50,7 +50,7 @@ public class ModelFieldTypeImpl extends ModelResolvableImpl implements ActiveMod
     }
 
     @Override
-    public void resolve() throws ActiveModel.UnresolveModeldDependency {
+    public void resolve() throws ActiveModel.UnresolveModelDependency {
 
         this.acceptType0();
     }

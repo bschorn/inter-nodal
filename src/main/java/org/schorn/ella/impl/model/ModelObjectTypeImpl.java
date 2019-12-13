@@ -80,7 +80,7 @@ public class ModelObjectTypeImpl extends ModelResolvableImpl implements ActiveMo
     }
 
     @Override
-    public void resolve() throws ActiveModel.UnresolveModeldDependency {
+    public void resolve() throws ActiveModel.UnresolveModelDependency {
 
     }
 

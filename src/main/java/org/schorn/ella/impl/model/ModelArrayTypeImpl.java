@@ -48,7 +48,7 @@ public class ModelArrayTypeImpl extends ModelResolvableImpl implements ActiveMod
     }
 
     @Override
-    public void resolve() throws ActiveModel.UnresolveModeldDependency {
+    public void resolve() throws ActiveModel.UnresolveModelDependency {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

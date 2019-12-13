@@ -79,6 +79,13 @@ public class ActiveSchema {
         return list;
     }
 
+    public enum Flags {
+        DataCategory,
+        DataPurpose,
+        DataLevel;
+
+    }
+
     /**
      *
      */
@@ -94,6 +101,7 @@ public class ActiveSchema {
         Constraints('!', Constraints.class, false, null, null),
         Member('%', Member.class, false, new MemberFormats.Reformat(), new MemberFormats.Meta()),
         Parent('-', Parent.class, false, null, null),
+        Attributes('F', Type.class, false, null, null),
         Unset('x', Type.class, false, null, null);
 
         private final Character operator;

@@ -156,7 +156,7 @@ public class ObjectTypeFormats {
             Map<String, Object> map = new HashMap<>();
             map.put("name", objectType.name());
             if (objectType.parents() != null && !objectType.parents().isEmpty()) {
-                map.put("object_role", objectType.parents().get(0).parentName().toLowerCase());
+                map.put("parent_type", objectType.parents().get(0).parentName());
             }
             List<Map> memberMaps = new ArrayList<>();
             for (ActiveSchema.Member member : objectType.members()) {

@@ -63,7 +63,7 @@ public class ModelMemberImpl extends ModelResolvableImpl implements ActiveModel.
     }
 
     @Override
-    public void resolve() throws ActiveModel.UnresolveModeldDependency {
+    public void resolve() throws ActiveModel.UnresolveModelDependency {
 
     }
 

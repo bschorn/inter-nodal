@@ -3,6 +3,7 @@
 lexer grammar SpecLexer;
 
 // Sections
+ATTRIBUTES:             'Attributes';
 FIELD_TYPES:            'FieldTypes';
 VALUE_TYPES:            'ValueTypes';
 FRAGMENTS:              'Fragments';
@@ -12,6 +13,9 @@ ARRAY_TYPES:            'ArrayTypes';
 MEMBERS:                'Members';
 PARENTS:                'Parents';
 DATA_TYPE:              'DataType';
+DATA_CATEGORY:          'DataCategory';
+DATA_PURPOSE:           'DataPurpose';
+DATA_LEVEL:             'DataLevel';
 FIELD_TYPE:             'FieldType';
 VALUE_TYPE:             'ValueType';
 FRAGMENT:               'Fragment';

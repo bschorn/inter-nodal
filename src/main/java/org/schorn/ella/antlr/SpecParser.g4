@@ -61,6 +61,7 @@ attrCreation
 
 addTypeToAttr
     : 'add' '(' typeQualifier '.' typeNameRef ( ')' | ',' attributeAttributes ')' )
+    | 'add' '(' flagQualifier '.' enumID ')'
     ;
 
 attributeAttributes
@@ -85,6 +86,7 @@ typeFlavor
 attrFlavor
     : 'Members'
     | 'Parents'
+    | 'Attributes'
     ;
 
 typeQualifier
@@ -94,6 +96,12 @@ typeQualifier
     | 'Template'
     | 'ObjectType'
     | 'ArrayType'
+    ;
+
+flagQualifier
+    : 'DataCategory'
+    | 'DataPurpose'
+    | 'DataLevel'
     ;
 
 enumQualifier

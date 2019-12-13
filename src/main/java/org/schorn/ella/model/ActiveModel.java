@@ -99,19 +99,19 @@ public interface ActiveModel {
     }
 
     public enum DataCategory {
-        MASTER,
-        TRANSACTIONAL,
-        REPORTING;
+        FACTS,
+        ACTS,
+        REACTS;
     }
 
     public enum DataPurpose {
-        ENTITY(DataCategory.MASTER), // Party, Account, Product
-        ASSOCIATION(DataCategory.MASTER), // PartyGroup(Customers,Employees)
-        REFERENCE(DataCategory.MASTER), // Side(Buy,Short,Cover,Sell), MarketStrategy(Long,Short)
-        REQUEST(DataCategory.TRANSACTIONAL), // Order,
-        EXECUTION(DataCategory.TRANSACTIONAL), // Fill, Journal
-        REALTIME(DataCategory.REPORTING), // RTBalance, RTPosition
-        SNAPSHOT(DataCategory.REPORTING); // SODBalance, EODPosition, Ledger
+        ENTITY(DataCategory.FACTS), // Party, Account, Product
+        ASSOCIATION(DataCategory.FACTS), // PartyGroup(Customers,Employees)
+        REFERENCE(DataCategory.FACTS), // Side(Buy,Short,Cover,Sell), MarketStrategy(Long,Short)
+        REQUEST(DataCategory.ACTS), // Order,
+        EXECUTION(DataCategory.ACTS), // Fill, Journal
+        REALTIME(DataCategory.REACTS), // RTBalance, RTPosition
+        SNAPSHOT(DataCategory.REACTS); // SODBalance, EODPosition, Ledger// SODBalance, EODPosition, Ledger// SODBalance, EODPosition, Ledger// SODBalance, EODPosition, Ledger
 
         DataCategory category;
 
@@ -124,11 +124,23 @@ public interface ActiveModel {
         }
     }
 
-    public class UnresolveModeldDependency extends Exception {
+    public enum DataLevel {
+        UNIVERSAL, // conversion factor for miles to kilometers
+        INDUSTRY, // holidays
+        ENTERPRISE, // customers, general ledger
+        DIVISION, // journal
+        DEPARTMENT,
+        LOB,
+        APPLICATION,
+        META,
+        UNKNOWN;
+    }
+
+    public class UnresolveModelDependency extends Exception {
 
         private final ModelRole role;
         private final String name;
-        public UnresolveModeldDependency(String message, ModelRole role, String name) {
+        public UnresolveModelDependency(String message, ModelRole role, String name) {
             super(message);
             this.role = role;
             this.name = name;
@@ -155,7 +167,7 @@ public interface ActiveModel {
 
     interface ModelResolvable {
 
-        void resolve() throws UnresolveModeldDependency;
+        void resolve() throws UnresolveModelDependency;
 
         boolean isResolved();
     }

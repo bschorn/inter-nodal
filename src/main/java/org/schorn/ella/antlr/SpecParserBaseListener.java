@@ -232,6 +232,18 @@ public class SpecParserBaseListener implements SpecParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFlagQualifier(SpecParser.FlagQualifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFlagQualifier(SpecParser.FlagQualifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterEnumQualifier(SpecParser.EnumQualifierContext ctx) { }
 	/**
 	 * {@inheritDoc}

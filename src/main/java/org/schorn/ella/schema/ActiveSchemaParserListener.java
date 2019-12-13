@@ -104,6 +104,7 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
                 }
             } catch (Exception ex) {
                 LGR.error(ex.getMessage());
+                ex.printStackTrace();
             }
         }
     }
@@ -261,10 +262,18 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
 
     private void doAttrCreation(SpecParser.AttrCreationContext ctx) {
         this.currentAttrType = ActiveSchema.Roles.parse(ctx.attrFlavor().getText());
-        //LGR.debug("doAttrCreation() - create subType: '{}' for '{}.{}'",this.currentAttrType.name(), this.currentType.name(), this.currentTypeNameDef);
+        LGR.debug("doAttrCreation() - create subType: '{}' for '{}.{}'", this.currentAttrType.name(), this.currentType.name(), this.currentTypeNameDef);
         for (SpecParser.AddTypeToAttrContext atctx : ctx.addTypeToAttr()) {
-            doAddTypeToAttr(atctx);
+            if (atctx.typeQualifier() != null) {
+                doAddTypeToAttr(atctx);
+            } else if (atctx.flagQualifier() != null) {
+                doAddAttrToType(atctx);
+            }
         }
+    }
+    private void doAddAttrToType(SpecParser.AddTypeToAttrContext ctx) {
+        ActiveSchema.Flags flagType = ActiveSchema.Flags.valueOf(ctx.flagQualifier().getText());
+
     }
 
     private void doAddTypeToAttr(SpecParser.AddTypeToAttrContext ctx) {
