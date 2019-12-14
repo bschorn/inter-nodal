@@ -18,9 +18,9 @@ public class SpecParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		ATTRIBUTES=1, FIELD_TYPES=2, VALUE_TYPES=3, FRAGMENTS=4, OBJECT_TYPES=5, 
-		TEMPLATES=6, ARRAY_TYPES=7, MEMBERS=8, PARENTS=9, DATA_TYPE=10, DATA_CATEGORY=11, 
-		DATA_PURPOSE=12, DATA_LEVEL=13, FIELD_TYPE=14, VALUE_TYPE=15, FRAGMENT=16, 
-		OBJECT_TYPE=17, TEMPLATE=18, ARRAY_TYPE=19, MEMBER=20, PARENT=21, BOND_TYPE=22, 
+		BASE_TYPES=6, ARRAY_TYPES=7, MEMBERS=8, PARENTS=9, DATA_TYPE=10, OBJECT_CATEGORY=11, 
+		OBJECT_PURPOSE=12, OBJECT_LEVEL=13, FIELD_TYPE=14, VALUE_TYPE=15, FRAGMENT=16, 
+		OBJECT_TYPE=17, BASE_TYPE=18, ARRAY_TYPE=19, MEMBER=20, PARENT=21, BOND_TYPE=22, 
 		CMD_ACTION_READ=23, CMD_OBJECT_FILE=24, DEFINE=25, ADD=26, MAX=27, MIN=28, 
 		TYPE_NAME_DEF=29, ENUM_ID=30, TYPE_NAME_REF=31, TEXT_LENGTH=32, DECIMAL_LITERAL=33, 
 		FLOAT_LITERAL=34, CHAR_LITERAL=35, TEXT_PATTERN=36, STRING_LITERAL=37, 
@@ -33,7 +33,7 @@ public class SpecParser extends Parser {
 		RULE_typeAttribute = 4, RULE_parameters = 5, RULE_parameter = 6, RULE_command = 7, 
 		RULE_cmdPath = 8, RULE_listOfValues = 9, RULE_listValue = 10, RULE_attrCreation = 11, 
 		RULE_addTypeToAttr = 12, RULE_attributeAttributes = 13, RULE_attributeAttribute = 14, 
-		RULE_typeFlavor = 15, RULE_attrFlavor = 16, RULE_typeQualifier = 17, RULE_flagQualifier = 18, 
+		RULE_typeFlavor = 15, RULE_attrFlavor = 16, RULE_typeQualifier = 17, RULE_attributeType = 18, 
 		RULE_enumQualifier = 19, RULE_cmdAction = 20, RULE_cmdObject = 21, RULE_cmd = 22, 
 		RULE_enumID = 23, RULE_typeNameRef = 24, RULE_typeNameDef = 25, RULE_pattern = 26, 
 		RULE_number = 27, RULE_datetime = 28;
@@ -42,7 +42,7 @@ public class SpecParser extends Parser {
 			"def", "typeCreation", "defineType", "typeAttributes", "typeAttribute", 
 			"parameters", "parameter", "command", "cmdPath", "listOfValues", "listValue", 
 			"attrCreation", "addTypeToAttr", "attributeAttributes", "attributeAttribute", 
-			"typeFlavor", "attrFlavor", "typeQualifier", "flagQualifier", "enumQualifier", 
+			"typeFlavor", "attrFlavor", "typeQualifier", "attributeType", "enumQualifier", 
 			"cmdAction", "cmdObject", "cmd", "enumID", "typeNameRef", "typeNameDef", 
 			"pattern", "number", "datetime"
 		};
@@ -52,22 +52,23 @@ public class SpecParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'Attributes'", "'FieldTypes'", "'ValueTypes'", "'Fragments'", 
-			"'ObjectTypes'", "'Templates'", "'ArrayTypes'", "'Members'", "'Parents'", 
-			"'DataType'", "'DataCategory'", "'DataPurpose'", "'DataLevel'", "'FieldType'", 
-			"'ValueType'", "'Fragment'", "'ObjectType'", "'Template'", "'ArrayType'", 
-			"'Member'", "'Parent'", "'BondType'", "'Read'", "'File'", "'def'", "'add'", 
-			"'MAX'", "'MIN'", null, null, null, null, null, null, null, null, null, 
-			"'null'", "'^'", "'$'", "'~'", "'@'", "'#'", "'|'", "'\"'", "'('", "')'", 
-			"'['", "']'", "'<'", "'>'", "'{'", "'}'", "','", "'.'", "':'", "';'"
+			"'ObjectTypes'", "'BaseTypes'", "'ArrayTypes'", "'Members'", "'Parents'", 
+			"'DataType'", "'ObjectCategory'", "'ObjectPurpose'", "'ObjectLevel'", 
+			"'FieldType'", "'ValueType'", "'Fragment'", "'ObjectType'", "'BaseType'", 
+			"'ArrayType'", "'Member'", "'Parent'", "'BondType'", "'Read'", "'File'", 
+			"'def'", "'add'", "'MAX'", "'MIN'", null, null, null, null, null, null, 
+			null, null, null, "'null'", "'^'", "'$'", "'~'", "'@'", "'#'", "'|'", 
+			"'\"'", "'('", "')'", "'['", "']'", "'<'", "'>'", "'{'", "'}'", "','", 
+			"'.'", "':'", "';'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "ATTRIBUTES", "FIELD_TYPES", "VALUE_TYPES", "FRAGMENTS", "OBJECT_TYPES", 
-			"TEMPLATES", "ARRAY_TYPES", "MEMBERS", "PARENTS", "DATA_TYPE", "DATA_CATEGORY", 
-			"DATA_PURPOSE", "DATA_LEVEL", "FIELD_TYPE", "VALUE_TYPE", "FRAGMENT", 
-			"OBJECT_TYPE", "TEMPLATE", "ARRAY_TYPE", "MEMBER", "PARENT", "BOND_TYPE", 
+			"BASE_TYPES", "ARRAY_TYPES", "MEMBERS", "PARENTS", "DATA_TYPE", "OBJECT_CATEGORY", 
+			"OBJECT_PURPOSE", "OBJECT_LEVEL", "FIELD_TYPE", "VALUE_TYPE", "FRAGMENT", 
+			"OBJECT_TYPE", "BASE_TYPE", "ARRAY_TYPE", "MEMBER", "PARENT", "BOND_TYPE", 
 			"CMD_ACTION_READ", "CMD_OBJECT_FILE", "DEFINE", "ADD", "MAX", "MIN", 
 			"TYPE_NAME_DEF", "ENUM_ID", "TYPE_NAME_REF", "TEXT_LENGTH", "DECIMAL_LITERAL", 
 			"FLOAT_LITERAL", "CHAR_LITERAL", "TEXT_PATTERN", "STRING_LITERAL", "NULL_LITERAL", 
@@ -165,7 +166,7 @@ public class SpecParser extends Parser {
 			setState(61);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FIELD_TYPES) | (1L << VALUE_TYPES) | (1L << FRAGMENTS) | (1L << OBJECT_TYPES) | (1L << TEMPLATES) | (1L << ARRAY_TYPES))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FIELD_TYPES) | (1L << VALUE_TYPES) | (1L << FRAGMENTS) | (1L << OBJECT_TYPES) | (1L << BASE_TYPES) | (1L << ARRAY_TYPES))) != 0)) {
 				{
 				{
 				setState(58);
@@ -986,8 +987,8 @@ public class SpecParser extends Parser {
 		public AttributeAttributesContext attributeAttributes() {
 			return getRuleContext(AttributeAttributesContext.class,0);
 		}
-		public FlagQualifierContext flagQualifier() {
-			return getRuleContext(FlagQualifierContext.class,0);
+		public AttributeTypeContext attributeType() {
+			return getRuleContext(AttributeTypeContext.class,0);
 		}
 		public EnumIDContext enumID() {
 			return getRuleContext(EnumIDContext.class,0);
@@ -1063,7 +1064,7 @@ public class SpecParser extends Parser {
 				setState(166);
 				match(LPAREN);
 				setState(167);
-				flagQualifier();
+				attributeType();
 				setState(168);
 				match(DOT);
 				setState(169);
@@ -1256,7 +1257,7 @@ public class SpecParser extends Parser {
 		public TerminalNode FIELD_TYPES() { return getToken(SpecParser.FIELD_TYPES, 0); }
 		public TerminalNode VALUE_TYPES() { return getToken(SpecParser.VALUE_TYPES, 0); }
 		public TerminalNode FRAGMENTS() { return getToken(SpecParser.FRAGMENTS, 0); }
-		public TerminalNode TEMPLATES() { return getToken(SpecParser.TEMPLATES, 0); }
+		public TerminalNode BASE_TYPES() { return getToken(SpecParser.BASE_TYPES, 0); }
 		public TerminalNode OBJECT_TYPES() { return getToken(SpecParser.OBJECT_TYPES, 0); }
 		public TerminalNode ARRAY_TYPES() { return getToken(SpecParser.ARRAY_TYPES, 0); }
 		public TypeFlavorContext(ParserRuleContext parent, int invokingState) {
@@ -1287,7 +1288,7 @@ public class SpecParser extends Parser {
 			{
 			setState(199);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FIELD_TYPES) | (1L << VALUE_TYPES) | (1L << FRAGMENTS) | (1L << OBJECT_TYPES) | (1L << TEMPLATES) | (1L << ARRAY_TYPES))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FIELD_TYPES) | (1L << VALUE_TYPES) | (1L << FRAGMENTS) | (1L << OBJECT_TYPES) | (1L << BASE_TYPES) | (1L << ARRAY_TYPES))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1365,7 +1366,7 @@ public class SpecParser extends Parser {
 		public TerminalNode FIELD_TYPE() { return getToken(SpecParser.FIELD_TYPE, 0); }
 		public TerminalNode VALUE_TYPE() { return getToken(SpecParser.VALUE_TYPE, 0); }
 		public TerminalNode FRAGMENT() { return getToken(SpecParser.FRAGMENT, 0); }
-		public TerminalNode TEMPLATE() { return getToken(SpecParser.TEMPLATE, 0); }
+		public TerminalNode BASE_TYPE() { return getToken(SpecParser.BASE_TYPE, 0); }
 		public TerminalNode OBJECT_TYPE() { return getToken(SpecParser.OBJECT_TYPE, 0); }
 		public TerminalNode ARRAY_TYPE() { return getToken(SpecParser.ARRAY_TYPE, 0); }
 		public TypeQualifierContext(ParserRuleContext parent, int invokingState) {
@@ -1396,7 +1397,7 @@ public class SpecParser extends Parser {
 			{
 			setState(203);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FIELD_TYPE) | (1L << VALUE_TYPE) | (1L << FRAGMENT) | (1L << OBJECT_TYPE) | (1L << TEMPLATE) | (1L << ARRAY_TYPE))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FIELD_TYPE) | (1L << VALUE_TYPE) | (1L << FRAGMENT) | (1L << OBJECT_TYPE) | (1L << BASE_TYPE) | (1L << ARRAY_TYPE))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1417,39 +1418,39 @@ public class SpecParser extends Parser {
 		return _localctx;
 	}
 
-	public static class FlagQualifierContext extends ParserRuleContext {
-		public TerminalNode DATA_CATEGORY() { return getToken(SpecParser.DATA_CATEGORY, 0); }
-		public TerminalNode DATA_PURPOSE() { return getToken(SpecParser.DATA_PURPOSE, 0); }
-		public TerminalNode DATA_LEVEL() { return getToken(SpecParser.DATA_LEVEL, 0); }
-		public FlagQualifierContext(ParserRuleContext parent, int invokingState) {
+	public static class AttributeTypeContext extends ParserRuleContext {
+		public TerminalNode OBJECT_CATEGORY() { return getToken(SpecParser.OBJECT_CATEGORY, 0); }
+		public TerminalNode OBJECT_PURPOSE() { return getToken(SpecParser.OBJECT_PURPOSE, 0); }
+		public TerminalNode OBJECT_LEVEL() { return getToken(SpecParser.OBJECT_LEVEL, 0); }
+		public AttributeTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_flagQualifier; }
+		@Override public int getRuleIndex() { return RULE_attributeType; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpecParserListener ) ((SpecParserListener)listener).enterFlagQualifier(this);
+			if ( listener instanceof SpecParserListener ) ((SpecParserListener)listener).enterAttributeType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpecParserListener ) ((SpecParserListener)listener).exitFlagQualifier(this);
+			if ( listener instanceof SpecParserListener ) ((SpecParserListener)listener).exitAttributeType(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpecParserVisitor ) return ((SpecParserVisitor<? extends T>)visitor).visitFlagQualifier(this);
+			if ( visitor instanceof SpecParserVisitor ) return ((SpecParserVisitor<? extends T>)visitor).visitAttributeType(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final FlagQualifierContext flagQualifier() throws RecognitionException {
-		FlagQualifierContext _localctx = new FlagQualifierContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_flagQualifier);
+	public final AttributeTypeContext attributeType() throws RecognitionException {
+		AttributeTypeContext _localctx = new AttributeTypeContext(_ctx, getState());
+		enterRule(_localctx, 36, RULE_attributeType);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(205);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DATA_CATEGORY) | (1L << DATA_PURPOSE) | (1L << DATA_LEVEL))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OBJECT_CATEGORY) | (1L << OBJECT_PURPOSE) | (1L << OBJECT_LEVEL))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {

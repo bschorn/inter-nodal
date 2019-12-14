@@ -155,6 +155,9 @@ public class ObjectTypeFormats {
         public Map apply(ActiveSchema.ObjectType objectType) {
             Map<String, Object> map = new HashMap<>();
             map.put("name", objectType.name());
+            for (Map.Entry<ActiveSchema.AttributeType, String> entry : objectType.attributes().entrySet()) {
+                map.put(entry.getKey().attributeName(), entry.getValue());
+            }
             if (objectType.parents() != null && !objectType.parents().isEmpty()) {
                 map.put("parent_type", objectType.parents().get(0).parentName());
             }

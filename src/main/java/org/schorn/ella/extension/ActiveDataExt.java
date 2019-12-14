@@ -21,35 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.schorn.ella.schema;
+package org.schorn.ella.extension;
 
-import java.util.StringJoiner;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import org.schorn.ella.node.ActiveNode.ActiveData;
+import org.schorn.ella.node.ActiveNode.StructData;
+import org.schorn.ella.node.ActiveNode.ValueData;
 
 /**
  *
  * @author bschorn
  */
-public class TemplateFormats {
+public interface ActiveDataExt extends Externalizable {
 
-    static public class FormatOne implements TypeFormatter<ActiveSchema.Template, String> {
-
-        @Override
-        public String apply(ActiveSchema.Template template) {
-            return "";
+    @Override
+    default void writeExternal(ObjectOutput out) throws IOException {
+        if (this instanceof ValueData) {
+            ValueData vdata = (ValueData) this;
+            vdata.write(out);
+        } else if (this instanceof StructData) {
+            StructData sdata = (StructData) this;
+            for (ActiveData adata : sdata.nodes()) {
+                adata.writeExternal(out);
+            }
         }
-
-        @Override
-        public StringJoiner newJoiner() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
     }
 
-    static class Reformat extends ObjectTypeFormats.Reformat {
-
-        @Override
-        public StringJoiner newJoiner() {
-            return new StringJoiner("\n\t", String.format("\n%ss\n\t", ActiveSchema.Roles.Template.name()), ";");
+    @Override
+    default void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        if (this instanceof ValueData) {
+        } else if (this instanceof StructData) {
         }
     }
 }

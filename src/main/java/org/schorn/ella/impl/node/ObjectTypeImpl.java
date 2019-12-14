@@ -37,17 +37,17 @@ class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
 
     private final ObjectSchema schema;
     private final DomainType domainType;
-    private final ObjectRole objectRole;
+    private final ObjectCategory objectRole;
     private final ObjectLevel objectLevel;
-    private final ObjectSubRole objectSubRole;
+    private final ObjectPurpose objectPurpose;
 
-    protected ObjectTypeImpl(AppContext context, String name, ObjectSchema schema, DomainType domainType, Short activeIdx, ObjectRole objectRole, ObjectLevel objectLevel, ObjectSubRole objectSubRole) {
+    protected ObjectTypeImpl(AppContext context, String name, ObjectSchema schema, DomainType domainType, Short activeIdx, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) {
         super(context, name, activeIdx);
         this.schema = schema;
         this.domainType = domainType;
         this.objectRole = objectRole;
         this.objectLevel = objectLevel;
-        this.objectSubRole = objectSubRole;
+        this.objectPurpose = objectPurpose;
     }
 
     @Override
@@ -61,18 +61,18 @@ class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
     }
 
     @Override
-    public ObjectRole objectRole() {
+    public ObjectCategory category() {
         return this.objectRole;
     }
 
     @Override
-    public ObjectLevel objectLevel() {
+    public ObjectLevel level() {
         return this.objectLevel;
     }
 
     @Override
-    public ObjectSubRole objectSubRole() {
-        return this.objectSubRole;
+    public ObjectPurpose purpose() {
+        return this.objectPurpose;
     }
 
     @Override

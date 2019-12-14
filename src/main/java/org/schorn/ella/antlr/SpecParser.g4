@@ -61,7 +61,7 @@ attrCreation
 
 addTypeToAttr
     : 'add' '(' typeQualifier '.' typeNameRef ( ')' | ',' attributeAttributes ')' )
-    | 'add' '(' flagQualifier '.' enumID ')'
+    | 'add' '(' attributeType '.' enumID ')'
     ;
 
 attributeAttributes
@@ -78,7 +78,7 @@ typeFlavor
     : 'FieldTypes'
     | 'ValueTypes'
     | 'Fragments'
-    | 'Templates'
+    | 'BaseTypes'
     | 'ObjectTypes'
     | 'ArrayTypes'
     ;
@@ -93,15 +93,15 @@ typeQualifier
     : 'FieldType'
     | 'ValueType'
     | 'Fragment'
-    | 'Template'
+    | 'BaseType'
     | 'ObjectType'
     | 'ArrayType'
     ;
 
-flagQualifier
-    : 'DataCategory'
-    | 'DataPurpose'
-    | 'DataLevel'
+attributeType
+    : 'ObjectCategory'
+    | 'ObjectPurpose'
+    | 'ObjectLevel'
     ;
 
 enumQualifier

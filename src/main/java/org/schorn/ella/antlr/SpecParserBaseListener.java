@@ -232,13 +232,13 @@ public class SpecParserBaseListener implements SpecParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFlagQualifier(SpecParser.FlagQualifierContext ctx) { }
+	@Override public void enterAttributeType(SpecParser.AttributeTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFlagQualifier(SpecParser.FlagQualifierContext ctx) { }
+	@Override public void exitAttributeType(SpecParser.AttributeTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

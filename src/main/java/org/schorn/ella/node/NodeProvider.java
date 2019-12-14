@@ -38,9 +38,9 @@ import org.schorn.ella.node.ActiveNode.INode;
 import org.schorn.ella.node.ActiveNode.Identity;
 import org.schorn.ella.node.ActiveNode.Identity.IdentityType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
+import org.schorn.ella.node.ActiveNode.ObjectCategory;
 import org.schorn.ella.node.ActiveNode.ObjectLevel;
-import org.schorn.ella.node.ActiveNode.ObjectRole;
-import org.schorn.ella.node.ActiveNode.ObjectSubRole;
+import org.schorn.ella.node.ActiveNode.ObjectPurpose;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ObjectType.ObjectSchema;
 import org.schorn.ella.node.ActiveNode.ValueType;
@@ -154,7 +154,7 @@ public interface NodeProvider extends Provider {
 
     ValueType createDynamicValueType(AppContext context, String value_type, Object value) throws Exception;
 
-    ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType, ObjectRole objectRole, ObjectLevel objectLevel, ObjectSubRole objectSubRole) throws Exception;
+    ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) throws Exception;
 
     ObjectType createTransientObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType) throws Exception;
 

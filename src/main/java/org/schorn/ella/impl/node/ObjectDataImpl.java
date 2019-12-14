@@ -28,14 +28,12 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
+import org.schorn.ella.node.ActiveNode;
+import org.schorn.ella.node.ActiveNode.ObjectData;
+import org.schorn.ella.node.BondType;
+import org.schorn.ella.node.MetaTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.node.ActiveNode.ObjectData;
-import org.schorn.ella.node.ActiveNode;
-import org.schorn.ella.node.MetaTypes;
-import org.schorn.ella.node.BondType;
 
 /**
  * Object Data Implementation

@@ -37,7 +37,7 @@ import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.schema.ActiveSchema.FieldType;
 import org.schorn.ella.schema.ActiveSchema.Fragment;
 import org.schorn.ella.schema.ActiveSchema.ObjectType;
-import org.schorn.ella.schema.ActiveSchema.Template;
+import org.schorn.ella.schema.ActiveSchema.BaseType;
 import org.schorn.ella.schema.ActiveSchema.ValueType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,7 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
     private ActiveSchema.Roles currentAttrType = null;
     private String currentTypeNameDef = null;
 
-    private ActiveSchema.Template currentTemplate = null;
+    private ActiveSchema.BaseType currentTemplate = null;
     private ActiveSchema.ObjectType currentObjectType = null;
     private ActiveSchema.Fragment currentFragment = null;
     private ActiveSchema.ValueType currentValueType = null;
@@ -89,8 +89,8 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
                     case Fragment:
                         this.currentFragment = this.schema.create(Fragment.class, this.currentTypeNameDef);
                         break;
-                    case Template:
-                        this.currentTemplate = this.schema.create(Template.class, this.currentTypeNameDef);
+                    case BaseType:
+                        this.currentTemplate = this.schema.create(BaseType.class, this.currentTypeNameDef);
                         break;
                     case ObjectType:
                         this.currentObjectType = this.schema.create(ObjectType.class, this.currentTypeNameDef);
@@ -266,14 +266,27 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
         for (SpecParser.AddTypeToAttrContext atctx : ctx.addTypeToAttr()) {
             if (atctx.typeQualifier() != null) {
                 doAddTypeToAttr(atctx);
-            } else if (atctx.flagQualifier() != null) {
+            } else if (atctx.attributeType() != null) {
                 doAddAttrToType(atctx);
             }
         }
     }
-    private void doAddAttrToType(SpecParser.AddTypeToAttrContext ctx) {
-        ActiveSchema.Flags flagType = ActiveSchema.Flags.valueOf(ctx.flagQualifier().getText());
 
+    private void doAddAttrToType(SpecParser.AddTypeToAttrContext ctx) {
+        ActiveSchema.AttributeType attributeType = ActiveSchema.AttributeType.valueOf(ctx.attributeType().getText());
+        if (ctx.enumID() == null) {
+            return;
+        }
+        String attributeValue = ctx.enumID().getText();
+        switch (this.currentAttrType) {
+            case Attribute:
+                switch (this.currentType) {
+                    case ObjectType:
+                        this.currentObjectType.addAttribute(attributeType, attributeValue);
+                        break;
+                }
+                break;
+        }
     }
 
     private void doAddTypeToAttr(SpecParser.AddTypeToAttrContext ctx) {
@@ -289,7 +302,7 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
                         this.currentObjectType.addMember(this.currentMemberType);
                         //LGR.debug("doAddTypeToAttr() - add member '{}' to '{}'",this.currentMemberType.name(),this.currentObjectType.name());
                         break;
-                    case Template:
+                    case BaseType:
                         this.currentTemplate.addMember(this.currentMemberType);
                         //LGR.debug("doAddTypeToAttr() - add member '{}' to '{}'",this.currentMemberType.name(),this.currentTemplate.name());
                         break;
@@ -304,7 +317,7 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
                 break;
             case Parent:
                 switch (this.currentType) {
-                    case Template:
+                    case BaseType:
                         this.currentTemplate.addParent(
                                 new ActiveSchema.Parent(
                                         this.schema, memberType, memberName));

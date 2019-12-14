@@ -188,15 +188,15 @@ public interface SpecParserListener extends ParseTreeListener {
 	 */
 	void exitTypeQualifier(SpecParser.TypeQualifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpecParser#flagQualifier}.
+	 * Enter a parse tree produced by {@link SpecParser#attributeType}.
 	 * @param ctx the parse tree
 	 */
-	void enterFlagQualifier(SpecParser.FlagQualifierContext ctx);
+	void enterAttributeType(SpecParser.AttributeTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpecParser#flagQualifier}.
+	 * Exit a parse tree produced by {@link SpecParser#attributeType}.
 	 * @param ctx the parse tree
 	 */
-	void exitFlagQualifier(SpecParser.FlagQualifierContext ctx);
+	void exitAttributeType(SpecParser.AttributeTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpecParser#enumQualifier}.
 	 * @param ctx the parse tree

@@ -119,11 +119,11 @@ public interface SpecParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypeQualifier(SpecParser.TypeQualifierContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpecParser#flagQualifier}.
+	 * Visit a parse tree produced by {@link SpecParser#attributeType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFlagQualifier(SpecParser.FlagQualifierContext ctx);
+	T visitAttributeType(SpecParser.AttributeTypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpecParser#enumQualifier}.
 	 * @param ctx the parse tree

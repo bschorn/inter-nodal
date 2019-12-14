@@ -27,9 +27,9 @@ import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.DomainType;
+import org.schorn.ella.node.ActiveNode.ObjectCategory;
 import org.schorn.ella.node.ActiveNode.ObjectLevel;
-import org.schorn.ella.node.ActiveNode.ObjectRole;
-import org.schorn.ella.node.ActiveNode.ObjectSubRole;
+import org.schorn.ella.node.ActiveNode.ObjectPurpose;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueType.DataType;
@@ -477,7 +477,7 @@ public class MetaTypes {
         @Override
         public void register() throws Exception {
             if (this.metaTypes != null) {
-                ObjectType.Builder builder = ObjectType.builder(AppContext.Common, this.name(), DomainType.Meta, ObjectRole.Unknown, ObjectLevel.Unknown, ObjectSubRole.Unknown);
+                ObjectType.Builder builder = ObjectType.builder(AppContext.Common, this.name(), DomainType.Meta, ObjectCategory.UNK, ObjectPurpose.UNK, ObjectLevel.UNK);
                 for (MetaType metaType : this.metaTypes) {
                     ActiveType activeType;
                     switch (metaType.role()) {

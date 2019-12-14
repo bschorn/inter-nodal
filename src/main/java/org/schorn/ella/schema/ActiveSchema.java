@@ -41,6 +41,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.schorn.ella.convert.TypeConverter;
+import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.DataGroup;
 import org.slf4j.Logger;
@@ -79,11 +80,20 @@ public class ActiveSchema {
         return list;
     }
 
-    public enum Flags {
-        DataCategory,
-        DataPurpose,
-        DataLevel;
+    public enum AttributeType {
+        ObjectCategory("object_category"),
+        ObjectPurpose("object_purpose"),
+        ObjectLevel("object_level");
 
+        private final String attributeName;
+
+        AttributeType(String attributeName) {
+            this.attributeName = attributeName;
+        }
+
+        public String attributeName() {
+            return this.attributeName;
+        }
     }
 
     /**
@@ -95,13 +105,13 @@ public class ActiveSchema {
         FieldType('^', FieldType.class, true, new FieldTypeFormats.Reformat(), new FieldTypeFormats.Meta()),
         ValueType('$', ValueType.class, true, new ValueTypeFormats.Reformat(), new ValueTypeFormats.Meta()),
         Fragment('~', Fragment.class, true, new FragmentFormats.Reformat(), null),
-        Template('%', Template.class, true, new TemplateFormats.Reformat(), null),
+        BaseType('%', BaseType.class, true, new BaseTypeFormats.Reformat(), null),
         ObjectType('#', ObjectType.class, true, new ObjectTypeFormats.Reformat(), new ObjectTypeFormats.Meta()),
         ArrayType('@', ArrayType.class, false, null, null),
         Constraints('!', Constraints.class, false, null, null),
         Member('%', Member.class, false, new MemberFormats.Reformat(), new MemberFormats.Meta()),
         Parent('-', Parent.class, false, null, null),
-        Attributes('F', Type.class, false, null, null),
+        Attribute('¯', Type.class, false, null, null),
         Unset('x', Type.class, false, null, null);
 
         private final Character operator;
@@ -413,16 +423,16 @@ public class ActiveSchema {
 
     }
 
-    static public class Template extends ObjectType {
+    static public class BaseType extends ObjectType {
 
         static TypeFormatter<ObjectType, String> FORMATTER = new ObjectTypeFormats.FormatOne();
 
         @Override
         public Roles role() {
-            return Roles.Template;
+            return Roles.BaseType;
         }
 
-        Template(ActiveSchema schema, String name) {
+        BaseType(ActiveSchema schema, String name) {
             super(schema, name);
         }
 
@@ -438,16 +448,25 @@ public class ActiveSchema {
 
         static public final Map<String, Integer> TYPE_NAMES_ORD = new HashMap<>();
 
-        @Override
-        public Roles role() {
-            return Roles.ObjectType;
-        }
+        private boolean resolved = false;
+
+        private final ActiveSchema schema;
+        private final String name;
+        private final List<Parent> parents = new ArrayList<>();
+        private final List<Member> members = new ArrayList<>();
+        private final Map<AttributeType, String> attributes = new HashMap<>();
 
         ObjectType(ActiveSchema schema, String name) {
             this.schema = schema;
             this.name = name;
             TYPE_NAMES_ORD.put(this.qualifiedName(), TYPE_NAMES_ORD.size());
         }
+
+        @Override
+        public Roles role() {
+            return Roles.ObjectType;
+        }
+
         @Override
         public String name() {
             return this.name;
@@ -463,11 +482,6 @@ public class ActiveSchema {
             return this.members;
         }
 
-        private final ActiveSchema schema;
-        private final String name;
-        private final List<Parent> parents = new ArrayList<>();
-        private final List<Member> members = new ArrayList<>();
-
         public ActiveSchema schema() {
             return this.schema;
         }
@@ -478,16 +492,22 @@ public class ActiveSchema {
             this.members.add(member);
         }
 
+        public void addAttribute(AttributeType attributeType, String attributeValue) {
+            this.attributes.put(attributeType, attributeValue);
+        }
+
         public List<Parent> parents() {
             return this.parents;
+        }
+
+        public Map<AttributeType, String> attributes() {
+            return this.attributes;
         }
 
         @Override
         public String toString() {
             return FORMATTER.apply(this);
         }
-
-        private boolean resolved = false;
 
         @Override
         public boolean isResolved() {
@@ -496,11 +516,31 @@ public class ActiveSchema {
 
         @Override
         public void resolve() throws Exception {
+            for (Map.Entry<AttributeType, String> entry : this.attributes.entrySet()) {
+                Object attrValue = null;
+                switch (entry.getKey()) {
+                    case ObjectCategory:
+                        attrValue = ActiveNode.ObjectCategory.valueOf(entry.getValue());
+                        break;
+                    case ObjectPurpose:
+                        attrValue = ActiveNode.ObjectPurpose.valueOf(entry.getValue());
+                        break;
+                    case ObjectLevel:
+                        attrValue = ActiveNode.ObjectLevel.valueOf(entry.getValue());
+                        break;
+                }
+                if (attrValue == null) {
+                    throw new Exception(String.format("Unresolved Attribute '%s.%s' in ObjectType.%s:\n\t",
+                            entry.getKey().getClass().getSimpleName(),
+                            entry.getValue(),
+                            this.name));
+                }
+            }
             List<Member> importedMembers = new ArrayList<>();
             for (Parent parentType : this.parents) {
                 Type type = this.schema.getType(parentType.name());
                 switch (type.role()) {
-                    case Template:
+                    case BaseType:
                     case ObjectType:
                         ObjectType otype = (ObjectType) type;
                         otype.members().forEach((m) -> {
@@ -635,7 +675,7 @@ public class ActiveSchema {
 
         @Override
         public Map metaMap() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
     }
@@ -936,7 +976,7 @@ public class ActiveSchema {
 
         @Override
         public Map metaMap() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
     }
@@ -964,8 +1004,8 @@ public class ActiveSchema {
                 return (T) createValueType(name);
             case Fragment:
                 return (T) createFragment(name);
-            case Template:
-                return (T) createTemplate(name);
+            case BaseType:
+                return (T) createBaseType(name);
             case ObjectType:
                 return (T) createObjectType(name);
             case ArrayType:
@@ -992,8 +1032,8 @@ public class ActiveSchema {
                 return getValueType(name);
             case Fragment:
                 return getFragment(name);
-            case Template:
-                return getTemplate(name);
+            case BaseType:
+                return getBaseType(name);
             case ObjectType:
                 return getObjectType(name);
             case ArrayType:
@@ -1060,32 +1100,33 @@ public class ActiveSchema {
     }
 
     private Fragment getFragment(String name) {
-        Optional<Fragment> optTemplate
+        Optional<Fragment> optFragment
                 = this.branchTypes.stream()
                         .filter(t -> t.name().equals(name))
                         .filter(t -> t.role().equals(Roles.Fragment))
                         .map(t -> Fragment.class.cast(t))
                         .findAny();
-        if (optTemplate.isPresent()) {
-            return optTemplate.get();
+        if (optFragment.isPresent()) {
+            return optFragment.get();
         }
         return null;
     }
-    private Template createTemplate(String name) {
-        Template abstractType = getTemplate(name);
+
+    private BaseType createBaseType(String name) {
+        BaseType abstractType = getBaseType(name);
         if (abstractType == null) {
-            abstractType = new Template(this, name);
+            abstractType = new BaseType(this, name);
             this.branchTypes.add(abstractType);
         }
         return abstractType;
     }
 
-    private Template getTemplate(String name) {
-        Optional<Template> optAbstractType
+    private BaseType getBaseType(String name) {
+        Optional<BaseType> optAbstractType
                 = this.branchTypes.stream()
                         .filter(t -> t.name().equals(name))
-                        .filter(t -> t.role().equals(Roles.Template))
-                        .map(t -> Template.class.cast(t))
+                        .filter(t -> t.role().equals(Roles.BaseType))
+                        .map(t -> BaseType.class.cast(t))
                         .findAny();
         if (optAbstractType.isPresent()) {
             return optAbstractType.get();
@@ -1181,7 +1222,7 @@ public class ActiveSchema {
             }
         };
         branchResolver.accept(Roles.Fragment);
-        branchResolver.accept(Roles.Template);
+        branchResolver.accept(Roles.BaseType);
         branchResolver.accept(Roles.ObjectType);
 
         for (Exception ex : exceptions) {

@@ -99,19 +99,19 @@ public interface ActiveModel {
     }
 
     public enum DataCategory {
-        FACTS,
-        ACTS,
-        REACTS;
+        FACT,
+        ACT,
+        REACT;
     }
 
     public enum DataPurpose {
-        ENTITY(DataCategory.FACTS), // Party, Account, Product
-        ASSOCIATION(DataCategory.FACTS), // PartyGroup(Customers,Employees)
-        REFERENCE(DataCategory.FACTS), // Side(Buy,Short,Cover,Sell), MarketStrategy(Long,Short)
-        REQUEST(DataCategory.ACTS), // Order,
-        EXECUTION(DataCategory.ACTS), // Fill, Journal
-        REALTIME(DataCategory.REACTS), // RTBalance, RTPosition
-        SNAPSHOT(DataCategory.REACTS); // SODBalance, EODPosition, Ledger// SODBalance, EODPosition, Ledger// SODBalance, EODPosition, Ledger// SODBalance, EODPosition, Ledger
+        ENTITY(DataCategory.FACT), // Party, Account, Product
+        ASSOCIATION(DataCategory.FACT), // PartyGroup(Customers,Employees)
+        REFERENCE(DataCategory.FACT), // Side(Buy,Short,Cover,Sell), MarketStrategy(Long,Short)
+        REQUEST(DataCategory.ACT), // Order,
+        EXECUTION(DataCategory.ACT), // Fill, Journal
+        REALTIME(DataCategory.REACT), // RTBalance, RTPosition
+        SNAPSHOT(DataCategory.REACT); // SODBalance, EODPosition, Ledger
 
         DataCategory category;
 

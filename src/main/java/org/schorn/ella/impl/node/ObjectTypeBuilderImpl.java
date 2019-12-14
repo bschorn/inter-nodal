@@ -30,9 +30,9 @@ import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
+import org.schorn.ella.node.ActiveNode.ObjectCategory;
 import org.schorn.ella.node.ActiveNode.ObjectLevel;
-import org.schorn.ella.node.ActiveNode.ObjectRole;
-import org.schorn.ella.node.ActiveNode.ObjectSubRole;
+import org.schorn.ella.node.ActiveNode.ObjectPurpose;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ObjectType.Builder;
 import org.schorn.ella.node.ActiveNode.ObjectType.ObjectSchema;
@@ -54,19 +54,19 @@ class ObjectTypeBuilderImpl implements Builder {
     private final AppContext context;
     private final String name;
     private final DomainType domainType;
-    private final ObjectRole objectRole;
+    private final ObjectCategory objectRole;
     private final ObjectLevel objectLevel;
-    private final ObjectSubRole objectSubRole;
+    private final ObjectPurpose objectPurpose;
     private final List<MemberDef> members;
     private ObjectType dynamicType = null;
 
-    ObjectTypeBuilderImpl(AppContext context, String name, DomainType domainType, ObjectRole objectRole, ObjectLevel objectLevel, ObjectSubRole objectSubRole) {
+    ObjectTypeBuilderImpl(AppContext context, String name, DomainType domainType, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) {
         this.context = context;
         this.name = name;
         this.domainType = domainType;
         this.objectRole = objectRole;
         this.objectLevel = objectLevel;
-        this.objectSubRole = objectSubRole;
+        this.objectPurpose = objectPurpose;
         this.members = new ArrayList<>(10);
     }
 
@@ -121,7 +121,7 @@ class ObjectTypeBuilderImpl implements Builder {
     public ObjectType build() {
         ObjectSchema schema = new ObjectSchemaImpl(this.members);
         try {
-            return NodeProvider.provider().createObjectType(context, name, schema, domainType, objectRole, objectLevel, objectSubRole);
+            return NodeProvider.provider().createObjectType(context, name, schema, domainType, objectRole, objectPurpose, objectLevel);
         } catch (Exception ex) {
             LGR.error(Functions.getStackTraceAsString(ex));
             return null;
@@ -232,18 +232,18 @@ class ObjectTypeBuilderImpl implements Builder {
         }
 
         @Override
-        public ObjectRole objectRole() {
-            return ObjectRole.Unknown;
+        public ObjectCategory category() {
+            return ObjectCategory.UNK;
         }
 
         @Override
-        public ObjectLevel objectLevel() {
-            return ObjectLevel.Unknown;
+        public ObjectLevel level() {
+            return ObjectLevel.UNK;
         }
 
         @Override
-        public ObjectSubRole objectSubRole() {
-            return ObjectSubRole.Unknown;
+        public ObjectPurpose purpose() {
+            return ObjectPurpose.UNK;
         }
 
     }

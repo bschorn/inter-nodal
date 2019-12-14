@@ -272,9 +272,9 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
      * @throws Exception
      */
     @Override
-    public ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType, ActiveNode.ObjectRole objectRole, ActiveNode.ObjectLevel objectLevel, ActiveNode.ObjectSubRole objectSubRole) throws Exception {
+    public ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType, ActiveNode.ObjectCategory objectRole, ActiveNode.ObjectPurpose objectPurpose, ActiveNode.ObjectLevel objectLevel) throws Exception {
         return (ObjectType) context.addType(createInstance(ObjectType.class, context, object_type, objectMembers, domainType,
-                Integer.valueOf(context.objectTypes().size()).shortValue(), objectRole, objectLevel, objectSubRole));
+                Integer.valueOf(context.objectTypes().size()).shortValue(), objectRole, objectPurpose, objectLevel));
     }
 
     @Override

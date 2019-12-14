@@ -44,6 +44,7 @@ import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.ActiveContext.Contextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.extension.ActiveConstraint;
+import org.schorn.ella.extension.ActiveDataExt;
 import org.schorn.ella.extension.ActiveFamily;
 import org.schorn.ella.extension.ActiveFind;
 import org.schorn.ella.extension.ActiveJson;
@@ -162,105 +163,92 @@ public interface ActiveNode {
      *
      *
      */
-    public enum ObjectRole {
-        Entity,
-        Activity,
-        Aggregate,
-        Meta,
-        Unknown;
-
-        String tagName;
-
-        ObjectRole() {
-            this.tagName = this.name().toLowerCase();
-        }
+    public enum ObjectCategory {
+        FACT,
+        ACT,
+        REACT,
+        META,
+        UNK;
 
         /**
          *
          * @return
          */
         public String tagName() {
-            return this.tagName;
+            return this.name();
         }
 
-        static public ObjectRole valueFromTag(String tagName) {
+        static public ObjectCategory valueFromTag(String tagName) {
             if (tagName == null) {
-                return ObjectRole.Unknown;
+                return ObjectCategory.UNK;
             }
-            for (ObjectRole dataCategory : ObjectRole.values()) {
-                if (dataCategory.tagName.equals(tagName)) {
-                    return dataCategory;
+            for (ObjectCategory category : ObjectCategory.values()) {
+                if (category.name().equalsIgnoreCase(tagName)) {
+                    return category;
                 }
             }
-            return ObjectRole.Unknown;
+            return ObjectCategory.UNK;
+        }
+    }
+
+    public enum ObjectPurpose {
+        ENTITY(ObjectCategory.FACT),
+        ASSOCIATION(ObjectCategory.FACT),
+        REFERENCE(ObjectCategory.FACT),
+        REQUEST(ObjectCategory.ACT),
+        EXECUTION(ObjectCategory.ACT),
+        REALTIME(ObjectCategory.REACT),
+        SNAPSHOT(ObjectCategory.REACT),
+        META(ObjectCategory.META),
+        UNK(ObjectCategory.UNK);
+
+        ObjectCategory category;
+
+        ObjectPurpose(ObjectCategory category) {
+            this.category = category;
+        }
+
+        public ObjectCategory category() {
+            return this.category;
+        }
+        static public ObjectPurpose valueFromTag(String tagName) {
+            if (tagName == null) {
+                return ObjectPurpose.UNK;
+            }
+            for (ObjectPurpose purpose : ObjectPurpose.values()) {
+                if (purpose.name().equalsIgnoreCase(tagName)) {
+                    return purpose;
+                }
+            }
+            return ObjectPurpose.UNK;
         }
     }
 
     public enum ObjectLevel {
-        Universal,
-        Industry,
-        Enterprise,
-        Division,
-        Department,
-        Application,
-        Meta,
-        Unknown;
-
-        String tagName;
-
-        ObjectLevel() {
-            this.tagName = this.name().toLowerCase();
-        }
+        UNIVERSAL,
+        INDUSTRY,
+        ENTERPRISE,
+        DIVISION,
+        DEPARTMENT,
+        LOB,
+        APPLICATION,
+        META,
+        UNK;
 
         public String tagName() {
-            return this.tagName;
+            return this.name();
         }
 
         static public ObjectLevel valueFromTag(String tagName) {
             if (tagName == null) {
-                return ObjectLevel.Unknown;
+                return ObjectLevel.UNK;
             }
             for (ObjectLevel level : ObjectLevel.values()) {
-                if (level.tagName.equalsIgnoreCase(tagName)) {
+                if (level.name().equalsIgnoreCase(tagName)) {
                     return level;
                 }
             }
-            return ObjectLevel.Unknown;
-
-        }
-    }
-
-    public enum ObjectSubRole {
-        Reference(ObjectRole.Entity),
-        Meta(ObjectRole.Meta),
-        Unknown(ObjectRole.Unknown);
-
-        String tagName;
-        ObjectRole objectRole;
-
-        ObjectSubRole(ObjectRole objectRole) {
-            this.tagName = this.name().toLowerCase();
-            this.objectRole = objectRole;
-        }
-
-        public ObjectRole parentRole() {
-            return this.objectRole;
-        }
-
-        public String tagName() {
-            return this.tagName;
-        }
-
-        static public ObjectSubRole valueFromTag(String tagName) {
-            if (tagName == null) {
-                return ObjectSubRole.Unknown;
-            }
-            for (ObjectSubRole subRole : ObjectSubRole.values()) {
-                if (subRole.tagName.equalsIgnoreCase(tagName)) {
-                    return subRole;
-                }
-            }
-            return ObjectSubRole.Unknown;
+            return ObjectLevel.UNK;
 
         }
     }
@@ -925,11 +913,11 @@ public interface ActiveNode {
 
         DomainType domainType();
 
-        ObjectRole objectRole();
+        ObjectCategory category();
 
-        ObjectLevel objectLevel();
+        ObjectLevel level();
 
-        ObjectSubRole objectSubRole();
+        ObjectPurpose purpose();
 
         /**
          * Since ObjectData objects are immutable we use the Builder Pattern to
@@ -1068,11 +1056,11 @@ public interface ActiveNode {
         }
 
         static Builder builder(AppContext context, String object_type, DomainType domainType) throws Exception {
-            return NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type, domainType, ObjectRole.Unknown, ObjectLevel.Unknown, ObjectSubRole.Unknown);
+            return NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type, domainType, ObjectCategory.UNK, ObjectPurpose.UNK, ObjectLevel.UNK);
         }
 
-        static Builder builder(AppContext context, String object_type, DomainType domainType, ObjectRole objectRole, ObjectLevel objectLevel, ObjectSubRole objectSubRole) throws Exception {
-            return NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type, domainType, objectRole, objectLevel, objectSubRole);
+        static Builder builder(AppContext context, String object_type, DomainType domainType, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) throws Exception {
+            return NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type, domainType, objectRole, objectPurpose, objectLevel);
         }
 
         /*
@@ -1166,7 +1154,7 @@ public interface ActiveNode {
      * Base class for ValueData and StructData (which is base for ObjectData,
      * ArrayData)
      */
-    interface ActiveData extends ActiveNode, Contextual, Bytes, Comparable<ActiveData>, ActiveId, ActiveRole,
+    interface ActiveData extends ActiveDataExt, ActiveNode, Contextual, Bytes, Comparable<ActiveData>, ActiveId, ActiveRole,
             ContentState, ActiveFind, ActiveMatch, ActiveStream, ActiveOut, ActiveFamily, ActiveConstraint {
 
         int size();
