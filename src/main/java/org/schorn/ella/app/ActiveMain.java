@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.schorn.ella.Resources;
+import org.schorn.ella.ComponentProperties;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.MetaReader;
 import org.schorn.ella.node.MetaTypes;
@@ -73,7 +73,7 @@ public final class ActiveMain {
      *
      * @throws Exception
      */
-    void initActivityCfg() throws Exception {
+    private void initActivityCfg() throws Exception {
         String activityDate = System.getProperty("ActivityDate", DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now()));
         String activityFileName = NodeConfig.ACTIVITY_FILE.value().replace("{DATE}", activityDate);
         String activityFile = String.format("%s%s%s",
@@ -90,7 +90,7 @@ public final class ActiveMain {
      * For any static dependencies that require specific order of creation.
      *
      */
-    void initStatic() {
+    private void initStatic() {
         //AppContext context = AppContext.Common;
         StringCached.initialize();
         MetaTypes.initialize();
@@ -100,7 +100,7 @@ public final class ActiveMain {
     /**
      * Standard Default Values
      */
-    void initDefaultValues() {
+    private void initDefaultValues() {
         NodeProvider.provider().setDefaultValue(MetaTypes.ValueTypes.idata_uuid.valueType(), AvailableActions.DefaultActions.AUTO_UUID);
         NodeProvider.provider().setDefaultValue(MetaTypes.ValueTypes.idata_cts.valueType(), AvailableActions.DefaultActions.AUTO_TS);
         NodeProvider.provider().setDefaultValue(MetaTypes.AutoTypes.octs.valueType(), AvailableActions.DefaultActions.AUTO_TS);
@@ -108,7 +108,7 @@ public final class ActiveMain {
         NodeProvider.provider().setDefaultValue(MetaTypes.AutoTypes.okey.valueType(), AvailableActions.DefaultActions.AUTO_KEY);
     }
 
-    void initMeta() {
+    private void initMeta() {
         for (String context : NodeConfig.ACTIVE_CONTEXTS.values(",")) {
             if (!this.contexts.contains(context)) {
                 this.contexts.add(context);
@@ -125,8 +125,7 @@ public final class ActiveMain {
                         if (metaFile.startsWith(".")) {
                             metaFile = metaFile.substring(2);
                             String[] dirFiles = metaFile.split("[\\\\/]");
-                            Resources resources = new Resources();
-                            metaPath = resources.getResourcedPath(dirFiles);
+                            metaPath = ComponentProperties.NODE.getResourcedPath(dirFiles);
                         }
                         if (Files.exists(metaPath)) {
                             this.metaSuppliersMap.put(context, new MetaReader.FileMetaSupplier(metaPath));
@@ -170,7 +169,7 @@ public final class ActiveMain {
     }
 
     private ActiveMain(String[] args) throws Exception {
-        new CommandLineArgs(args).loadIntoSystemProperties();
+        ComponentProperties.init(CommandLineArgs.init(args).getProperties());
         this.initActivityCfg();
         this.initStatic();
         this.initDefaultValues();
@@ -191,12 +190,12 @@ public final class ActiveMain {
         }
 
         public Starter create() throws Exception {
-            ActiveMain APP = Starter.APP;
-            if (APP == null) {
+            ActiveMain app = Starter.APP;
+            if (app == null) {
                 synchronized (LOCK) {
-                    APP = Starter.APP;
-                    if (APP == null) {
-                        Starter.APP = APP = new ActiveMain(this.args);
+                    app = Starter.APP;
+                    if (app == null) {
+                        Starter.APP = app = new ActiveMain(this.args);
                     }
                 }
             }

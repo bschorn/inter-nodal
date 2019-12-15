@@ -23,10 +23,10 @@
  */
 package org.schorn.ella.node;
 
+import java.util.Arrays;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayType;
-import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueType.FieldType;
@@ -62,7 +62,7 @@ public class MapTypes {
                 LGR.error(type.toString() + ": " + Functions.getStackTraceAsString(ex));
             }
         }
-        for (MetaType type : Arrays.values()) {
+        for (MetaType type : Arrayz.values()) {
             try {
                 type.register();
             } catch (Exception ex) {
@@ -187,7 +187,7 @@ public class MapTypes {
      */
     public enum ObjectTypes implements MetaType {
         field_map(ValueTypes.map_type, ValueTypes.map_value, ArrayValueTypes.map_values, ValueTypes.map_target, ArrayValueTypes.map_rules, ArrayValueTypes.map_lookup),
-        meta_link(ValueTypes.source_meta, ValueTypes.target_meta, Arrays.field_map);
+        meta_link(ValueTypes.source_meta, ValueTypes.target_meta, Arrayz.field_map);
 
         ObjectType objectType;
         ArrayType arrayType;
@@ -205,7 +205,8 @@ public class MapTypes {
         @Override
         public void register() throws Exception {
             if (this.metaTypes != null) {
-                ObjectType.Builder builder = ObjectType.builder(AppContext.Common, this.name(), DomainType.Mapping);
+                ObjectType.Builder builder = ObjectType.builder(AppContext.Common, this.name(),
+                        Arrays.asList(new ActiveNode.TypeAttribute[]{TypeAttributes.DomainType.Mapping}));
                 for (MetaType metaType : this.metaTypes) {
                     ActiveType activeType;
                     switch (metaType.role()) {
@@ -247,13 +248,13 @@ public class MapTypes {
      * Arrays
      *
      */
-    public enum Arrays implements MetaType {
+    public enum Arrayz implements MetaType {
         field_map(ObjectTypes.field_map),;
 
         MetaType metaType;
         ArrayType arrayType;
 
-        Arrays(MetaType metaType) {
+        Arrayz(MetaType metaType) {
             this.metaType = metaType;
         }
 

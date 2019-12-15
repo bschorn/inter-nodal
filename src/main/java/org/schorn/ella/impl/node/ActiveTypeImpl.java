@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.node;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.format.SupportString;
 import org.schorn.ella.node.ActiveNode.ActiveType;
@@ -37,7 +36,7 @@ import org.schorn.ella.util.StringCached;
  */
 public abstract class ActiveTypeImpl implements ActiveType {
 
-    static private AtomicInteger NEXT_ACTIVE_TYPE_ID = new AtomicInteger(0);
+    private static final AtomicInteger NEXT_ACTIVE_TYPE_ID = new AtomicInteger(0);
 
     private final AppContext context;
     private final StringCached nameCached;
@@ -48,7 +47,7 @@ public abstract class ActiveTypeImpl implements ActiveType {
         this.context = context;
         this.nameCached = new StringCached(name);
         this.activeId = NEXT_ACTIVE_TYPE_ID.getAndIncrement();
-        this.activeIdx = activeIdx.shortValue();
+        this.activeIdx = activeIdx;
     }
 
     @Override

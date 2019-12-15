@@ -32,10 +32,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Predicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveType;
@@ -45,6 +41,8 @@ import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueTypeMember;
 import org.schorn.ella.repo.RepoSupport.ActiveCondition;
 import org.schorn.ella.repo.RepoSupport.ActiveQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ActiveQuery Implementation
@@ -220,7 +218,7 @@ class ActiveQueryImpl implements ActiveQuery {
             ObjectType[] to = new ObjectType[this.from.length];
             for (int i = 0; i < this.from.length; i += 1) {
                 String tempTypeName = String.format("%s#%s", this.from[i].name(), UUID.randomUUID().toString());
-                ObjectType.Builder builder = ObjectType.builder(this.context(), tempTypeName, this.from[i].domainType());
+                ObjectType.Builder builder = ObjectType.builder(this.context(), tempTypeName, this.from[i].attributes());
                 if (this.select != null) {
                     for (ValueType valueType : this.select) {
                         if (this.from[i].isMember(valueType)) {

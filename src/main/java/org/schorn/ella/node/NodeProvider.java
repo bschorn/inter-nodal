@@ -33,16 +33,13 @@ import org.schorn.ella.node.ActiveNode.ActiveRef;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.Constraints;
-import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.INode;
 import org.schorn.ella.node.ActiveNode.Identity;
 import org.schorn.ella.node.ActiveNode.Identity.IdentityType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
-import org.schorn.ella.node.ActiveNode.ObjectCategory;
-import org.schorn.ella.node.ActiveNode.ObjectLevel;
-import org.schorn.ella.node.ActiveNode.ObjectPurpose;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ObjectType.ObjectSchema;
+import org.schorn.ella.node.ActiveNode.TypeAttribute;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueType.DataType;
 import org.schorn.ella.node.ActiveNode.ValueType.DefaultValue;
@@ -154,9 +151,9 @@ public interface NodeProvider extends Provider {
 
     ValueType createDynamicValueType(AppContext context, String value_type, Object value) throws Exception;
 
-    ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) throws Exception;
+    ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, List<TypeAttribute> attributes) throws Exception;
 
-    ObjectType createTransientObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType) throws Exception;
+    ObjectType createTransientObjectType(AppContext context, String object_type, ObjectSchema objectMembers) throws Exception;
 
     ArrayType createArrayType(AppContext context, String array_type, ActiveType activeType, BondType bondType) throws Exception;
 

@@ -23,34 +23,44 @@
  */
 package org.schorn.ella.util;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.Properties;
 
 /**
  *
  * @author bschorn
  */
 public class CommandLineArgs {
+    static private final Object LOCK = new Object();
 
-    private final String[] args;
-    private final Map<String, String> parameters = new HashMap<>();
-    private final Set<String> flags = new HashSet<>();
+    static private CommandLineArgs INSTANCE = null;
 
-    public CommandLineArgs(String[] args) {
-        this.args = args;
+    static public CommandLineArgs init(String[] args) {
+        CommandLineArgs instance = CommandLineArgs.INSTANCE;
+        if (instance == null) {
+            synchronized (LOCK) {
+                instance = CommandLineArgs.INSTANCE;
+                if (instance == null) {
+                    CommandLineArgs.INSTANCE = instance = new CommandLineArgs(args);
+                }
+            }
+        }
+        return CommandLineArgs.INSTANCE;
+    }
+
+    private final Properties properties = new Properties();
+
+    private CommandLineArgs(String[] args) {
         String paramName = null;
         String paramValue = null;
-        for (int i = 0; i < this.args.length; i++) {
-            String arg = this.args[i];
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
             if (arg.startsWith("-")) {
                 if (paramName != null && paramValue != null) {
-                    parameters.put(paramName, paramValue);
+                    this.properties.setProperty(paramName, paramValue);
                     paramName = null;
                     paramValue = null;
                 } else if (paramName != null) {
-                    this.flags.add(paramName);
+                    this.properties.setProperty(paramName, Boolean.TRUE.toString());
                     paramName = null;
                 }
             }
@@ -63,25 +73,19 @@ public class CommandLineArgs {
             }
         }
         if (paramName != null && paramValue != null) {
-            parameters.put(paramName, paramValue);
+            this.properties.setProperty(paramName, paramValue);
         }
     }
 
-    public void loadIntoSystemProperties() {
-        for (String parameterName : this.parameters.keySet()) {
-            System.setProperty(parameterName, this.parameters.get(parameterName));
-        }
+    static public Properties getProperties() {
+        return INSTANCE.properties;
     }
 
-    public Set<String> getParameterNames() {
-        return this.parameters.keySet();
+    static public boolean hasParameterFlag(String flagName) {
+        return Boolean.valueOf(INSTANCE.properties.getProperty(flagName, Boolean.FALSE.toString()));
     }
 
-    public String getParameterValue(String parameterName) {
-        return this.parameters.get(parameterName);
-    }
-
-    public boolean hasParameterFlag(String parameterFlag) {
-        return this.flags.contains(parameterFlag);
+    static public String getParameterValue(String parameterName) {
+        return INSTANCE.properties.getProperty(parameterName);
     }
 }

@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
@@ -155,7 +154,7 @@ public class NamedQueryImpl implements NamedQuery {
     public ObjectType createIntoType(AppContext context, ValueTypeMember[] selectValueTypeMembers,
             ObjectType fromType) throws Exception {
         String tempTypeName = this.queryName;
-        ObjectType.Builder builder = ObjectType.builder(context, tempTypeName, fromType.domainType());
+        ObjectType.Builder builder = ObjectType.builder(context, tempTypeName, fromType.attributes());
         for (ValueTypeMember valueTypeMember : selectValueTypeMembers) {
             builder.add(valueTypeMember.memberType());
         }

@@ -26,10 +26,6 @@ package org.schorn.ella.node;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayType;
-import org.schorn.ella.node.ActiveNode.DomainType;
-import org.schorn.ella.node.ActiveNode.ObjectCategory;
-import org.schorn.ella.node.ActiveNode.ObjectLevel;
-import org.schorn.ella.node.ActiveNode.ObjectPurpose;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueType.DataType;
@@ -243,9 +239,9 @@ public class MetaTypes {
         context(FieldTypes.TEXT),
         name(FieldTypes.TEXT),
         domain_type(FieldTypes.ENUM),
-        object_role(FieldTypes.ENUM),
+        object_category(FieldTypes.ENUM),
         object_level(FieldTypes.ENUM),
-        object_sub_role(FieldTypes.ENUM),
+        object_purpose(FieldTypes.ENUM),
         value_type(FieldTypes.TEXT),
         object_type(FieldTypes.TEXT),
         array_type(FieldTypes.TEXT),
@@ -392,9 +388,9 @@ public class MetaTypes {
         holidays(ValueTypes.holidays),
         list(ValueTypes.list),
         domain_type(ValueTypes.domain_type),
-        object_role(ValueTypes.object_role),
+        object_category(ValueTypes.object_category),
         object_level(ValueTypes.object_level),
-        object_sub_role(ValueTypes.object_sub_role);
+        object_purpose(ValueTypes.object_purpose);
 
         MetaType metaType;
         ArrayType arrayType;
@@ -443,19 +439,20 @@ public class MetaTypes {
      */
     public enum ObjectTypes implements MetaType {
         //IData(MetaValues.idata_uuid,MetaValues.idata_cts,MetaValues.idata_mts,MetaValues.idata_ats),
+        attributes(ValueTypes.domain_type, ValueTypes.object_category, ValueTypes.object_purpose, ValueTypes.object_level),
         member_types(ValueTypes.value_type, ValueTypes.object_type, ValueTypes.array_type, ValueTypes.bond_type, ValueTypes.meta_owner),
         constraints(ValueTypes.min_integer, ValueTypes.max_integer, ValueTypes.min_decimal, ValueTypes.max_decimal, ValueTypes.min_date, ValueTypes.max_date, ValueTypes.min_datetime, ValueTypes.max_datetime,
                 ValueTypes.min_time, ValueTypes.max_time, ValueTypes.pattern, ArrayValueTypes.day_of_week, ArrayValueTypes.holidays, ArrayValueTypes.list),
         data_types(ValueTypes.data_type_name, ValueTypes.data_group, ValueTypes.data_class, ValueTypes.parent_class, ValueTypes.type_class, ValueTypes.value_class),
         field_types(ValueTypes.name, ValueTypes.data_type, ObjectTypes.constraints, ValueTypes.meta_owner),
         value_types(ValueTypes.name, ValueTypes.field_type, ValueTypes.meta_owner),
-        object_types(ValueTypes.name, ValueTypes.domain_type, ValueTypes.object_role, ValueTypes.object_level, ValueTypes.object_sub_role, Arrays.member_types),
+        object_types(ValueTypes.name, ValueTypes.domain_type, ValueTypes.object_category, ValueTypes.object_level, ValueTypes.object_purpose, Arrays.member_types),
         array_types(ValueTypes.name, Arrays.member_types),
         meta(ValueTypes.context, Arrays.data_types, Arrays.field_types, Arrays.value_types, Arrays.array_types, Arrays.object_types),
         error_data(ValueTypes.context, ValueTypes.active_role, ValueTypes.active_type, ValueTypes.error_ts, ValueTypes.class_name, ValueTypes.method_name, ValueTypes.error_message, ValueTypes.parent_data, ValueTypes.child_data),
         error_report(ValueTypes.package_name, ValueTypes.class_name, ValueTypes.method_name, ValueTypes.error_message, ValueTypes.error_ts, ValueTypes.exception_message, ValueTypes.exception_stack_trace, ValueTypes.context, ValueTypes.active_type, ValueTypes.active_data),
         repo_stats(ValueTypes.object_type, ValueTypes.count, ValueTypes.bytes, ValueTypes.null_bytes, ValueTypes.min_datetime, ValueTypes.max_datetime),
-        identity_type(ValueTypes.idata_idtype, ValueTypes.idata_user, ValueTypes.idata_id, ValueTypes.idata_uuid, ValueTypes.idata_cts),;
+        identity_type(ValueTypes.idata_idtype, ValueTypes.idata_user, ValueTypes.idata_id, ValueTypes.idata_uuid, ValueTypes.idata_cts);
 
         ObjectType objectType;
         ArrayType arrayType;
@@ -477,7 +474,8 @@ public class MetaTypes {
         @Override
         public void register() throws Exception {
             if (this.metaTypes != null) {
-                ObjectType.Builder builder = ObjectType.builder(AppContext.Common, this.name(), DomainType.Meta, ObjectCategory.UNK, ObjectPurpose.UNK, ObjectLevel.UNK);
+                ObjectType.Builder builder = ObjectType.builder(AppContext.Common, this.name(),
+                        java.util.Arrays.asList(new ActiveNode.TypeAttribute[]{TypeAttributes.DomainType.Meta}));
                 for (MetaType metaType : this.metaTypes) {
                     ActiveType activeType;
                     switch (metaType.role()) {

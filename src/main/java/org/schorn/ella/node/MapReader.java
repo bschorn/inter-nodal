@@ -134,7 +134,7 @@ public class MapReader {
     }
 
     public void register() throws Exception {
-        ArrayData fieldMapArray = this.mapData.findFirst(MapTypes.Arrays.field_map.arrayType());
+        ArrayData fieldMapArray = this.mapData.findFirst(MapTypes.Arrayz.field_map.arrayType());
         if (fieldMapArray == null || fieldMapArray.size() == 0) {
             return;
         }

@@ -41,9 +41,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.schorn.ella.convert.TypeConverter;
-import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.DataGroup;
+import org.schorn.ella.node.TypeAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -520,13 +520,13 @@ public class ActiveSchema {
                 Object attrValue = null;
                 switch (entry.getKey()) {
                     case ObjectCategory:
-                        attrValue = ActiveNode.ObjectCategory.valueOf(entry.getValue());
+                        attrValue = TypeAttributes.ObjectCategory.valueOf(entry.getValue());
                         break;
                     case ObjectPurpose:
-                        attrValue = ActiveNode.ObjectPurpose.valueOf(entry.getValue());
+                        attrValue = TypeAttributes.ObjectPurpose.valueOf(entry.getValue());
                         break;
                     case ObjectLevel:
-                        attrValue = ActiveNode.ObjectLevel.valueOf(entry.getValue());
+                        attrValue = TypeAttributes.ObjectLevel.valueOf(entry.getValue());
                         break;
                 }
                 if (attrValue == null) {

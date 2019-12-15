@@ -25,10 +25,13 @@ package org.schorn.ella;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Properties;
+import java.util.StringJoiner;
 
 /**
  *
@@ -41,23 +44,39 @@ public enum ComponentProperties implements ActiveProperties, ClassLocator {
     WEB,
     HTML;
 
-    protected Path rootPath = null;
+    protected Path resourcesPath = null;
     protected Exception exception = null;
     protected Properties properties = null;
     protected ClassLocator classLocator = null;
+    static public final Properties SYSTEM = new Properties();
 
-    ComponentProperties() {
+    static public void init(Properties properties) {
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            SYSTEM.setProperty(entry.getKey().toString(), entry.getValue().toString());
+        }
+        for (ComponentProperties componentProperty : ComponentProperties.values()) {
+            componentProperty.init0();
+        }
+    }
+
+    static public void init() {
+        for (ComponentProperties componentProperty : ComponentProperties.values()) {
+            componentProperty.init0();
+        }
+    }
+
+    protected void init0() {
         Properties properties0 = null;
         try {
-            String root = System.getProperty("Active.Root");
+            String root = SYSTEM.getProperty("Active.Resources");
             if (root != null) {
-                this.rootPath = Paths.get(root);
+                this.resourcesPath = Paths.get(root);
             } else {
-                this.rootPath = Paths.get(Thread.currentThread().getContextClassLoader().getResource("").toURI());
+                this.resourcesPath = Paths.get(Thread.currentThread().getContextClassLoader().getResource("").toURI());
             }
-            String environment = System.getProperty("Active.Environment");
+            String environment = SYSTEM.getProperty("Active.Environment");
             String propertiesFilePath = String.format("%s%s%s%s%s-%s.properties",
-                    this.rootPath.toString(), File.separator, "props", File.separator, this.name().toLowerCase(), environment);
+                    this.resourcesPath.toString(), File.separator, "props", File.separator, this.name().toLowerCase(), environment);
             Path path = Paths.get(propertiesFilePath);
             if (Files.exists(path)) {
                 properties0 = new Properties();
@@ -74,8 +93,23 @@ public enum ComponentProperties implements ActiveProperties, ClassLocator {
         }
     }
 
-    public Path getRootPath() {
-        return this.rootPath;
+    public Path getResourcePath() {
+        return this.resourcesPath;
+    }
+
+    public Path getResourcedPath(String... dirsFile) throws FileNotFoundException {
+        String filePath = this.resourcesPath.toString();
+        StringJoiner pathJoiner = new StringJoiner(File.separator, "", "");
+        pathJoiner.add(this.resourcesPath.toString());
+        for (String dirFile : dirsFile) {
+            pathJoiner.add(dirFile);
+        }
+        filePath = pathJoiner.toString();
+        Path resourcedPath = Paths.get(filePath);
+        if (Files.exists(resourcedPath)) {
+            return resourcedPath;
+        }
+        throw new FileNotFoundException(String.format("File not found: '%s'", filePath));
     }
 
     @Override

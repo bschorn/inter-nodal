@@ -43,13 +43,13 @@ import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.Constraints;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType;
-import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.INode;
 import org.schorn.ella.node.ActiveNode.Identity;
 import org.schorn.ella.node.ActiveNode.Identity.IdentityType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ObjectType.ObjectSchema;
+import org.schorn.ella.node.ActiveNode.TypeAttribute;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueType.DataType;
 import org.schorn.ella.node.ActiveNode.ValueType.DefaultValue;
@@ -264,22 +264,18 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
      * @param context
      * @param object_type
      * @param objectMembers
-     * @param domainType
-     * @param objectRole
-     * @param objectLevel
-     * @param objectSubRole
      * @return
      * @throws Exception
      */
     @Override
-    public ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType, ActiveNode.ObjectCategory objectRole, ActiveNode.ObjectPurpose objectPurpose, ActiveNode.ObjectLevel objectLevel) throws Exception {
-        return (ObjectType) context.addType(createInstance(ObjectType.class, context, object_type, objectMembers, domainType,
-                Integer.valueOf(context.objectTypes().size()).shortValue(), objectRole, objectPurpose, objectLevel));
+    public ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, List<TypeAttribute> attributes) throws Exception {
+        return (ObjectType) context.addType(createInstance(ObjectType.class, context, object_type, objectMembers,
+                Integer.valueOf(context.objectTypes().size()).shortValue(), attributes));
     }
 
     @Override
-    public ObjectType createTransientObjectType(AppContext context, String object_type, ObjectSchema objectMembers, DomainType domainType) throws Exception {
-        return createInstance(ObjectType.class, context, object_type, objectMembers, domainType, Short.valueOf((short) -1));
+    public ObjectType createTransientObjectType(AppContext context, String object_type, ObjectSchema objectMembers) throws Exception {
+        return createInstance(ObjectType.class, context, object_type, objectMembers, Short.valueOf((short) -1));
     }
 
     @Override

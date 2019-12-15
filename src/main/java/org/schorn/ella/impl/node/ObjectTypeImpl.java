@@ -23,6 +23,9 @@
  */
 package org.schorn.ella.impl.node;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.format.SupportString;
 import org.schorn.ella.node.ActiveNode.ObjectType;
@@ -36,18 +39,17 @@ import org.schorn.ella.node.DataGroup;
 class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
 
     private final ObjectSchema schema;
-    private final DomainType domainType;
-    private final ObjectCategory objectRole;
-    private final ObjectLevel objectLevel;
-    private final ObjectPurpose objectPurpose;
+    private final List<TypeAttribute> attributeList;
+    private final Map<Class<? extends TypeAttribute>, TypeAttribute> attributeMap;
 
-    protected ObjectTypeImpl(AppContext context, String name, ObjectSchema schema, DomainType domainType, Short activeIdx, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) {
+    protected ObjectTypeImpl(AppContext context, String name, ObjectSchema schema, Short activeIdx, List<TypeAttribute> attributes) {
         super(context, name, activeIdx);
         this.schema = schema;
-        this.domainType = domainType;
-        this.objectRole = objectRole;
-        this.objectLevel = objectLevel;
-        this.objectPurpose = objectPurpose;
+        this.attributeList = attributes;
+        this.attributeMap = new HashMap<>();
+        for (TypeAttribute typeAttribute : attributes) {
+            this.attributeMap.put(typeAttribute.getClass(), typeAttribute);
+        }
     }
 
     @Override
@@ -56,23 +58,19 @@ class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
     }
 
     @Override
-    public DomainType domainType() {
-        return this.domainType;
+    public <T extends TypeAttribute> T getTypeAttribute(Class<T> classForT) {
+        return (T) this.attributeMap.get(classForT);
     }
 
     @Override
-    public ObjectCategory category() {
-        return this.objectRole;
+    public boolean hasTypeAttribute(TypeAttribute typeAttribute) {
+        TypeAttribute typeAttribute2 = this.attributeMap.get(typeAttribute.getClass());
+        return (typeAttribute2 != null && typeAttribute2 == typeAttribute);
     }
 
     @Override
-    public ObjectLevel level() {
-        return this.objectLevel;
-    }
-
-    @Override
-    public ObjectPurpose purpose() {
-        return this.objectPurpose;
+    public List<TypeAttribute> attributes() {
+        return this.attributeList;
     }
 
     @Override

@@ -124,140 +124,6 @@ public interface ActiveNode {
      *
      *
      */
-    public enum DomainType {
-        Attribute("attribute"),
-        ValueObject("value_object"),
-        Entity("entity"),
-        Aggregate("aggregate"),
-        Unknown("unknown"),
-        Dynamic("dynamic"),
-        Meta("meta"),
-        Mapping("mapping");
-
-        String tagName;
-
-        DomainType(String tagName) {
-            this.tagName = tagName;
-        }
-
-        /**
-         *
-         * @return
-         */
-        public String tagName() {
-            return this.tagName;
-        }
-
-        static public DomainType valueFromTag(String tagName) {
-            for (DomainType domainType : DomainType.values()) {
-                if (domainType.tagName().equals(tagName)) {
-                    return domainType;
-                }
-            }
-            return DomainType.Unknown;
-        }
-    }
-
-    /**
-     *
-     *
-     *
-     */
-    public enum ObjectCategory {
-        FACT,
-        ACT,
-        REACT,
-        META,
-        UNK;
-
-        /**
-         *
-         * @return
-         */
-        public String tagName() {
-            return this.name();
-        }
-
-        static public ObjectCategory valueFromTag(String tagName) {
-            if (tagName == null) {
-                return ObjectCategory.UNK;
-            }
-            for (ObjectCategory category : ObjectCategory.values()) {
-                if (category.name().equalsIgnoreCase(tagName)) {
-                    return category;
-                }
-            }
-            return ObjectCategory.UNK;
-        }
-    }
-
-    public enum ObjectPurpose {
-        ENTITY(ObjectCategory.FACT),
-        ASSOCIATION(ObjectCategory.FACT),
-        REFERENCE(ObjectCategory.FACT),
-        REQUEST(ObjectCategory.ACT),
-        EXECUTION(ObjectCategory.ACT),
-        REALTIME(ObjectCategory.REACT),
-        SNAPSHOT(ObjectCategory.REACT),
-        META(ObjectCategory.META),
-        UNK(ObjectCategory.UNK);
-
-        ObjectCategory category;
-
-        ObjectPurpose(ObjectCategory category) {
-            this.category = category;
-        }
-
-        public ObjectCategory category() {
-            return this.category;
-        }
-        static public ObjectPurpose valueFromTag(String tagName) {
-            if (tagName == null) {
-                return ObjectPurpose.UNK;
-            }
-            for (ObjectPurpose purpose : ObjectPurpose.values()) {
-                if (purpose.name().equalsIgnoreCase(tagName)) {
-                    return purpose;
-                }
-            }
-            return ObjectPurpose.UNK;
-        }
-    }
-
-    public enum ObjectLevel {
-        UNIVERSAL,
-        INDUSTRY,
-        ENTERPRISE,
-        DIVISION,
-        DEPARTMENT,
-        LOB,
-        APPLICATION,
-        META,
-        UNK;
-
-        public String tagName() {
-            return this.name();
-        }
-
-        static public ObjectLevel valueFromTag(String tagName) {
-            if (tagName == null) {
-                return ObjectLevel.UNK;
-            }
-            for (ObjectLevel level : ObjectLevel.values()) {
-                if (level.name().equalsIgnoreCase(tagName)) {
-                    return level;
-                }
-            }
-            return ObjectLevel.UNK;
-
-        }
-    }
-
-    /**
-     *
-     *
-     *
-     */
     public enum Format {
         JSON, // (String.class),
         JsonRecord, // (String.class),
@@ -327,6 +193,15 @@ public interface ActiveNode {
     }
 
     /**
+     *
+     */
+    interface TypeAttribute {
+        String attributeName();
+
+        String attributeValue();
+    }
+
+    /**
      * Active Types that have no permanence are transient. They can *not* be
      * placed into the Repo (nor are they meant to be).
      */
@@ -366,6 +241,19 @@ public interface ActiveNode {
         }
 
         int activeIdx();
+
+        default <T extends TypeAttribute> T getTypeAttribute(Class<T> classForT) {
+            return null;
+        }
+
+        default boolean hasTypeAttribute(TypeAttribute typeAttribute) {
+            return false;
+        }
+
+        default List<TypeAttribute> attributes() {
+            return new ArrayList<>();
+        }
+
     }
 
     /**
@@ -911,14 +799,6 @@ public interface ActiveNode {
 
         boolean isDynamic();
 
-        DomainType domainType();
-
-        ObjectCategory category();
-
-        ObjectLevel level();
-
-        ObjectPurpose purpose();
-
         /**
          * Since ObjectData objects are immutable we use the Builder Pattern to
          * create them.
@@ -1055,12 +935,8 @@ public interface ActiveNode {
             Integer getIndex(ActiveType activeType);
         }
 
-        static Builder builder(AppContext context, String object_type, DomainType domainType) throws Exception {
-            return NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type, domainType, ObjectCategory.UNK, ObjectPurpose.UNK, ObjectLevel.UNK);
-        }
-
-        static Builder builder(AppContext context, String object_type, DomainType domainType, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) throws Exception {
-            return NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type, domainType, objectRole, objectPurpose, objectLevel);
+        static Builder builder(AppContext context, String object_type, List<TypeAttribute> typeAttributes) throws Exception {
+            return NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type, typeAttributes);
         }
 
         /*
@@ -1080,8 +956,7 @@ public interface ActiveNode {
          * @throws Exception
          */
         static ObjectType dynamic(AppContext context, String object_type) throws Exception {
-            Builder builder = NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type,
-                    DomainType.Dynamic);
+            Builder builder = NodeProvider.provider().createInstance(ObjectType.Builder.class, context, object_type);
             return builder.dynamic();
         }
 

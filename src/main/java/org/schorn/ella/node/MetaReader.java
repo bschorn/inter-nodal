@@ -37,12 +37,8 @@ import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType;
-import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.Format;
-import org.schorn.ella.node.ActiveNode.ObjectCategory;
 import org.schorn.ella.node.ActiveNode.ObjectData;
-import org.schorn.ella.node.ActiveNode.ObjectLevel;
-import org.schorn.ella.node.ActiveNode.ObjectPurpose;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.Role;
 import org.schorn.ella.node.ActiveNode.StructData;
@@ -563,31 +559,22 @@ public class MetaReader extends AbstractContextual {
         if (vdName != null && vdName.activeValue() != null) {
             memberTypeName = vdName.activeValue().toString();
         }
-        DomainType memberDomainType = DomainType.Unknown;
-        ValueData vdDomainType = (ValueData) objectData.get(MetaTypes.ValueTypes.domain_type.valueType());
-        if (vdDomainType != null && vdDomainType.activeValue() != null) {
-            String domain_type = vdDomainType.activeValue().toString();
-            memberDomainType = DomainType.valueFromTag(domain_type);
+        List<ActiveNode.TypeAttribute> attributeList = new ArrayList<>();
+
+        ObjectData attributesData = (ObjectData) objectData.get(MetaTypes.ObjectTypes.attributes.objectType());
+
+        for (ActiveNode.MemberDef memberDef : MetaTypes.ObjectTypes.attributes.objectType().schema().memberDefs()) {
+            if (memberDef.activeType().role() == ActiveNode.Role.Value) {
+                ValueType attributeType = (ValueType) memberDef.activeType();
+                ValueData attributeData = attributesData.get(attributeType);
+                ActiveNode.TypeAttribute typeAttribute = TypeAttributes.valueFromTag(attributeType, attributeData.activeValue().toString());
+                if (typeAttribute != null) {
+                    attributeList.add(typeAttribute);
+                }
+            }
         }
-        ObjectCategory memberObjectRole = ObjectCategory.UNK;
-        ValueData vdObjectRole = (ValueData) objectData.get(MetaTypes.ValueTypes.object_role.valueType());
-        if (vdObjectRole != null && vdObjectRole.activeValue() != null) {
-            String object_role = vdObjectRole.activeValue().toString();
-            memberObjectRole = ObjectCategory.valueFromTag(object_role);
-        }
-        ObjectLevel memberObjectLevel = ObjectLevel.UNK;
-        ValueData vdObjectLevel = (ValueData) objectData.get(MetaTypes.ValueTypes.object_role.valueType());
-        if (vdObjectLevel != null && vdObjectLevel.activeValue() != null) {
-            String object_level = vdObjectLevel.activeValue().toString();
-            memberObjectLevel = ObjectLevel.valueFromTag(object_level);
-        }
-        ObjectPurpose memberObjectPurpose = ObjectPurpose.UNK;
-        ValueData vdObjectSubRole = (ValueData) objectData.get(MetaTypes.ValueTypes.object_role.valueType());
-        if (vdObjectSubRole != null && vdObjectSubRole.activeValue() != null) {
-            String object_level = vdObjectSubRole.activeValue().toString();
-            memberObjectPurpose = ObjectPurpose.valueFromTag(object_level);
-        }
-        ObjectType.Builder builder = ActiveNode.ObjectType.builder(this.context(), memberTypeName, memberDomainType, memberObjectRole, memberObjectPurpose, memberObjectLevel);
+
+        ObjectType.Builder builder = ActiveNode.ObjectType.builder(this.context(), memberTypeName, attributeList);
         ArrayData adMemberTypes = (ArrayData) objectData.get(MetaTypes.Arrays.member_types.arrayType());
         for (ActiveData adata : adMemberTypes.nodes()) {
             if (adata instanceof ObjectData) {

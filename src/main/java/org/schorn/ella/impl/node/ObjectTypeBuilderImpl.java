@@ -28,14 +28,11 @@ import java.util.List;
 import java.util.Optional;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveType;
-import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
-import org.schorn.ella.node.ActiveNode.ObjectCategory;
-import org.schorn.ella.node.ActiveNode.ObjectLevel;
-import org.schorn.ella.node.ActiveNode.ObjectPurpose;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ObjectType.Builder;
 import org.schorn.ella.node.ActiveNode.ObjectType.ObjectSchema;
+import org.schorn.ella.node.ActiveNode.TypeAttribute;
 import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.NodeProvider;
 import org.schorn.ella.util.Functions;
@@ -53,21 +50,21 @@ class ObjectTypeBuilderImpl implements Builder {
 
     private final AppContext context;
     private final String name;
-    private final DomainType domainType;
-    private final ObjectCategory objectRole;
-    private final ObjectLevel objectLevel;
-    private final ObjectPurpose objectPurpose;
     private final List<MemberDef> members;
+    private final List<TypeAttribute> attributes;
     private ObjectType dynamicType = null;
 
-    ObjectTypeBuilderImpl(AppContext context, String name, DomainType domainType, ObjectCategory objectRole, ObjectPurpose objectPurpose, ObjectLevel objectLevel) {
+    ObjectTypeBuilderImpl(AppContext context, String name, List<TypeAttribute> attributes) {
         this.context = context;
         this.name = name;
-        this.domainType = domainType;
-        this.objectRole = objectRole;
-        this.objectLevel = objectLevel;
-        this.objectPurpose = objectPurpose;
         this.members = new ArrayList<>(10);
+        this.attributes = attributes;
+    }
+    ObjectTypeBuilderImpl(AppContext context, String name) {
+        this.context = context;
+        this.name = name;
+        this.members = new ArrayList<>(10);
+        this.attributes = new ArrayList<>();
     }
 
     /**
@@ -121,7 +118,7 @@ class ObjectTypeBuilderImpl implements Builder {
     public ObjectType build() {
         ObjectSchema schema = new ObjectSchemaImpl(this.members);
         try {
-            return NodeProvider.provider().createObjectType(context, name, schema, domainType, objectRole, objectPurpose, objectLevel);
+            return NodeProvider.provider().createObjectType(context, name, schema, this.attributes);
         } catch (Exception ex) {
             LGR.error(Functions.getStackTraceAsString(ex));
             return null;
@@ -132,7 +129,7 @@ class ObjectTypeBuilderImpl implements Builder {
     public ObjectType lease() {
         ObjectSchema schema = new ObjectSchemaImpl(this.members);
         try {
-            return NodeProvider.provider().createTransientObjectType(context, name, schema, domainType);
+            return NodeProvider.provider().createTransientObjectType(context, name, schema);
         } catch (Exception ex) {
             LGR.error(Functions.getStackTraceAsString(ex));
             return null;
@@ -224,26 +221,6 @@ class ObjectTypeBuilderImpl implements Builder {
                 builder.add(valueData);
             }
             return builder.build();
-        }
-
-        @Override
-        public DomainType domainType() {
-            return DomainType.Dynamic;
-        }
-
-        @Override
-        public ObjectCategory category() {
-            return ObjectCategory.UNK;
-        }
-
-        @Override
-        public ObjectLevel level() {
-            return ObjectLevel.UNK;
-        }
-
-        @Override
-        public ObjectPurpose purpose() {
-            return ObjectPurpose.UNK;
         }
 
     }

@@ -27,24 +27,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ArrayType;
-import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
-import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.node.BondType;
+import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.repo.RepoCoordinators.Summary;
 import org.schorn.ella.repo.RepoData;
 import org.schorn.ella.repo.RepoData.CurrentState;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -68,7 +65,7 @@ class SummaryImpl extends AbstractContextual implements Summary {
             valueTypes.add(ValueType.create(context, "Total", MetaTypes.FieldTypes.NUMBER.fieldType()));
             valueTypes.add(ValueType.create(context, "Utilization", MetaTypes.FieldTypes.DECIMAL.fieldType()));
             valueTypes.add(ValueType.create(context, "Bytes", MetaTypes.FieldTypes.NUMBER.fieldType()));
-            ObjectType.Builder builder = ObjectType.builder(context, "-RepoSummary-", DomainType.Dynamic);
+            ObjectType.Builder builder = ObjectType.builder(context, "-RepoSummary-", new ArrayList<>());
             valueTypes.stream().forEach(vt -> builder.add(vt, BondType.OPTIONAL));
             this.typeSummaryRow = builder.build();
             this.typeSummaryTable = ArrayType.create(context, this.typeSummaryRow.name(), this.typeSummaryRow, BondType.OPTIONAL);

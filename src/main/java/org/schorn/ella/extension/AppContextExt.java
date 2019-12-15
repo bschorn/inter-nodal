@@ -30,10 +30,10 @@ import org.schorn.ella.app.NodeConfig;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveRef;
 import org.schorn.ella.node.ActiveNode.ActiveRef.ReferenceType;
-import org.schorn.ella.node.ActiveNode.DomainType;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.MetaTypes.AutoTypes;
+import org.schorn.ella.node.TypeAttributes;
 
 /**
  *
@@ -48,7 +48,8 @@ public interface AppContextExt {
     default List<ObjectType> aggregateTypes() {
         if (this instanceof AppContext) {
             return ((AppContext) this).objectTypes().stream()
-                    .filter(ot -> ot.domainType().equals(DomainType.Aggregate))
+                    //.filter(ot -> ot.domainType().equals(DomainType.Aggregate))
+                    .filter(ot -> ot.hasTypeAttribute(TypeAttributes.DomainType.Aggregate))
                     .collect(Collectors.toList());
         }
         return null;
@@ -60,7 +61,7 @@ public interface AppContextExt {
     default List<ObjectType> entityTypes() {
         if (this instanceof AppContext) {
             return ((AppContext) this).objectTypes().stream()
-                    .filter(ot -> ot.domainType().equals(DomainType.Aggregate) || ot.domainType().equals(DomainType.Entity))
+                    .filter(ot -> ot.hasTypeAttribute(TypeAttributes.DomainType.Aggregate) || ot.hasTypeAttribute(TypeAttributes.DomainType.Entity))
                     .collect(Collectors.toList());
         }
         return null;
@@ -72,7 +73,7 @@ public interface AppContextExt {
     default List<ObjectType> valueObjectTypes() {
         if (this instanceof AppContext) {
             return ((AppContext) this).objectTypes().stream()
-                    .filter(ot -> ot.domainType().equals(DomainType.ValueObject))
+                    .filter(ot -> ot.hasTypeAttribute(TypeAttributes.DomainType.ValueObject))
                     .collect(Collectors.toList());
         }
         return null;
