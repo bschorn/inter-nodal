@@ -268,18 +268,22 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
      * @throws Exception
      */
     @Override
-    public ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, List<TypeAttribute> attributes) throws Exception {
+    public ObjectType createObjectType(AppContext context, String object_type,
+            ObjectSchema objectMembers, List<TypeAttribute> attributes,
+            List<ObjectType> parentTypes) throws Exception {
         return (ObjectType) context.addType(createInstance(ObjectType.class, context, object_type, objectMembers,
-                Integer.valueOf(context.objectTypes().size()).shortValue(), attributes));
+                Integer.valueOf(context.objectTypes().size()).shortValue(), attributes, parentTypes));
     }
 
     @Override
-    public ObjectType createTransientObjectType(AppContext context, String object_type, ObjectSchema objectMembers) throws Exception {
+    public ObjectType createTransientObjectType(AppContext context,
+            String object_type, ObjectSchema objectMembers) throws Exception {
         return createInstance(ObjectType.class, context, object_type, objectMembers, Short.valueOf((short) -1));
     }
 
     @Override
-    public ArrayType createArrayType(AppContext context, String array_type, ActiveType activeType, BondType bondType) throws Exception {
+    public ArrayType createArrayType(AppContext context, String array_type,
+            ActiveType activeType, BondType bondType) throws Exception {
         MemberDef memberDef = null;
         if (activeType != null) {
             if (bondType == null) {

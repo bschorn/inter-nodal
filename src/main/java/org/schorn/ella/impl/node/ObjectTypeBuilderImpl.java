@@ -52,19 +52,30 @@ class ObjectTypeBuilderImpl implements Builder {
     private final String name;
     private final List<MemberDef> members;
     private final List<TypeAttribute> attributes;
+    private final List<ObjectType> baseTypes;
     private ObjectType dynamicType = null;
+
+    ObjectTypeBuilderImpl(AppContext context, String name, List<TypeAttribute> attributes, List<ObjectType> baseTypes) {
+        this.context = context;
+        this.name = name;
+        this.members = new ArrayList<>(10);
+        this.attributes = attributes;
+        this.baseTypes = baseTypes;
+    }
 
     ObjectTypeBuilderImpl(AppContext context, String name, List<TypeAttribute> attributes) {
         this.context = context;
         this.name = name;
         this.members = new ArrayList<>(10);
         this.attributes = attributes;
+        this.baseTypes = new ArrayList<>();
     }
     ObjectTypeBuilderImpl(AppContext context, String name) {
         this.context = context;
         this.name = name;
         this.members = new ArrayList<>(10);
         this.attributes = new ArrayList<>();
+        this.baseTypes = new ArrayList<>();
     }
 
     /**
@@ -111,6 +122,12 @@ class ObjectTypeBuilderImpl implements Builder {
         return this;
     }
 
+    @Override
+    public Builder addBaseType(ObjectType parentType) {
+        this.baseTypes.add(parentType);
+        return this;
+    }
+
     /**
      *
      */
@@ -118,7 +135,7 @@ class ObjectTypeBuilderImpl implements Builder {
     public ObjectType build() {
         ObjectSchema schema = new ObjectSchemaImpl(this.members);
         try {
-            return NodeProvider.provider().createObjectType(context, name, schema, this.attributes);
+            return NodeProvider.provider().createObjectType(context, name, schema, this.attributes, this.baseTypes);
         } catch (Exception ex) {
             LGR.error(Functions.getStackTraceAsString(ex));
             return null;
@@ -221,6 +238,16 @@ class ObjectTypeBuilderImpl implements Builder {
                 builder.add(valueData);
             }
             return builder.build();
+        }
+
+        @Override
+        public List<ObjectType> baseTypes() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public Builder addBaseType(ObjectType parentType) {
+            return this;
         }
 
     }

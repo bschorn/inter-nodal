@@ -25,14 +25,13 @@ package org.schorn.ella.format;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
 import org.schorn.ella.node.ActiveNode.ObjectType;
-import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ObjectType.ObjectSchema;
+import org.schorn.ella.node.ActiveNode.ValueType;
+import org.schorn.ella.node.BondType;
 
 /**
  *
@@ -51,6 +50,12 @@ abstract class ActiveTypeToString<T> implements CustomToString<T> {
         String header = String.format("%s {%d} #%s", indent(generation), otype.activeId(), otype.name());
         List<String> tokens = new ArrayList<>(20);
         tokens.add(header);
+        if (!otype.attributes().isEmpty()) {
+            tokens.add(TypeAttributesToString.INSTANCE.format(otype.attributes()));
+        }
+        if (!otype.baseTypes().isEmpty()) {
+            tokens.add(ParentTypesToString.INSTANCE.format(otype.baseTypes()));
+        }
         ObjectSchema schema = otype.schema();
         for (MemberDef memberType : schema.memberDefs()) {
             switch (memberType.activeType().role()) {

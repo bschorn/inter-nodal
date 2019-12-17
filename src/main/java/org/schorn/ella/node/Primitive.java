@@ -35,7 +35,6 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
 import org.schorn.ella.node.ActiveNode.ValueData.PrimitiveData;
 import org.schorn.ella.node.ActiveNode.ValueType.PrimitiveType;
 import org.schorn.ella.util.StringCached;
@@ -830,7 +829,7 @@ public interface Primitive {
     }
 
     /*
-	 * INTEGER
+     * INTEGER
      */
     static class Pinteger implements PrimitiveType<Integer>, PrimitiveData<Integer>, Comparable<Pinteger> {
 

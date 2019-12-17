@@ -151,7 +151,7 @@ public interface NodeProvider extends Provider {
 
     ValueType createDynamicValueType(AppContext context, String value_type, Object value) throws Exception;
 
-    ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, List<TypeAttribute> attributes) throws Exception;
+    ObjectType createObjectType(AppContext context, String object_type, ObjectSchema objectMembers, List<TypeAttribute> attributes, List<ObjectType> baseTypes) throws Exception;
 
     ObjectType createTransientObjectType(AppContext context, String object_type, ObjectSchema objectMembers) throws Exception;
 

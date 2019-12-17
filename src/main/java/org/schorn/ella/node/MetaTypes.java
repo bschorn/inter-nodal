@@ -245,6 +245,7 @@ public class MetaTypes {
         value_type(FieldTypes.TEXT),
         object_type(FieldTypes.TEXT),
         array_type(FieldTypes.TEXT),
+        base_types(FieldTypes.TEXT),
         skey(FieldTypes.TEXT),
         fkey(FieldTypes.TEXT),
         key(FieldTypes.TEXT),
@@ -387,10 +388,7 @@ public class MetaTypes {
         day_of_week(ValueTypes.day_of_week),
         holidays(ValueTypes.holidays),
         list(ValueTypes.list),
-        domain_type(ValueTypes.domain_type),
-        object_category(ValueTypes.object_category),
-        object_level(ValueTypes.object_level),
-        object_purpose(ValueTypes.object_purpose);
+        base_types(ValueTypes.base_types);
 
         MetaType metaType;
         ArrayType arrayType;
@@ -446,7 +444,7 @@ public class MetaTypes {
         data_types(ValueTypes.data_type_name, ValueTypes.data_group, ValueTypes.data_class, ValueTypes.parent_class, ValueTypes.type_class, ValueTypes.value_class),
         field_types(ValueTypes.name, ValueTypes.data_type, ObjectTypes.constraints, ValueTypes.meta_owner),
         value_types(ValueTypes.name, ValueTypes.field_type, ValueTypes.meta_owner),
-        object_types(ValueTypes.name, ValueTypes.domain_type, ValueTypes.object_category, ValueTypes.object_level, ValueTypes.object_purpose, Arrays.member_types),
+        object_types(ValueTypes.name, ObjectTypes.attributes, ArrayValueTypes.base_types, Arrays.member_types),
         array_types(ValueTypes.name, Arrays.member_types),
         meta(ValueTypes.context, Arrays.data_types, Arrays.field_types, Arrays.value_types, Arrays.array_types, Arrays.object_types),
         error_data(ValueTypes.context, ValueTypes.active_role, ValueTypes.active_type, ValueTypes.error_ts, ValueTypes.class_name, ValueTypes.method_name, ValueTypes.error_message, ValueTypes.parent_data, ValueTypes.child_data),

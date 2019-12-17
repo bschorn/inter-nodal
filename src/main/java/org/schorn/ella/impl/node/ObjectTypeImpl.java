@@ -39,22 +39,38 @@ import org.schorn.ella.node.DataGroup;
 class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
 
     private final ObjectSchema schema;
+    private final List<ObjectType> baseTypes;
     private final List<TypeAttribute> attributeList;
     private final Map<Class<? extends TypeAttribute>, TypeAttribute> attributeMap;
 
-    protected ObjectTypeImpl(AppContext context, String name, ObjectSchema schema, Short activeIdx, List<TypeAttribute> attributes) {
+    protected ObjectTypeImpl(AppContext context, String name, ObjectSchema schema,
+            Short activeIdx, List<TypeAttribute> attributes, List<ObjectType> baseTypes) {
         super(context, name, activeIdx);
         this.schema = schema;
+        this.baseTypes = baseTypes;
         this.attributeList = attributes;
         this.attributeMap = new HashMap<>();
         for (TypeAttribute typeAttribute : attributes) {
             this.attributeMap.put(typeAttribute.getClass(), typeAttribute);
+        }
+        for (ObjectType baseType : baseTypes) {
+            for (TypeAttribute typeAttribute : baseType.attributes()) {
+                if (!this.attributeMap.containsKey(typeAttribute.getClass())) {
+                    this.attributeList.add(typeAttribute);
+                    this.attributeMap.put(typeAttribute.getClass(), typeAttribute);
+                }
+            }
         }
     }
 
     @Override
     public boolean isDynamic() {
         return false;
+    }
+
+    @Override
+    public List<ObjectType> baseTypes() {
+        return this.baseTypes;
     }
 
     @Override

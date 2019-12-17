@@ -165,7 +165,11 @@ public class ObjectTypeFormats {
                 }
             }
             if (objectType.parents() != null && !objectType.parents().isEmpty()) {
-                map.put("parent_type", objectType.parents().get(0).parentName());
+                List<String> parents = new ArrayList<>();
+                for (ActiveSchema.Parent parent : objectType.parents()) {
+                    parents.add(parent.parentName());
+                }
+                map.put("base_types", parents);
             }
             List<Map> memberMaps = new ArrayList<>();
             for (ActiveSchema.Member member : objectType.members()) {

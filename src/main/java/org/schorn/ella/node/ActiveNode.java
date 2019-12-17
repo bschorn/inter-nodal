@@ -821,11 +821,15 @@ public interface ActiveNode {
 
         ObjectSchema schema();
 
+        List<ObjectType> baseTypes();
+
         interface Builder {
 
             Builder add(ActiveType activeType, BondType bondType);
 
             Builder add(ActiveType activeType);
+
+            Builder addBaseType(ObjectType baseType);
 
             /**
              * Create a registered immutable ObjectType.
