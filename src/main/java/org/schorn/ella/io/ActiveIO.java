@@ -26,17 +26,15 @@ package org.schorn.ella.io;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.FunctionalException;
 import org.schorn.ella.Mingleton;
-import org.schorn.ella.context.AppContext;
 import org.schorn.ella.context.ActiveContext.Contextual;
+import org.schorn.ella.context.AppContext;
+import org.schorn.ella.repo.RepoProvider;
 import org.schorn.ella.transform.ActiveTransform.Transform;
 import org.schorn.ella.util.Functions;
-import org.schorn.ella.repo.RepoProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Input/Output Interfaces

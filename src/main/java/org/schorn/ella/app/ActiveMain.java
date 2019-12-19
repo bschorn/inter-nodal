@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import org.schorn.ella.ComponentProperties;
 import org.schorn.ella.context.AppContext;
+import org.schorn.ella.html.ActiveHtml;
+import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.MetaReader;
 import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.node.NodeProvider;
@@ -144,6 +146,24 @@ public final class ActiveMain {
                     }
                 }
             }
+        }
+    }
+
+    private void initLabels() {
+        for (String labelFileName : NodeConfig.ACTIVE_LABELS.values(",")) {
+            Path labelPath = Paths.get(labelFileName);
+            if (Files.exists(labelPath)) {
+
+            }
+        }
+        ActiveNode.ActiveType labeledType = null;
+        ActiveNode.ActiveType parentType = null;
+        String label = null;
+        try {
+            ActiveHtml.HtmlLabeler.get().set(labeledType, label);
+            ActiveHtml.HtmlLabeler.get().set(parentType, labeledType, label);
+        } catch (Exception ex) {
+
         }
     }
 

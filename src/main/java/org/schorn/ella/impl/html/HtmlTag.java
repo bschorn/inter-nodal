@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
-
 import org.schorn.ella.html.ActiveHtml.HtmlSelectElement;
 
 /**
@@ -424,7 +423,7 @@ public interface HtmlTag {
             }
 
             public Builder label(String label) {
-                this.label = label;
+                this.label = label != null ? label : this.label;
                 return this;
             }
 

@@ -24,17 +24,14 @@
 package org.schorn.ella.impl.html;
 
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.html.ActiveHtml.SelectBuilder;
-import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.node.ActiveNode.ActiveData;
-import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintData;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType;
-import org.schorn.ella.util.Functions;
+import org.schorn.ella.node.ActiveNode.ValueType;
+import org.schorn.ella.node.DataGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -55,7 +52,7 @@ class EnumListBuilderImpl extends SelectBuilderImpl implements SelectBuilder {
     EnumListBuilderImpl(ValueType valueType) {
         this.valueType = valueType;
         List<ConstraintType<?>> constraintTypes = this.valueType.fieldType().constraints().constraintTypes();
-        constraintTypes.stream().forEach(constraintType -> {
+        for (ConstraintType constraintType : constraintTypes) {
             ConstraintData constraintData = this.valueType.fieldType().constraints().constraint(constraintType);
             List<Object> values = constraintData.constraintValues();
             if (values != null && !values.isEmpty()) {
@@ -65,16 +62,19 @@ class EnumListBuilderImpl extends SelectBuilderImpl implements SelectBuilder {
                     case ENUM:
                         switch (constraintName) {
                             case "list":
-                                values.stream()
-                                        .filter(o -> o instanceof ActiveData)
-                                        .map(o -> ActiveData.class.cast(o))
-                                        .forEach(item -> {
-                                            try {
-                                                this.addOption(item.activeValue().toString(), item.activeValue().toString());
-                                            } catch (Exception ex) {
-                                                LGR.error(Functions.getStackTraceAsString(ex));
+                                for (Object obj : values) {
+                                    if (obj instanceof ActiveData) {
+                                        ActiveData adata = (ActiveData) obj;
+                                        if (adata != null && adata.activeValue() != null) {
+                                            String[] keyValue = adata.activeValue().toString().split("\\|");
+                                            if (keyValue.length == 2) {
+                                                this.addOption(keyValue[0], keyValue[1]);
+                                            } else {
+                                                this.addOption(keyValue[0], keyValue[0]);
                                             }
-                                        });
+                                        }
+                                    }
+                                }
                                 break;
                             default:
                                 break;
@@ -84,6 +84,6 @@ class EnumListBuilderImpl extends SelectBuilderImpl implements SelectBuilder {
                         break;
                 }
             }
-        });
+        }
     }
 }

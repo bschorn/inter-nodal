@@ -23,20 +23,18 @@
  */
 package org.schorn.ella.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.repo.RepoSupport;
 import org.schorn.ella.repo.RepoSupport.ActiveCondition;
 import org.schorn.ella.repo.RepoSupport.ActiveQuery;
 import org.schorn.ella.repo.RepoSupport.ConditionStatementParser;
 import org.schorn.ella.repo.RepoSupport.QueryData;
-import org.schorn.ella.server.AdminServer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.schorn.ella.server.ActiveServer.ContextServer;
+import org.schorn.ella.server.AdminServer;
 import org.schorn.ella.util.Functions;
 
 /**
@@ -99,8 +97,8 @@ public interface ContentAPI {
             whereStrings.addAll(namedQuery.queryFilters());
 
             /*
-			 * where clause conditions can be added to queryBuilder at this point before
-			 * calling build() 
+             * where clause conditions can be added to queryBuilder at this point before
+             * calling build()
              */
             if (optParams != null) {
                 Object objParam = optParams.get("where");

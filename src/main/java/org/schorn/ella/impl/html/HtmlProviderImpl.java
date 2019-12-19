@@ -29,13 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
-import org.schorn.ella.html.HtmlConfig;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.HtmlAttribute;
@@ -49,6 +44,7 @@ import org.schorn.ella.html.ActiveHtml.InputBuilder;
 import org.schorn.ella.html.ActiveHtml.SelectBuilder;
 import org.schorn.ella.html.ActiveHtml.TableBuilder;
 import org.schorn.ella.html.ActiveHtml.TableData;
+import org.schorn.ella.html.HtmlConfig;
 import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.impl.html.HtmlSelectElementImpl.ValueLabelImpl;
 import org.schorn.ella.node.ActiveNode;
@@ -61,6 +57,8 @@ import org.schorn.ella.node.ActiveNode.Role;
 import org.schorn.ella.node.ActiveNode.StructData;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -147,7 +145,10 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     public HtmlElement html_form(ActiveNode.ObjectType objectType) throws Exception {
         String form_id = objectType.name();
         String form_name = objectType.name();
-        String form_label = objectType.name();
+        String form_label = HtmlProvider.provider().labeler().get(objectType, null);
+        if (form_label == null) {
+            form_label = objectType.name();
+        }
 
         HtmlDivElement divElement = ActiveHtml.HtmlDivElement.create();
         divElement.addClass(objectType.name());
