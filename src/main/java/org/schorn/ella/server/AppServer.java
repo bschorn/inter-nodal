@@ -100,7 +100,7 @@ public interface AppServer {
      * @throws Exception
      */
     static public void load() throws Exception {
-        String activeServers = ServerConfig.ACTIVE_SERVERS.value();
+        String activeServers = ServerConfig.ACTIVE_SERVERS.asString();
         String[] classNames = activeServers.split(",");
         for (String className : classNames) {
             try {

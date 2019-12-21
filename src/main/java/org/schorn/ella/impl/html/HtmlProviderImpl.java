@@ -156,7 +156,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         HtmlLabelElement labelElement = ActiveHtml.HtmlLabelElement.create();
         labelElement.setFor(form_id);
         labelElement.setTextContent(form_label);
-        labelElement.addClass(HtmlConfig.HTML_FORM_LABEL_CLASS.value());
+        labelElement.addClass(HtmlConfig.HTML_FORM_LABEL_CLASS.asString());
         divElement.append(labelElement);
 
         ActiveHtml.FormBuilder formBuilder = ActiveHtml.FormBuilder.builder(form_id, form_name);
@@ -212,7 +212,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         }
 
         HtmlFormElement formElement = formBuilder.build();
-        formElement.addClass(HtmlConfig.HTML_FORM_CLASS.value());
+        formElement.addClass(HtmlConfig.HTML_FORM_CLASS.asString());
         divElement.append(formElement);
 
         return divElement;
@@ -264,8 +264,8 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         builder.setName(valueName);
         builder.setLabel(labelName);
         builder.addClassDiv(arrayData.name(), valueName);
-        builder.addClassLabel(HtmlConfig.HTML_SELECT_LABEL_CLASS.value());
-        builder.addClassSelect(HtmlConfig.HTML_SELECT_CLASS.value());
+        builder.addClassLabel(HtmlConfig.HTML_SELECT_LABEL_CLASS.asString());
+        builder.addClassSelect(HtmlConfig.HTML_SELECT_CLASS.asString());
         return builder.build();
     }
 
@@ -285,8 +285,8 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         //enumListBuilder.setLabel(String.format("%s.%s", objectType.label(), valueType.label()));
         enumListBuilder.setLabel(String.format("%s", valueType.label()));
         enumListBuilder.addClassDiv(objectType.name(), valueType.name());
-        enumListBuilder.addClassLabel(HtmlConfig.HTML_SELECT_LABEL_CLASS.value());
-        enumListBuilder.addClassSelect(HtmlConfig.HTML_SELECT_CLASS.value());
+        enumListBuilder.addClassLabel(HtmlConfig.HTML_SELECT_LABEL_CLASS.asString());
+        enumListBuilder.addClassSelect(HtmlConfig.HTML_SELECT_CLASS.asString());
         return enumListBuilder.build();
     }
 
@@ -318,7 +318,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         HtmlLabelElement labelElement = ActiveHtml.HtmlLabelElement.create();
         labelElement.setFor(input_id);
         labelElement.setTextContent(input_label);
-        labelElement.addClass(HtmlConfig.HTML_INPUT_LABEL_CLASS.value());
+        labelElement.addClass(HtmlConfig.HTML_INPUT_LABEL_CLASS.asString());
         divElement.append(labelElement);
 
         InputBuilder inputBuilder = InputBuilder.builder(objectType, valueType);
@@ -326,7 +326,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         inputBuilder.setId(input_id);
 
         HtmlInputElement inputElement = inputBuilder.build();
-        inputElement.addClass(HtmlConfig.HTML_INPUT_CLASS.value());
+        inputElement.addClass(HtmlConfig.HTML_INPUT_CLASS.asString());
         divElement.append(inputElement);
         if (inputBuilder.getInputType() == HtmlInputElement.Type.HIDDEN) {
             divElement.addAttribute(HtmlAttribute.create("hidden", Boolean.TRUE));
@@ -349,7 +349,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     public HtmlElement html_table(TableData tableData) throws Exception {
         TableBuilder tableBuilder = TableBuilder.builder();
         if (tableData.getCaption().length() > 30) {
-            tableBuilder.setCaption(tableData.getCaption(), HtmlConfig.HTML_TABLE_SMALL_CAPTION_CLASS.value());
+            tableBuilder.setCaption(tableData.getCaption(), HtmlConfig.HTML_TABLE_SMALL_CAPTION_CLASS.asString());
         } else {
             tableBuilder.setCaption(tableData.getCaption());
         }

@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.StringJoiner;
 import org.schorn.ella.ComponentProperties;
 import org.schorn.ella.app.BaseConfig;
+import org.schorn.ella.node.DataGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,38 +45,50 @@ import org.slf4j.LoggerFactory;
  *
  */
 public enum HtmlConfig implements BaseConfig {
-    HTML_FORM_CLASS(HtmlProvider.class, "HtmlFormClass", "node-form"),
-    HTML_FORM_LABEL_CLASS(HtmlProvider.class, "HtmlFormLabelClass", "node-form-label"),
-    HTML_INPUT_CLASS(HtmlProvider.class, "HtmlInputClass", "node-input"),
-    HTML_INPUT_LABEL_CLASS(HtmlProvider.class, "HtmlInputLabelClass", "node-input-label"),
-    HTML_SELECT_CLASS(HtmlProvider.class, "HtmlSelectClass", "node-select"),
-    HTML_SELECT_LABEL_CLASS(HtmlProvider.class, "HtmlSelectLabelClass", "node-select-label"),
-
-    /**
-     *
-     */
-    HTML_TABLE_CLASS(HtmlProvider.class, "HtmlTableClass", "node-table"),
-    HTML_TABLE_THEAD_CLASS(HtmlProvider.class, "HtmlTableTHeadClass", "node-table-thead"),
-    HTML_TABLE_TFOOT_CLASS(HtmlProvider.class, "HtmlTableTFootClass", "node-table-tfoot"),
-    HTML_TABLE_TBODY_CLASS(HtmlProvider.class, "HtmlTableTBodyClass", "node-table-tbody"),
-
-    /**
-     *
-     */
-    HTML_TABLE_TROW_CLASS(HtmlProvider.class, "HtmlTableTRowClass", "node-table-trow"),
-    HTML_TABLE_TCOL_CLASS(HtmlProvider.class, "HtmlTableTColClass", "node-table-tcol"),
-    HTML_TABLE_SMALL_CAPTION_CLASS(HtmlProvider.class, "HtmlTableSmallCaptionClass", "active-table-caption-small"),;
+    HTML_FORM_CLASS(HtmlProvider.class, "HtmlFormClass", DataGroup.TEXT, null, "node-form"),
+    HTML_FORM_LABEL_CLASS(HtmlProvider.class, "HtmlFormLabelClass", DataGroup.TEXT, null, "node-form-label"),
+    HTML_INPUT_CLASS(HtmlProvider.class, "HtmlInputClass", DataGroup.TEXT, null, "node-input"),
+    HTML_INPUT_LABEL_CLASS(HtmlProvider.class, "HtmlInputLabelClass", DataGroup.TEXT, null, "node-input-label"),
+    HTML_SELECT_CLASS(HtmlProvider.class, "HtmlSelectClass", DataGroup.TEXT, null, "node-select"),
+    HTML_SELECT_LABEL_CLASS(HtmlProvider.class, "HtmlSelectLabelClass", DataGroup.TEXT, null, "node-select-label"),
+    HTML_TABLE_CLASS(HtmlProvider.class, "HtmlTableClass", DataGroup.TEXT, null, "node-table"),
+    HTML_TABLE_THEAD_CLASS(HtmlProvider.class, "HtmlTableTHeadClass", DataGroup.TEXT, null, "node-table-thead"),
+    HTML_TABLE_TFOOT_CLASS(HtmlProvider.class, "HtmlTableTFootClass", DataGroup.TEXT, null, "node-table-tfoot"),
+    HTML_TABLE_TBODY_CLASS(HtmlProvider.class, "HtmlTableTBodyClass", DataGroup.TEXT, null, "node-table-tbody"),
+    HTML_TABLE_TROW_CLASS(HtmlProvider.class, "HtmlTableTRowClass", DataGroup.TEXT, null, "node-table-trow"),
+    HTML_TABLE_TCOL_CLASS(HtmlProvider.class, "HtmlTableTColClass", DataGroup.TEXT, null, "node-table-tcol"),
+    HTML_TABLE_SMALL_CAPTION_CLASS(HtmlProvider.class, "HtmlTableSmallCaptionClass", DataGroup.TEXT, null, "active-table-caption-small"),;
 
     private static final Logger LGR = LoggerFactory.getLogger(HtmlConfig.class);
 
-    Class<?> propertyOwner;
-    String propertyKey;
-    String defaultValue;
+    private final Class<?> propertyOwner;
+    private final String propertyKey;
+    private final String defaultValue;
+    private final DataGroup dataGroup;
+    private final String delimiter;
 
-    HtmlConfig(Class<?> propertyOwner, String propertyKey, String defaultValue) {
+
+    HtmlConfig(Class<?> propertyOwner, String propertyKey, DataGroup dataGroup, String delimiter, String defaultValue) {
         this.propertyOwner = propertyOwner;
         this.propertyKey = propertyKey;
+        this.dataGroup = dataGroup;
+        this.delimiter = delimiter;
         this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public DataGroup dataGroup() {
+        return this.dataGroup;
+    }
+
+    @Override
+    public boolean isMultiValue() {
+        return this.delimiter != null;
+    }
+
+    @Override
+    public String delimiter() {
+        return this.delimiter;
     }
 
     /**
@@ -115,7 +128,7 @@ public enum HtmlConfig implements BaseConfig {
     static public String dump() {
         StringJoiner joiner = new StringJoiner("\n\t", "[\n\t", "\n]\n");
         for (HtmlConfig config : HtmlConfig.values()) {
-            joiner.add(String.format("%-35s: %-40 -> %-60", config.name(), config.propertyKey, config.value()));
+            joiner.add(String.format("%-35s: %-40 -> %-60", config.name(), config.propertyKey, config.asString()));
         }
         return joiner.toString();
     }

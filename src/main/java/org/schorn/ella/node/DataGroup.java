@@ -25,11 +25,15 @@ package org.schorn.ella.node;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
 import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  *
@@ -47,6 +51,8 @@ public enum DataGroup {
     DECIMAL,
     ENUM,
     UUID,
+    URL,
+    MAP,
     CUSTOM,;
 
     boolean isQuoted = false;
@@ -56,6 +62,7 @@ public enum DataGroup {
     boolean isDecimal = false;
     boolean isTemporal = false;
     boolean isEnumerable = false;
+    boolean isDictionary = false;
     boolean isCustom = false;
 
     Class<?> acceptables[];
@@ -89,6 +96,13 @@ public enum DataGroup {
                 this.isQuoted = true;
                 this.isBinary = true;
                 break;
+            case "URL":
+                this.isQuoted = true;
+                this.isBinary = false;
+                break;
+            case "MAP":
+                this.isDictionary = true;
+                this.isBinary = false;
             case "CUSTOM":
                 this.isCustom = true;
             default:
@@ -132,6 +146,39 @@ public enum DataGroup {
         return this.isQuoted;
     }
 
+    public Object toNaturalType(Object value) throws Exception {
+        switch (this) {
+            case TEXT:
+                return NodeProvider.provider().typeConvert(value.getClass(), String.class, value);
+            case BOOL:
+                return NodeProvider.provider().typeConvert(value.getClass(), Boolean.class, value);
+            case BYTE:
+                return NodeProvider.provider().typeConvert(value.getClass(), Byte.class, value);
+            case DATE:
+                return NodeProvider.provider().typeConvert(value.getClass(), LocalDate.class, value);
+            case TIME:
+                return NodeProvider.provider().typeConvert(value.getClass(), LocalTime.class, value);
+            case TIMESTAMP:
+                return NodeProvider.provider().typeConvert(value.getClass(), LocalDateTime.class, value);
+            case DECIMAL:
+                return NodeProvider.provider().typeConvert(value.getClass(), BigDecimal.class, value);
+            case NUMBER:
+                return NodeProvider.provider().typeConvert(value.getClass(), Integer.class, value);
+            case ENUM:
+                return NodeProvider.provider().typeConvert(value.getClass(), String.class, value);
+            case UUID:
+                return NodeProvider.provider().typeConvert(value.getClass(), UUID.class, value);
+            case URL:
+                return NodeProvider.provider().typeConvert(value.getClass(), URL.class, value);
+            case MAP:
+                return NodeProvider.provider().typeConvert(value.getClass(), Map.class, value);
+            case CUSTOM:
+                return NodeProvider.provider().typeConvert(value.getClass(), String.class, value);
+            default:
+                return value;
+        }
+    }
+
     @Override
     public String toString() {
         return String.format("%s", this.name());
@@ -171,6 +218,8 @@ public enum DataGroup {
             } else {
                 return DataGroup.TIMESTAMP;
             }
+        } else if (value instanceof URL || value instanceof URI) {
+            return DataGroup.URL;
         } else {
             return DataGroup.TEXT;
         }
@@ -206,7 +255,7 @@ public enum DataGroup {
                 BigDecimal decimalValue = NodeProvider.provider().typeConvert(String.class, BigDecimal.class, str_value);
                 if (longValue.doubleValue() != decimalValue.doubleValue()) {
                     return DataGroup.DECIMAL;
-                } else if (longValue.longValue() == decimalValue.longValue()) {
+                } else if (longValue == decimalValue.longValue()) {
                     return DataGroup.NUMBER;
                 }
             } catch (Exception ex) {

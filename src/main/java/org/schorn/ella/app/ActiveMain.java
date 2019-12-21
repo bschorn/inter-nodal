@@ -24,6 +24,7 @@
 package org.schorn.ella.app;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,8 +37,6 @@ import java.util.List;
 import java.util.Map;
 import org.schorn.ella.ComponentProperties;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.html.ActiveHtml;
-import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.MetaReader;
 import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.node.NodeProvider;
@@ -59,6 +58,7 @@ public final class ActiveMain {
 
     private final List<String> contexts = new ArrayList<>();
     private final Map<String, MetaReader.MetaSupplier> metaSuppliersMap = new HashMap<>();
+    private ActiveLang activeLang = null;
 
     public void addContext(String context, MetaReader.MetaSupplier metaSupplier) {
         if (!this.contexts.contains(context)) {
@@ -77,9 +77,9 @@ public final class ActiveMain {
      */
     private void initActivityCfg() throws Exception {
         String activityDate = System.getProperty("ActivityDate", DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now()));
-        String activityFileName = NodeConfig.ACTIVITY_FILE.value().replace("{DATE}", activityDate);
+        String activityFileName = NodeConfig.ACTIVITY_FILE.asString().replace("{DATE}", activityDate);
         String activityFile = String.format("%s%s%s",
-                NodeConfig.ACTIVITY_DIR.value(),
+                NodeConfig.ACTIVITY_DIR.asString(),
                 File.separator,
                 activityFileName
         );
@@ -111,12 +111,12 @@ public final class ActiveMain {
     }
 
     private void initMeta() {
-        for (String context : NodeConfig.ACTIVE_CONTEXTS.values(",")) {
+        for (String context : NodeConfig.ACTIVE_CONTEXTS.asArray(",")) {
             if (!this.contexts.contains(context)) {
                 this.contexts.add(context);
             }
         }
-        for (String metaFileMapEntry : NodeConfig.ACTIVE_METAS.values(",")) {
+        for (String metaFileMapEntry : NodeConfig.ACTIVE_METAS.asArray(",")) {
             String[] mapEntry = metaFileMapEntry.split(":");
             if (mapEntry.length == 2) {
                 String context = mapEntry[0];
@@ -149,38 +149,36 @@ public final class ActiveMain {
         }
     }
 
-    private void initLabels() {
-        for (String labelFileName : NodeConfig.ACTIVE_LABELS.values(",")) {
-            Path labelPath = Paths.get(labelFileName);
-            if (Files.exists(labelPath)) {
-
+    private void initLabels() throws Exception {
+        String language = NodeConfig.ACTIVE_LANG.asString();
+        if (language == null) {
+            LGR.error("{}.initLabels() - there is no Active.Lang specified.",
+                    this.getClass().getSimpleName());
+            language = "EN-US";
+        }
+        this.activeLang = ActiveLang.create(language);
+        for (AppContext context : AppContext.values()) {
+            if (context.hasRepo()) {
+                List labelUrls = (List) NodeConfig.ACTIVE_LABELS.asNaturalType();
+                for (Object ourl : labelUrls) {
+                    if (ourl instanceof URL) {
+                        URL url = (URL) ourl;
+                        try {
+                            this.activeLang.loadLabels(context, url);
+                        } catch (Exception ex3) {
+                            LGR.error("{}.initLabels() - {}",
+                                    this.getClass().getSimpleName(),
+                                    Functions.stackTraceToString(ex3));
+                        }
+                    }
+                }
             }
         }
-        ActiveNode.ActiveType labeledType = null;
-        ActiveNode.ActiveType parentType = null;
-        String label = null;
-        try {
-            ActiveHtml.HtmlLabeler.get().set(labeledType, label);
-            ActiveHtml.HtmlLabeler.get().set(parentType, labeledType, label);
-        } catch (Exception ex) {
-
-        }
     }
-
-    /*
-    public void init() throws Exception {
-        this.initActivityCfg();
-        this.initStatic();
-        this.initDefaultValues();
-        AppContext.meta();
-        AppContext.recover();
-        AdminServer.instance().initServers();
-        AdminServer.instance().initApplets();
-    }
-     */
 
     public void start(String[] args) throws Exception {
         AppContext.meta(Collections.unmodifiableMap(this.metaSuppliersMap));
+        this.initLabels();
         AppContext.recover();
         AdminServer.instance().initServers();
         AdminServer.instance().initApplets();

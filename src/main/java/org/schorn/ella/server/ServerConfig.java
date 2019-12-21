@@ -28,6 +28,7 @@ import java.util.StringJoiner;
 import org.schorn.ella.ComponentProperties;
 import org.schorn.ella.app.*;
 import org.schorn.ella.context.ActiveContext;
+import org.schorn.ella.node.DataGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,21 +46,40 @@ import org.slf4j.LoggerFactory;
  *
  */
 public enum ServerConfig implements BaseConfig {
-    ACTIVE_MASTER_SERVER(ActiveContext.Action.class, "Active.MasterServer", null),
-    ACTIVE_MASTER_SERVER_ADDRESS(ActiveContext.Data.class, "Active.MasterServerAddress", null),
-    ACTIVE_SERVERS(AdminServer.class, "Active.Servers", null),
-    ADMIN_SERVER_CFG_MAX_IO_THREADS(AdminServer.Cfg.class, "AdminServer.Cfg.MaxIOThreads", "5");
+    ACTIVE_MASTER_SERVER(ActiveContext.Action.class, "Active.MasterServer", DataGroup.TEXT, ",", null),
+    ACTIVE_MASTER_SERVER_ADDRESS(ActiveContext.Data.class, "Active.MasterServerAddress", DataGroup.URL, ",", null),
+    ACTIVE_SERVERS(AdminServer.class, "Active.Servers", DataGroup.TEXT, ",", null),
+    ADMIN_SERVER_CFG_MAX_IO_THREADS(AdminServer.Cfg.class, "AdminServer.Cfg.MaxIOThreads", DataGroup.NUMBER, null, "5");
 
     private static final Logger LGR = LoggerFactory.getLogger(ServerConfig.class);
 
     private final Class<?> propertyOwner;
     private final String propertyKey;
     private final String defaultValue;
+    private final DataGroup dataGroup;
+    private final String delimiter;
 
-    ServerConfig(Class<?> propertyOwner, String propertyKey, String defaultValue) {
+    ServerConfig(Class<?> propertyOwner, String propertyKey, DataGroup dataGroup, String delimiter, String defaultValue) {
         this.propertyOwner = propertyOwner;
         this.propertyKey = propertyKey;
+        this.dataGroup = dataGroup;
+        this.delimiter = delimiter;
         this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public DataGroup dataGroup() {
+        return this.dataGroup;
+    }
+
+    @Override
+    public boolean isMultiValue() {
+        return this.delimiter != null;
+    }
+
+    @Override
+    public String delimiter() {
+        return this.delimiter;
     }
 
     @Override
@@ -95,7 +115,7 @@ public enum ServerConfig implements BaseConfig {
     static public String dump() {
         StringJoiner joiner = new StringJoiner("\n\t", "[\n\t", "\n]\n");
         for (ServerConfig config : ServerConfig.values()) {
-            joiner.add(String.format("%-35s: %-40s %-60s", config.name(), config.propertyKey, config.value()));
+            joiner.add(String.format("%-35s: %-40s %-60s", config.name(), config.propertyKey, config.asString()));
         }
         return joiner.toString();
     }

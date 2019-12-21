@@ -173,7 +173,7 @@ public interface ActiveTransform {
                 = String.format("%s.AUTO_DYNAMIC_TYPE", OpenNodeToActiveNode.class.getSimpleName());
 
         default boolean isAutoDynamicTypes() throws Exception {
-            return NodeConfig.AUTO_DYNAMIC_TYPE.valueAsNumber().intValue() == 1;
+            return NodeConfig.AUTO_DYNAMIC_TYPE.asNumber().intValue() == 1;
         }
 
         @Override
@@ -383,7 +383,7 @@ public interface ActiveTransform {
         List<Object> apply(String line);
 
         static public String getLineParserCSV() {
-            return NodeConfig.LINE_PARSER_CSV_PATTERN.value();
+            return NodeConfig.LINE_PARSER_CSV_PATTERN.asString();
         }
     }
 

@@ -24,9 +24,12 @@
 package org.schorn.ella.app;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.schorn.ella.convert.TypeConverter;
+import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 
@@ -49,7 +52,13 @@ public interface BaseConfig {
 
     String defaultValue();
 
-    default String value() {
+    DataGroup dataGroup();
+
+    boolean isMultiValue();
+
+    String delimiter();
+
+    default String asString() {
         /*
         * Use the stack trace and look for the 'proptery owner' of the value in the
         * call stack. Objective is to keep the usage of the configuration value
@@ -81,16 +90,23 @@ public interface BaseConfig {
         return value;
     }
 
-    default String[] values(String delimiter) {
-        if (this.value() != null && this.value().length() > 0) {
-            return this.value().split(delimiter);
+    default String[] asArray() {
+        if (this.asString() != null && this.asString().length() > 0) {
+            return this.asString().split(this.delimiter());
         }
         return new String[0];
     }
 
-    default Number valueAsNumber() {
+    default String[] asArray(String delimiter) {
+        if (this.asString() != null && this.asString().length() > 0) {
+            return this.asString().split(delimiter);
+        }
+        return new String[0];
+    }
+
+    default Number asNumber() {
         try {
-            String value = this.value();
+            String value = this.asString();
             if (value != null) {
                 BigDecimal valueAsNumber = TypeConverter.recast(String.class, BigDecimal.class, value);
                 return (Number) valueAsNumber;
@@ -109,9 +125,9 @@ public interface BaseConfig {
      * @param classForT
      * @return
      */
-    default <T> T valueAs(Class<T> classForT) {
+    default <T> T asClassType(Class<T> classForT) {
         try {
-            String value = this.value();
+            String value = this.asString();
             if (value != null) {
                 return (T) TypeConverter.recast(String.class, classForT, value);
             }
@@ -122,5 +138,22 @@ public interface BaseConfig {
         }
         return null;
 
+    }
+
+    /**
+     *
+     * @return @throws Exception
+     */
+    default Object asNaturalType() throws Exception {
+        if (this.delimiter() == null) {
+            return this.dataGroup().toNaturalType(this.asString());
+        } else {
+            List<Object> list = new ArrayList<>();
+            String[] values = this.asArray(this.delimiter());
+            for (String value : values) {
+                list.add(this.dataGroup().toNaturalType(value));
+            }
+            return list;
+        }
     }
 }

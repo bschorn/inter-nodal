@@ -40,7 +40,7 @@ public interface AdminServer {
      * Configuration for AdminServer
      */
     public enum Cfg {
-        MAX_IO_THREADS(Integer.class, ServerConfig.ADMIN_SERVER_CFG_MAX_IO_THREADS.valueAs(Integer.class)),;
+        MAX_IO_THREADS(Integer.class, ServerConfig.ADMIN_SERVER_CFG_MAX_IO_THREADS.asClassType(Integer.class)),;
 
         Class<?> valueClass;
         Object value;
@@ -65,7 +65,7 @@ public interface AdminServer {
     }
 
     static public String[] getActiveServers() {
-        return ServerConfig.ACTIVE_SERVERS.values(",");
+        return ServerConfig.ACTIVE_SERVERS.asArray(",");
     }
 
     ExecutorService executorForIO();

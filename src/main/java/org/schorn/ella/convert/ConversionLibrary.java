@@ -25,6 +25,7 @@ package org.schorn.ella.convert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -121,6 +122,26 @@ public class ConversionLibrary {
         {
             Function<String, UUID> function = s -> s.isEmpty() ? UUID.randomUUID() : UUID.fromString(s.toUpperCase());
             library.add(String.class, UUID.class, function, "String -> UUID");
+        }
+        // String -> URL
+        {
+            Function<String, URL> function = s -> {
+                if (s.isEmpty()) {
+                    return null;
+                }
+                URL url = null;
+                try {
+                    url = new URL(s);
+                } catch (Exception ex) {
+                }
+                return url;
+            };
+            library.add(String.class, URL.class, function, "String -> URL");
+        }
+        // URL -> String
+        {
+            Function<URL, String> function = url -> url.toString();
+            library.add(URL.class, String.class, function, "URL -> String");
         }
         // LocalDateTime -> String 
         {

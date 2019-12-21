@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import org.schorn.ella.Singleton;
-import org.schorn.ella.app.NodeConfig;
 import org.schorn.ella.context.AppContext.ContextRole;
 import org.schorn.ella.http.ActiveHTTP;
 import org.schorn.ella.io.EndPoint;
@@ -43,6 +42,7 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueType.FieldType;
 import org.schorn.ella.repo.ActiveRepo;
+import org.schorn.ella.server.ServerConfig;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,7 +169,7 @@ public interface ActiveContext {
          */
         default URIPoint httpAddress() {
             try {
-                String address = NodeConfig.ACTIVE_MASTER_SERVER_ADDRESS.value();
+                String address = ServerConfig.ACTIVE_MASTER_SERVER_ADDRESS.asString();
                 if (address != null) {
                     return URIPoint.create(new URI(address));
                 } else {
@@ -250,7 +250,7 @@ public interface ActiveContext {
          */
         default boolean submitToRepo() {
             try {
-                Number number = NodeConfig.ACTIVE_MASTER_SERVER.valueAsNumber();
+                Number number = ServerConfig.ACTIVE_MASTER_SERVER.asNumber();
                 return (number != null && number.intValue() != 0);
             } catch (Exception e) {
                 return false;

@@ -26,7 +26,6 @@ package org.schorn.ella.convert;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
 import org.schorn.ella.node.ActiveNode.TypeConversion;
 
 /**
@@ -53,6 +52,9 @@ public class TypeConverter {
 
     @SuppressWarnings("unchecked")
     public <R> R convert(Class<?> classFrom, Class<R> classTo, Object valueFrom) throws Exception {
+        if (classFrom == classTo) {
+            return (R) valueFrom;
+        }
         TypeConversion<?, R> typeConversion = this.get(classFrom, classTo);
         if (typeConversion != null) {
             return typeConversion.apply(valueFrom);
