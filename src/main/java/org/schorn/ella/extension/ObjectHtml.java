@@ -24,9 +24,12 @@
 package org.schorn.ella.extension;
 
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
+import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
-import org.schorn.ella.html.HtmlProvider;
+import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This extension is a convenience method into the HTML library.
@@ -36,12 +39,16 @@ import org.schorn.ella.html.HtmlProvider;
  */
 public interface ObjectHtml {
 
+    static final Logger LGR = LoggerFactory.getLogger(ObjectHtml.class);
+
     default HtmlElement htmlForm() {
         if (this instanceof ObjectType) {
             try {
                 return HtmlProvider.provider().html_form((ObjectType) this);
             } catch (Exception e) {
-                e.printStackTrace();
+                LGR.error("{}.htmlForm() - Caught Exception: {}",
+                        this.getClass().getSimpleName(),
+                        Functions.stackTraceToString(e));
             }
         }
         if (this instanceof ObjectData) {
@@ -49,7 +56,9 @@ public interface ObjectHtml {
                 ObjectData objectData = (ObjectData) this;
                 return HtmlProvider.provider().html_form(objectData.objectType());
             } catch (Exception e) {
-                e.printStackTrace();
+                LGR.error("{}.htmlForm() - Caught Exception: {}",
+                        this.getClass().getSimpleName(),
+                        Functions.stackTraceToString(e));
             }
         }
         return null;

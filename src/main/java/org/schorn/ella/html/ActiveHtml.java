@@ -24,17 +24,16 @@
 package org.schorn.ella.html;
 
 import java.util.List;
-
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode;
-import org.schorn.ella.node.DataGroup;
-import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
+import org.schorn.ella.node.DataGroup;
+import org.schorn.ella.node.MetaTypes;
 
 /**
  *
@@ -157,14 +156,17 @@ public interface ActiveHtml {
         }
 
         public enum Type {
-            CHECKBOX, DATE, DATETIME("datetime-local"),
-            HIDDEN, LIST, MONTH, NUMBER,
+            CHECKBOX,
+            DATE,
+            DATETIME("datetime-local"),
+            HIDDEN,
+            LIST,
+            MONTH,
+            NUMBER,
+            TEXT,
+            TIME;
 
-            /**
-             *
-             */
-            TEXT, TIME;
-            String value;
+            private final String value;
 
             Type(String value) {
                 this.value = value;
@@ -396,6 +398,10 @@ public interface ActiveHtml {
         public void setId(String id);
 
         public HtmlInputElement.Type getInputType();
+
+        public boolean isRequired();
+
+        public boolean isReadonly();
 
         public HtmlInputElement build() throws Exception;
     }

@@ -39,6 +39,7 @@ import org.schorn.ella.node.ActiveNode.Constraints.ConstraintData;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
+import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class InputBuilderImpl implements InputBuilder {
+final class InputBuilderImpl implements InputBuilder {
 
     static final Logger LGR = LoggerFactory.getLogger(InputBuilderImpl.class);
 
@@ -60,6 +61,7 @@ class InputBuilderImpl implements InputBuilder {
     String id;
     boolean required = true;
     boolean readonly = false;
+    boolean hidden = false;
     Map<TagAttribute, Object> attributes = new HashMap<>();
 
     InputBuilderImpl() {
@@ -68,16 +70,23 @@ class InputBuilderImpl implements InputBuilder {
     InputBuilderImpl(ObjectType compositeType, ValueType valueType) {
         this.objectType = compositeType;
         this.valueType = valueType;
-        if (compositeType.isUniqueKey(valueType) && !compositeType.isNaturalKey(valueType)) {
+        if (compositeType.schema().get(valueType).bondType() == BondType.AUTOMATIC) {
             this.inputType = HtmlInputElement.Type.HIDDEN;
+            this.required = false;
+            this.readonly = true;
+        } else if (compositeType.isUniqueKey(valueType) && !compositeType.isNaturalKey(valueType)) {
+            this.inputType = HtmlInputElement.Type.HIDDEN;
+            this.required = true;
+            this.readonly = true;
         } else {
             this.inputType = InputBuilder.getInputType(valueType);
+            this.required = !this.objectType.isOptional(this.valueType);
+            this.readonly = this.objectType.isUniqueKey(this.valueType);
         }
-        this.required = !this.objectType.isOptional(this.valueType);
-        this.readonly = this.objectType.isUniqueKey(this.valueType);
         this.attributes();
     }
 
+    @Override
     public HtmlInputElement.Type getInputType() {
         return this.inputType;
     }
@@ -222,6 +231,16 @@ class InputBuilderImpl implements InputBuilder {
             inputElement.addAttribute(ActiveHtml.HtmlAttribute.create(entry.getKey().attributeName(), entry.getValue()));
         }
         return inputElement;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return this.required;
+    }
+
+    @Override
+    public boolean isReadonly() {
+        return this.readonly;
     }
 
 }

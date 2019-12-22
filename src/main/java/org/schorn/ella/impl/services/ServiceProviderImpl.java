@@ -30,10 +30,6 @@ import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
@@ -59,6 +55,8 @@ import org.schorn.ella.services.ActiveServices;
 import org.schorn.ella.transform.ActiveTransform.Transform;
 import org.schorn.ella.transform.TransformProvider;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -439,7 +437,9 @@ class ServiceProviderImpl extends AbstractContextual implements ActiveServices, 
             try {
                 return htmlElement.render();
             } catch (Exception e) {
-                e.printStackTrace();
+                LGR.error("{}.getHTMLForm() - Caught Exception: {}",
+                        this.getClass().getSimpleName(),
+                        Functions.stackTraceToString(e));
             }
         }
         return "";
@@ -448,11 +448,14 @@ class ServiceProviderImpl extends AbstractContextual implements ActiveServices, 
     @Override
     public String getHTMLSelect(Object object, String object_type, String value_type) {
         ArrayData arrayData = (ArrayData) object;
+        //HtmlProvider.provider().labeler().get(labelType)
         HtmlElement htmlElement = arrayData.htmlSelect(value_type, value_type);
         try {
             return htmlElement.render();
         } catch (Exception e) {
-            e.printStackTrace();
+            LGR.error("{}.getHTMLSelect() - Caught Exception: {}",
+                    this.getClass().getSimpleName(),
+                    Functions.stackTraceToString(e));
         }
         return "";
     }
@@ -490,7 +493,9 @@ class ServiceProviderImpl extends AbstractContextual implements ActiveServices, 
         try {
             return htmlElement.render();
         } catch (Exception e) {
-            e.printStackTrace();
+            LGR.error("{}.getHTMLTable() - Caught Exception: {}",
+                    this.getClass().getSimpleName(),
+                    Functions.stackTraceToString(e));
         }
         return "";
     }
@@ -502,7 +507,9 @@ class ServiceProviderImpl extends AbstractContextual implements ActiveServices, 
         try {
             return htmlElement.render();
         } catch (Exception e) {
-            e.printStackTrace();
+            LGR.error("{}.getHTMLTables() - Caught Exception: {}",
+                    this.getClass().getSimpleName(),
+                    Functions.stackTraceToString(e));
         }
         return "";
     }

@@ -23,7 +23,7 @@
  */
 package org.schorn.ella.extension;
 
-import org.schorn.ella.html.ActiveHtml;
+import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 
 /**
@@ -48,7 +48,8 @@ public interface ActiveLabel {
         if (this instanceof ActiveType) {
             ActiveType activeType = (ActiveType) this;
             try {
-                return ActiveHtml.HtmlLabeler.get().get(activeType);
+                //return ActiveHtml.HtmlLabeler.get().get(activeType);
+                return HtmlProvider.provider().labeler().get(activeType);
             } catch (Exception e) {
                 return activeType.name();
             }

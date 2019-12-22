@@ -56,6 +56,7 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.Role;
 import org.schorn.ella.node.ActiveNode.StructData;
 import org.schorn.ella.node.ActiveNode.ValueType;
+import org.schorn.ella.node.BondType;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,6 +164,9 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
 
         for (ActiveNode.MemberDef memberType : objectType.schema().memberDefs()) {
             ActiveType activeType = memberType.activeType();
+            if (memberType.bondType().equals(BondType.AUTOMATIC)) {
+                continue;
+            }
             switch (activeType.role()) {
                 case Value:
                     if (activeType instanceof ActiveNode.ValueType) {
@@ -283,7 +287,15 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         enumListBuilder.setId(String.format("%s-%s", objectType.name(), valueType.name()));
         enumListBuilder.setName(valueType.name());
         //enumListBuilder.setLabel(String.format("%s.%s", objectType.label(), valueType.label()));
-        enumListBuilder.setLabel(String.format("%s", valueType.label()));
+        String label = HtmlProvider.provider().labeler().get(objectType, valueType);
+        if (label == null) {
+            label = HtmlProvider.provider().labeler().get(valueType);
+        }
+        if (label == null) {
+            enumListBuilder.setLabel(String.format("%s", valueType.label()));
+        } else {
+            enumListBuilder.setLabel(label);
+        }
         enumListBuilder.addClassDiv(objectType.name(), valueType.name());
         enumListBuilder.addClassLabel(HtmlConfig.HTML_SELECT_LABEL_CLASS.asString());
         enumListBuilder.addClassSelect(HtmlConfig.HTML_SELECT_CLASS.asString());
