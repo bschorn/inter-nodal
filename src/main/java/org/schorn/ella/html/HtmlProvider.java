@@ -30,6 +30,7 @@ import org.schorn.ella.html.ActiveHtml.TableData;
 import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
+import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
 
 /**
  *
@@ -53,6 +54,15 @@ public interface HtmlProvider extends Provider {
      * @return
      */
     public HtmlLabeler labeler();
+
+    /**
+     *
+     * @param htmlHead
+     * @param htmlBody
+     * @return
+     * @throws Exception
+     */
+    public HtmlPageElement html_page() throws Exception;
 
     /**
      * Creates the User Interface element block containing a form <form>

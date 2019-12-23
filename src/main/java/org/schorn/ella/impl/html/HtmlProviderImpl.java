@@ -40,6 +40,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlFormElement;
 import org.schorn.ella.html.ActiveHtml.HtmlInputElement;
 import org.schorn.ella.html.ActiveHtml.HtmlLabelElement;
 import org.schorn.ella.html.ActiveHtml.HtmlLabeler;
+import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
 import org.schorn.ella.html.ActiveHtml.InputBuilder;
 import org.schorn.ella.html.ActiveHtml.SelectBuilder;
 import org.schorn.ella.html.ActiveHtml.TableBuilder;
@@ -83,6 +84,10 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     @Override
     public void init() throws Exception {
         this.mapInterfaceToImpl(ActiveHtml.HtmlAttribute.class, HtmlAttributeImpl.class);
+        this.mapInterfaceToImpl(ActiveHtml.HtmlMetaElement.class, HtmlMetaElementImpl.class);
+        this.mapInterfaceToImpl(ActiveHtml.HtmlPageElement.class, HtmlPageElementImpl.class);
+        this.mapInterfaceToImpl(ActiveHtml.HtmlHeadElement.class, HtmlHeadElementImpl.class);
+        this.mapInterfaceToImpl(ActiveHtml.HtmlBodyElement.class, HtmlBodyElementImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.HtmlDivElement.class, HtmlDivElementImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.HtmlElement.class, HtmlElementImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.HtmlFieldsetElement.class, HtmlFieldsetElementImpl.class);
@@ -140,6 +145,13 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     @Override
     public HtmlLabeler labeler() {
         return labeler;
+    }
+
+    @Override
+    public HtmlPageElement html_page() throws Exception {
+        HtmlPageElement htmlPage = ActiveHtml.HtmlPageElement.create();
+
+        return htmlPage;
     }
 
     @Override

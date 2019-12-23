@@ -45,19 +45,19 @@ import org.slf4j.LoggerFactory;
  *
  */
 public enum HtmlConfig implements BaseConfig {
-    HTML_FORM_CLASS(HtmlProvider.class, "HtmlFormClass", DataGroup.TEXT, null, "node-form"),
-    HTML_FORM_LABEL_CLASS(HtmlProvider.class, "HtmlFormLabelClass", DataGroup.TEXT, null, "node-form-label"),
-    HTML_INPUT_CLASS(HtmlProvider.class, "HtmlInputClass", DataGroup.TEXT, null, "node-input"),
-    HTML_INPUT_LABEL_CLASS(HtmlProvider.class, "HtmlInputLabelClass", DataGroup.TEXT, null, "node-input-label"),
-    HTML_SELECT_CLASS(HtmlProvider.class, "HtmlSelectClass", DataGroup.TEXT, null, "node-select"),
-    HTML_SELECT_LABEL_CLASS(HtmlProvider.class, "HtmlSelectLabelClass", DataGroup.TEXT, null, "node-select-label"),
-    HTML_TABLE_CLASS(HtmlProvider.class, "HtmlTableClass", DataGroup.TEXT, null, "node-table"),
-    HTML_TABLE_THEAD_CLASS(HtmlProvider.class, "HtmlTableTHeadClass", DataGroup.TEXT, null, "node-table-thead"),
-    HTML_TABLE_TFOOT_CLASS(HtmlProvider.class, "HtmlTableTFootClass", DataGroup.TEXT, null, "node-table-tfoot"),
-    HTML_TABLE_TBODY_CLASS(HtmlProvider.class, "HtmlTableTBodyClass", DataGroup.TEXT, null, "node-table-tbody"),
-    HTML_TABLE_TROW_CLASS(HtmlProvider.class, "HtmlTableTRowClass", DataGroup.TEXT, null, "node-table-trow"),
-    HTML_TABLE_TCOL_CLASS(HtmlProvider.class, "HtmlTableTColClass", DataGroup.TEXT, null, "node-table-tcol"),
-    HTML_TABLE_SMALL_CAPTION_CLASS(HtmlProvider.class, "HtmlTableSmallCaptionClass", DataGroup.TEXT, null, "active-table-caption-small"),;
+    HTML_FORM_CLASS(HtmlProvider.class, "HtmlClass.Form", DataGroup.TEXT, null, "node-form"),
+    HTML_FORM_LABEL_CLASS(HtmlProvider.class, "HtmlClass.FormLabel", DataGroup.TEXT, null, "node-form-label"),
+    HTML_INPUT_CLASS(HtmlProvider.class, "HtmlClass.Input", DataGroup.TEXT, null, "node-input"),
+    HTML_INPUT_LABEL_CLASS(HtmlProvider.class, "HtmlClass.InputLabel", DataGroup.TEXT, null, "node-input-label"),
+    HTML_SELECT_CLASS(HtmlProvider.class, "HtmlClass.Select", DataGroup.TEXT, null, "node-select"),
+    HTML_SELECT_LABEL_CLASS(HtmlProvider.class, "HtmlClass.SelectLabel", DataGroup.TEXT, null, "node-select-label"),
+    HTML_TABLE_CLASS(HtmlProvider.class, "HtmlClass.Table", DataGroup.TEXT, null, "node-table"),
+    HTML_TABLE_THEAD_CLASS(HtmlProvider.class, "HtmlClass.TableTHead", DataGroup.TEXT, null, "node-table-thead"),
+    HTML_TABLE_TFOOT_CLASS(HtmlProvider.class, "HtmlClass.TableTFoot", DataGroup.TEXT, null, "node-table-tfoot"),
+    HTML_TABLE_TBODY_CLASS(HtmlProvider.class, "HtmlClass.TableTBody", DataGroup.TEXT, null, "node-table-tbody"),
+    HTML_TABLE_TROW_CLASS(HtmlProvider.class, "HtmlClass.TableTRow", DataGroup.TEXT, null, "node-table-trow"),
+    HTML_TABLE_TCOL_CLASS(HtmlProvider.class, "HtmlClass.TableTCol", DataGroup.TEXT, null, "node-table-tcol"),
+    HTML_TABLE_SMALL_CAPTION_CLASS(HtmlProvider.class, "HtmlClass.TableSmallCaption", DataGroup.TEXT, null, "active-table-caption-small"),;
 
     private static final Logger LGR = LoggerFactory.getLogger(HtmlConfig.class);
 

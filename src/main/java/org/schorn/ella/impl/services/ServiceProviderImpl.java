@@ -24,6 +24,7 @@
 package org.schorn.ella.impl.services;
 
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,8 +33,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
+import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
 import org.schorn.ella.html.HtmlProvider;
+import org.schorn.ella.html.MetaRules;
 import org.schorn.ella.load.ActiveObjectLoad;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveType;
@@ -57,6 +60,8 @@ import org.schorn.ella.transform.TransformProvider;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
+import org.schorn.ella.html.ActiveHtml.HtmlMetaElement;
 
 /**
  *
@@ -428,7 +433,6 @@ class ServiceProviderImpl extends AbstractContextual implements ActiveServices, 
      */
     @Override
     public String getHTMLForm(String context_str, String object_type) {
-        //App app = App.valueOf(context);
         Optional<AppContext> optNodeContext = AppContext.valueOf(context_str);
         if (optNodeContext.isPresent()) {
             AppContext context = optNodeContext.get();
@@ -436,6 +440,32 @@ class ServiceProviderImpl extends AbstractContextual implements ActiveServices, 
             HtmlElement htmlElement = objectType.htmlForm();
             try {
                 return htmlElement.render();
+            } catch (Exception e) {
+                LGR.error("{}.getHTMLForm() - Caught Exception: {}",
+                        this.getClass().getSimpleName(),
+                        Functions.stackTraceToString(e));
+            }
+        }
+        return "";
+    }
+
+    /**
+     *
+     */
+    @Override
+    public String getHTMLFormInPage(String context_str, String object_type) {
+        Optional<AppContext> optNodeContext = AppContext.valueOf(context_str);
+        if (optNodeContext.isPresent()) {
+            AppContext context = optNodeContext.get();
+            ObjectType objectType = ObjectType.get(context, object_type);
+            HtmlElement htmlElement = objectType.htmlForm();
+            try {
+                HtmlPageElement htmlPage = HtmlProvider.provider().html_page();
+                HtmlMetaElement htmlMeta = ActiveHtml.HtmlMetaElement.create(MetaRules.Attribute.charset);
+                htmlMeta.setValue(StandardCharsets.UTF_8);
+                htmlPage.htmlHead().append(htmlMeta);
+                htmlPage.htmlBody().append(htmlElement);
+                return htmlPage.render();
             } catch (Exception e) {
                 LGR.error("{}.getHTMLForm() - Caught Exception: {}",
                         this.getClass().getSimpleName(),

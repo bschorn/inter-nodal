@@ -51,6 +51,32 @@ public interface ActiveHtml {
     }
 
     /**
+     * NO: <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+     * YES: <meta charset="utf-8"/>
+     */
+    interface HtmlMetaElement extends HtmlElement {
+
+        /**
+         * Examples:
+         * <meta charset="utf-8">
+         *
+         * <!-- Redirect page after 3 seconds -->
+         * <meta http-equiv="refresh" content="3;url=https://www.newurl.org">
+         * @param attribute
+         * @return
+         * @throws java.lang.Exception
+         */
+        static public HtmlMetaElement create(MetaRules.Attribute attribute) throws Exception {
+            return HtmlProvider.provider().createInstance(HtmlMetaElement.class, attribute);
+        }
+
+        MetaRules.Attribute attribute();
+        void setValue(String attributeValue) throws Exception;
+
+        void setValue(Object attributeObject) throws Exception;
+    }
+
+    /**
      *
      */
     interface HtmlAttribute extends Render {
@@ -92,6 +118,27 @@ public interface ActiveHtml {
         void setId(String value) throws Exception;
 
         String getId();
+    }
+
+    interface HtmlPageElement extends HtmlElement {
+        static public HtmlPageElement create() throws Exception {
+            return HtmlProvider.provider().createInstance(HtmlPageElement.class);
+        }
+        HtmlHeadElement htmlHead();
+
+        HtmlBodyElement htmlBody();
+    }
+
+    interface HtmlHeadElement extends HtmlElement {
+        static public HtmlHeadElement create() throws Exception {
+            return HtmlProvider.provider().createInstance(HtmlHeadElement.class);
+        }
+    }
+
+    interface HtmlBodyElement extends HtmlElement {
+        static public HtmlBodyElement create() throws Exception {
+            return HtmlProvider.provider().createInstance(HtmlBodyElement.class);
+        }
     }
 
     /**

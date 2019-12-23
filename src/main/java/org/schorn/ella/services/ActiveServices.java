@@ -26,13 +26,11 @@ package org.schorn.ella.services;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.server.AdminServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is hastily done Franken-design. Leftovers from a previous
@@ -210,6 +208,9 @@ public interface ActiveServices extends Mingleton {
         String getHTMLTable(String context_str, Object object);
 
         String getHTMLTables(String context_str, Object object);
+
+        String getHTMLFormInPage(String context_str, String object_type);
+
 
         /**
          *
