@@ -42,6 +42,7 @@ import org.schorn.ella.server.ServerProvider;
 import org.schorn.ella.services.ServicesProvider;
 import org.schorn.ella.sql.SQLProvider;
 import org.schorn.ella.transform.TransformProvider;
+import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +112,9 @@ public interface Provider {
                             System.getProperty(this.interfaceClass.getSimpleName(), "no path specified"));
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                LGR.error("{}.ctor() - Caught Exception: {}",
+                        this.getClass().getSimpleName(),
+                        Functions.stackTraceToString(ex));
                 System.exit(100);
             }
         }

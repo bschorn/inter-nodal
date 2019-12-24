@@ -44,6 +44,7 @@ import org.schorn.ella.convert.TypeConverter;
 import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.node.TypeAttributes;
+import org.schorn.ella.node.ValueFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,6 +113,8 @@ public class ActiveSchema {
         Member('%', Member.class, false, new MemberFormats.Reformat(), new MemberFormats.Meta()),
         Parent('-', Parent.class, false, null, null),
         Attribute('¯', Type.class, false, null, null),
+        Flag('f', Type.class, false, null, null),
+        ValueFlag('f', Type.class, false, null, null),
         Unset('x', Type.class, false, null, null);
 
         private final Character operator;
@@ -364,10 +367,12 @@ public class ActiveSchema {
         private final ActiveSchema schema;
         private final String name;
         private String fieldTypeName = "text_type";
+        private final List<ValueFlag> valueFlags;
 
         ValueType(ActiveSchema schema, String name) {
             this.schema = schema;
             this.name = name;
+            this.valueFlags = new ArrayList<>();
         }
         @Override
         public String name() {
@@ -378,12 +383,23 @@ public class ActiveSchema {
             return this.fieldTypeName;
         }
 
+        public List<ValueFlag> flags() {
+            return this.valueFlags;
+        }
+
         public List<String> members() {
             return Arrays.asList(new String[]{this.fieldTypeName});
         }
 
         public void setFieldTypeName(String fieldTypeName) {
             this.fieldTypeName = fieldTypeName;
+        }
+
+        public void addFlag(String flag) {
+            ValueFlag valueFlag = ValueFlag.fromString(flag);
+            if (valueFlag != ValueFlag.NOFLAG) {
+                this.valueFlags.add(valueFlag);
+            }
         }
 
         @Override

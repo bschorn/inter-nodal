@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.schorn.ella.app;
+package org.schorn.ella.lang;
 
 import java.net.URL;
 import java.util.ArrayList;

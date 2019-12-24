@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import org.schorn.ella.ComponentProperties;
 import org.schorn.ella.context.AppContext;
+import org.schorn.ella.lang.ActiveLang;
 import org.schorn.ella.node.MetaReader;
 import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.node.NodeProvider;
@@ -154,7 +155,7 @@ public final class ActiveMain {
         if (language == null) {
             LGR.error("{}.initLabels() - there is no Active.Lang specified.",
                     this.getClass().getSimpleName());
-            language = "EN-US";
+            language = "en-US";
         }
         this.activeLang = ActiveLang.create(language);
         for (AppContext context : AppContext.values()) {

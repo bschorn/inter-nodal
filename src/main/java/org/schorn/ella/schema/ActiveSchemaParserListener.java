@@ -34,10 +34,10 @@ import org.schorn.ella.antlr.SpecParserBaseListener;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType.StandardSets;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType.StandardTypes;
 import org.schorn.ella.node.DataGroup;
+import org.schorn.ella.schema.ActiveSchema.BaseType;
 import org.schorn.ella.schema.ActiveSchema.FieldType;
 import org.schorn.ella.schema.ActiveSchema.Fragment;
 import org.schorn.ella.schema.ActiveSchema.ObjectType;
-import org.schorn.ella.schema.ActiveSchema.BaseType;
 import org.schorn.ella.schema.ActiveSchema.ValueType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -293,6 +293,16 @@ public class ActiveSchemaParserListener extends SpecParserBaseListener {
         ActiveSchema.Roles memberType = ActiveSchema.Roles.parse(ctx.typeQualifier().getText());
         String memberName = ctx.typeNameRef().getText();
         switch (this.currentAttrType) {
+            case Flag:
+                switch (this.currentType) {
+                    case ValueType:
+                        this.currentValueType.addFlag(memberName);
+                        break;
+                    default:
+                        // TODO: error
+                        break;
+                }
+                break;
             case Member:
                 this.currentMemberType = new ActiveSchema.Member(
                         this.schema, this.currentType, this.currentTypeNameDef,

@@ -87,6 +87,7 @@ attrFlavor
     : 'Members'
     | 'Parents'
     | 'Attributes'
+    | 'Flags'
     ;
 
 typeQualifier
@@ -96,6 +97,7 @@ typeQualifier
     | 'BaseType'
     | 'ObjectType'
     | 'ArrayType'
+    | 'ValueFlag'
     ;
 
 attributeType

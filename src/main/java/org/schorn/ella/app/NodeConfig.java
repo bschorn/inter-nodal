@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  */
 public enum NodeConfig implements BaseConfig {
     ACTIVE_SPEC(ActiveMain.class, "Active.Spec", DataGroup.URL, ",", null),
-    ACTIVE_LANG(ActiveMain.class, "Active.Language", DataGroup.TEXT, null, null),
+    ACTIVE_LANG(ActiveMain.class, "Active.Language", DataGroup.TEXT, ",", null),
     ACTIVE_LABELS(ActiveMain.class, "Active.Labels", DataGroup.URL, ",", null),
     ACTIVE_CONTEXTS(ActiveMain.class, "Active.Contexts", DataGroup.TEXT, ",", null),
     ACTIVE_METAS(ActiveMain.class, "Active.Metas", DataGroup.TEXT, ",", null),

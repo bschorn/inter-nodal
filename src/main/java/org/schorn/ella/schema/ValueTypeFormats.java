@@ -23,9 +23,12 @@
  */
 package org.schorn.ella.schema;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import org.schorn.ella.node.ValueFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +71,7 @@ public class ValueTypeFormats {
         }
 
     }
+
     static class Meta implements TypeFormatter<ActiveSchema.ValueType, Map> {
 
         @Override
@@ -75,6 +79,13 @@ public class ValueTypeFormats {
             Map<String, Object> map = new HashMap<>();
             map.put("name", valueType.name());
             map.put("field_type", valueType.fieldTypeName());
+            if (!valueType.flags().isEmpty()) {
+                List<String> flags = new ArrayList<>();
+                for (ValueFlag valueFlag : valueType.flags()) {
+                    flags.add(valueFlag.name());
+                }
+                map.put("value_flags", flags);
+            }
             return map;
         }
 

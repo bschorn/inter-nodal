@@ -26,11 +26,11 @@ package org.schorn.ella.html;
 import org.schorn.ella.Provider;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
 import org.schorn.ella.html.ActiveHtml.HtmlLabeler;
+import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
 import org.schorn.ella.html.ActiveHtml.TableData;
 import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
-import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
 
 /**
  *
