@@ -27,8 +27,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
@@ -666,7 +668,27 @@ public class MetaReader extends AbstractContextual {
             throw new Exception(String.format("%s.ctor() - \"field_type\" parameters is missing.",
                     this.getClass().getSimpleName()));
         }
-        ValueType valueType = ValueType.create(this.context(), valueData.activeValue().toString(), fieldType);
+        Set<ValueFlag> valueFlags = new HashSet<>();
+        ArrayData flagData = (ArrayData) objectData.get(MetaTypes.ArrayValueTypes.value_flags.arrayType());
+        if (flagData != null && !flagData.isNull() && flagData.size() > 0) {
+            ActiveNode.MemberDef memberDef = MetaTypes.ArrayValueTypes.value_flags.arrayType().memberDef();
+            if (memberDef.activeType().role() == ActiveNode.Role.Value) {
+                //ValueType memberType = (ValueType) memberDef.activeType();
+                for (ActiveData activeData : flagData.nodes()) {
+                    if (activeData != null && !activeData.isNull()) {
+                        String valueFlagStr = activeData.activeValue().toString();
+                        ValueFlag valueFlag = (ValueFlag) ValueFlag.fromString(valueFlagStr);
+                        if (valueFlag != null) {
+                            valueFlags.add(valueFlag);
+                        }
+                    }
+                }
+            }
+        }
+        ValueType valueType = ValueType.create(this.context(),
+                valueData.activeValue().toString(),
+                fieldType,
+                ValueFlag.getEnumSetFromSet(valueFlags));
         //LGR.info("Added {}: {}", valueType.getClass().getSimpleName(), valueType.toString());
         return valueType;
     }

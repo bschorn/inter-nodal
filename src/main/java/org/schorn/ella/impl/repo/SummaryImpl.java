@@ -36,6 +36,7 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.MetaTypes;
+import org.schorn.ella.node.ValueFlag;
 import org.schorn.ella.repo.RepoCoordinators.Summary;
 import org.schorn.ella.repo.RepoData;
 import org.schorn.ella.repo.RepoData.CurrentState;
@@ -61,10 +62,10 @@ class SummaryImpl extends AbstractContextual implements Summary {
         this.current = RepoData.CurrentState.get(this.context());
         List<ValueType> valueTypes = new ArrayList<>();
         try {
-            valueTypes.add(ValueType.create(context, "ObjectType", MetaTypes.FieldTypes.TEXT.fieldType()));
-            valueTypes.add(ValueType.create(context, "Total", MetaTypes.FieldTypes.NUMBER.fieldType()));
-            valueTypes.add(ValueType.create(context, "Utilization", MetaTypes.FieldTypes.DECIMAL.fieldType()));
-            valueTypes.add(ValueType.create(context, "Bytes", MetaTypes.FieldTypes.NUMBER.fieldType()));
+            valueTypes.add(ValueType.create(context, "ObjectType", MetaTypes.FieldTypes.TEXT.fieldType(), ValueFlag.getEnumSetFromLong(0)));
+            valueTypes.add(ValueType.create(context, "Total", MetaTypes.FieldTypes.NUMBER.fieldType(), ValueFlag.getEnumSetFromLong(0)));
+            valueTypes.add(ValueType.create(context, "Utilization", MetaTypes.FieldTypes.DECIMAL.fieldType(), ValueFlag.getEnumSetFromLong(0)));
+            valueTypes.add(ValueType.create(context, "Bytes", MetaTypes.FieldTypes.NUMBER.fieldType(), ValueFlag.getEnumSetFromLong(0)));
             ObjectType.Builder builder = ObjectType.builder(context, "-RepoSummary-", new ArrayList<>());
             valueTypes.stream().forEach(vt -> builder.add(vt, BondType.OPTIONAL));
             this.typeSummaryRow = builder.build();

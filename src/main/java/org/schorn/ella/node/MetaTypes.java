@@ -302,7 +302,8 @@ public class MetaTypes {
         child_data(FieldTypes.TEXT),
         count(FieldTypes.NUMBER),
         bytes(FieldTypes.NUMBER),
-        null_bytes(FieldTypes.NUMBER),;
+        null_bytes(FieldTypes.NUMBER),
+        value_flags(FieldTypes.ENUM);
 
         ValueType valueType;
 
@@ -311,7 +312,8 @@ public class MetaTypes {
                 FieldType ftype = metaField.fieldType();
                 valueType = ValueType.get(AppContext.Common, this.name());
                 if (valueType == null) {
-                    valueType = ValueType.create(AppContext.Common, this.name(), ftype);
+                    valueType = ValueType.create(AppContext.Common, this.name(),
+                            ftype, ValueFlag.getEnumSetFromLong(0));
                 }
             } catch (Exception e) {
                 LGR.error(Functions.getStackTraceAsString(e));
@@ -347,7 +349,8 @@ public class MetaTypes {
                 FieldType ftype = metaField.fieldType();
                 valueType = ValueType.get(AppContext.Common, this.name());
                 if (valueType == null) {
-                    valueType = ValueType.create(AppContext.Common, this.name(), ftype);
+                    valueType = ValueType.create(AppContext.Common, this.name(),
+                            ftype, ValueFlag.getEnumSetFromLong(0));
                 }
             } catch (Exception e) {
                 LGR.error(Functions.getStackTraceAsString(e));
@@ -388,7 +391,8 @@ public class MetaTypes {
         day_of_week(ValueTypes.day_of_week),
         holidays(ValueTypes.holidays),
         list(ValueTypes.list),
-        base_types(ValueTypes.base_types);
+        base_types(ValueTypes.base_types),
+        value_flags(ValueTypes.value_flags);
 
         MetaType metaType;
         ArrayType arrayType;

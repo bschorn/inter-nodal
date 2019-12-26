@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -611,6 +612,13 @@ public interface ActiveNode {
         FieldType fieldType();
 
         /**
+         * Returns the flags set using @link org.schorn.ella.node.ValueFlag
+         *
+         * @return
+         */
+        long valueFlags();
+
+        /**
          * PrimitiveType - the cargo type within a data point container
          */
         interface PrimitiveType<T> extends ActiveNode, Bytes {
@@ -718,9 +726,8 @@ public interface ActiveNode {
         /**
          * Creates a new ValueType definition with name specified by
          * 'value_type' in the specified NodeContext using the specified
-         * FieldType. The FieldType does NOT have to have the same NodeContext,
+         * FieldType.The FieldType does NOT have to have the same NodeContext,
          * but the resulting ValueType will belong to the given NodeContext.
-         *
          * NodeContext.ABC, "StreetAddress", XYZ.FieldType.address_street ->
          * ABC.StreetAddress
          *
@@ -729,14 +736,15 @@ public interface ActiveNode {
          * NodeContext + NodeRole + Name
          * @param fieldType null null         {@link org.schorn.ella.node.ActiveNode.ValueType.FieldType
 		 *            ValueType.FieldType}
+         * @param valueFlags
          *
          * @throws java.lang.Exception
          *
          * @return The created ValueType instance
          *
          */
-        static ValueType create(AppContext context, String value_type, FieldType fieldType) throws Exception {
-            return NodeProvider.provider().createValueType(context, value_type, fieldType);
+        static ValueType create(AppContext context, String value_type, FieldType fieldType, EnumSet<ValueFlag> valueFlags) throws Exception {
+            return NodeProvider.provider().createValueType(context, value_type, fieldType, valueFlags);
         }
 
         /**

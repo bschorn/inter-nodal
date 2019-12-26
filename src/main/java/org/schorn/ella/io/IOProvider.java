@@ -35,6 +35,7 @@ public interface IOProvider extends Provider {
 
     /**
      * Implementation for this interface is retrieved
+     * @return
      */
     static IOProvider provider() {
         return Provider.Providers.IO.getInstance(IOProvider.class);

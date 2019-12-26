@@ -52,7 +52,17 @@ public enum ComponentProperties implements ActiveProperties, ClassLocator {
 
     static public void init(Properties properties) {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-            SYSTEM.setProperty(entry.getKey().toString(), entry.getValue().toString());
+            String[] keyParts = entry.getKey().toString().split("\\.");
+            ComponentProperties cp = ComponentProperties.valueOf(keyParts[0].toUpperCase());
+            if (cp != null) {
+                StringJoiner keyJoiner = new StringJoiner(".", "", "");
+                for (int i = 1; i < keyParts.length; i++) {
+                    keyJoiner.add(keyParts[i]);
+                }
+                cp.setProperty(keyJoiner.toString(), entry.getValue().toString());
+            } else {
+                SYSTEM.setProperty(entry.getKey().toString(), entry.getValue().toString());
+            }
         }
         for (ComponentProperties componentProperty : ComponentProperties.values()) {
             componentProperty.init0();

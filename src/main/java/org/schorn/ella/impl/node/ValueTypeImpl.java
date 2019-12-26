@@ -23,14 +23,13 @@
  */
 package org.schorn.ella.impl.node;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ValueType;
-import org.schorn.ella.node.NodeProvider;
 import org.schorn.ella.node.DataGroup;
+import org.schorn.ella.node.NodeProvider;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Value Type
@@ -43,11 +42,13 @@ public class ValueTypeImpl extends ActiveTypeImpl implements ValueType {
 
     static final Logger LGR = LoggerFactory.getLogger(ValueTypeImpl.class);
 
-    private FieldType fieldType;
+    private final FieldType fieldType;
+    private final long valueFlags;
 
-    protected ValueTypeImpl(AppContext context, String name, FieldType fieldType, Short activeIdx) {
+    protected ValueTypeImpl(AppContext context, String name, FieldType fieldType, Short activeIdx, Long valueFlags) {
         super(context, name, activeIdx);
         this.fieldType = fieldType;
+        this.valueFlags = valueFlags;
     }
 
     /**
@@ -140,6 +141,11 @@ public class ValueTypeImpl extends ActiveTypeImpl implements ValueType {
     @Override
     public FieldType fieldType() {
         return this.fieldType;
+    }
+
+    @Override
+    public long valueFlags() {
+        return this.valueFlags;
     }
 
     @Override

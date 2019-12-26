@@ -63,7 +63,7 @@ public interface Provider {
 
     public enum Providers {
         CONTEXT(ContextProvider.class, true),
-        META(NodeProvider.class, false),
+        NODE(NodeProvider.class, false),
         TRANSFORM(TransformProvider.class, false),
         PARSER(ParserProvider.class, false),
         ERROR(ErrorProvider.class, false),
@@ -72,7 +72,7 @@ public interface Provider {
         REPO(RepoProvider.class, true),
         SERVER(ServerProvider.class, true),
         LOAD(LoadProvider.class, true),
-        API(ServicesProvider.class, false),
+        SERVICES(ServicesProvider.class, false),
         SQL(SQLProvider.class, false),
         HTML(HtmlProvider.class, false),
         HTTP(HTTPProvider.class, false),
@@ -146,17 +146,19 @@ public interface Provider {
      * Register Context with Provider
      *
      * The instances for NodeContext are created here so issues can be handled
-     * before we go to far.
+     * before we go to far.registerContext() is called only once per
+     * NodeContext.
      *
-     * registerContext() is called only once per NodeContext.
      *
      * @param context
+     * @throws java.lang.Exception
      */
     void registerContext(AppContext context) throws Exception;
 
     /**
      * Instance Creator
      *
+     * @param <T>
      * @param interfaceFor
      * @param params
      * @return
@@ -167,9 +169,8 @@ public interface Provider {
     /**
      * Reusable Instances (Mingleton)
      *
-     * This should only be used with stateless/thread-safe objects.
-     *
-     * Multiple Singletons - Same class but different constructor parameters.
+     * This should only be used with stateless/thread-safe objects.Multiple
+     * Singletons - Same class but different constructor parameters.
      *
      * This maintains a single instance for each parameter list.
      *
@@ -177,6 +178,7 @@ public interface Provider {
      * Provider.reuseInstance(Car.class, Color.RED); RED1 == RED2 Car BLUE =
      * Provider.reuseInstance(Car.class, Color.BLUE); RED1 != BLUE
      *
+     * @param <T>
      * @param interfaceFor
      * @param params
      * @return
@@ -185,13 +187,13 @@ public interface Provider {
     <T> T createReusable(Class<T> interfaceFor, Object... params) throws Exception;
 
     /**
-     * This is the same as createReusable() except it will not throw. It will
-     * return a null value instead.
+     * This is the same as createReusable() except it will not throw.It will
+     * return a null value instead. Use this method when you are certain that
+     * the implementation has already been located and there will not be any
+     * NoClassFoundException(s).
      *
-     * Use this method when you are certain that the implementation has already
-     * been located and there will not be any NoClassFoundException(s).
      *
-     *
+     * @param <T>
      * @param interfaceFor
      * @param params
      * @return
@@ -201,13 +203,14 @@ public interface Provider {
 
     /**
      * This is the same as getReusable() except it will only accept requests for
-     * implementers of Renewable interface.
+     * implementers of Renewable interface.Use this method when you know can't
+     * reuse this class but it did implement Renewable so it get you a new one
+     * without using reflection.
      *
-     * Use this method when you know can't reuse this class but it did implement
-     * Renewable so it get you a new one without using reflection. So it's still
-     * safe to believe there will be no throws.
+     * So it's still safe to believe there will be no throws.
      *
      *
+     * @param <T>
      * @param interfaceFor
      * @param params
      * @return
@@ -230,4 +233,11 @@ public interface Provider {
      */
     void mapInterfaceToImpl(Class<?> interfaceFor, Class<?> implFor);
 
+    default List<Class<? extends Mingleton>> mingletons() {
+        return new ArrayList<>();
+    }
+
+    default List<Class<? extends Renewable<?>>> renewables() {
+        return new ArrayList<>();
+    }
 }

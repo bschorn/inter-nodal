@@ -28,15 +28,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Provider;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.Singleton;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -101,7 +99,11 @@ abstract class AbstractProvider implements Provider {
                 }
             }
             if (constructor != null) {
-                newInstance = (T) constructor.newInstance(params);
+                try {
+                    newInstance = (T) constructor.newInstance(params);
+                } catch (InvocationTargetException ite) {
+                    LGR.error(Functions.getStackTraceAsString(ite));
+                }
                 break;
             }
         }

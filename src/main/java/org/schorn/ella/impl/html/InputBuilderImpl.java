@@ -41,6 +41,7 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.DataGroup;
+import org.schorn.ella.node.ValueFlag;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,23 +55,23 @@ final class InputBuilderImpl implements InputBuilder {
 
     static final Logger LGR = LoggerFactory.getLogger(InputBuilderImpl.class);
 
-    ObjectType objectType;
-    ValueType valueType;
-    HtmlInputElement.Type inputType;
-    String name;
-    String id;
-    boolean required = true;
-    boolean readonly = false;
-    boolean hidden = false;
-    Map<TagAttribute, Object> attributes = new HashMap<>();
-
-    InputBuilderImpl() {
-    }
+    private final ObjectType objectType;
+    private final ValueType valueType;
+    private HtmlInputElement.Type inputType;
+    private boolean required;
+    private boolean readonly;
+    private final Map<TagAttribute, Object> attributes = new HashMap<>();
+    private String name;
+    private String id;
 
     InputBuilderImpl(ObjectType compositeType, ValueType valueType) {
         this.objectType = compositeType;
         this.valueType = valueType;
-        if (compositeType.schema().get(valueType).bondType() == BondType.AUTOMATIC) {
+        if (ValueFlag.getEnumSetFromLong(valueType.valueFlags()).contains(ValueFlag.HIDDEN)) {
+            this.inputType = HtmlInputElement.Type.HIDDEN;
+            this.required = false;
+            this.readonly = true;
+        } else if (compositeType.schema().get(valueType).bondType() == BondType.AUTOMATIC) {
             this.inputType = HtmlInputElement.Type.HIDDEN;
             this.required = false;
             this.readonly = true;
@@ -102,12 +103,12 @@ final class InputBuilderImpl implements InputBuilder {
     }
 
     public void attributes() {
-        attributes.put(HtmlTag.InputAttribute.TYPE, this.inputType.value());
-        attributes.put(HtmlTag.InputAttribute.READONLY, this.readonly);
-        attributes.put(HtmlTag.InputAttribute.REQUIRED, this.required);
+        this.attributes.put(HtmlTag.InputAttribute.TYPE, this.inputType.value());
+        this.attributes.put(HtmlTag.InputAttribute.READONLY, this.readonly);
+        this.attributes.put(HtmlTag.InputAttribute.REQUIRED, this.required);
         List<ConstraintType<?>> constraintTypes = valueType.fieldType().constraints().constraintTypes();
-        constraintTypes.stream().forEach(constraintType -> {
-            ConstraintData constraintData = valueType.fieldType().constraints().constraint(constraintType);
+        constraintTypes.forEach(constraintType -> {
+            ConstraintData constraintData = this.valueType.fieldType().constraints().constraint(constraintType);
             List<Object> values = constraintData.constraintValues();
             if (values != null && !values.isEmpty()) {
                 String constraintName = constraintType.name();
@@ -119,11 +120,11 @@ final class InputBuilderImpl implements InputBuilder {
                     case DATE:
                         switch (standardType) {
                             case min_date:
-                                attributes.put(HtmlTag.InputAttribute.MIN,
+                                this.attributes.put(HtmlTag.InputAttribute.MIN,
                                         DateTimeFormatter.ISO_LOCAL_DATE.format((LocalDate) values.get(0)));
                                 break;
                             case max_date:
-                                attributes.put(HtmlTag.InputAttribute.MAX,
+                                this.attributes.put(HtmlTag.InputAttribute.MAX,
                                         DateTimeFormatter.ISO_LOCAL_DATE.format((LocalDate) values.get(0)));
                                 break;
                             default:
@@ -133,11 +134,11 @@ final class InputBuilderImpl implements InputBuilder {
                     case TIME:
                         switch (standardType) {
                             case min_time:
-                                attributes.put(HtmlTag.InputAttribute.MIN,
+                                this.attributes.put(HtmlTag.InputAttribute.MIN,
                                         DateTimeFormatter.ISO_LOCAL_TIME.format((LocalTime) values.get(0)));
                                 break;
                             case max_time:
-                                attributes.put(HtmlTag.InputAttribute.MAX,
+                                this.attributes.put(HtmlTag.InputAttribute.MAX,
                                         DateTimeFormatter.ISO_LOCAL_TIME.format((LocalTime) values.get(0)));
                                 break;
                             default:
@@ -147,11 +148,11 @@ final class InputBuilderImpl implements InputBuilder {
                     case TIMESTAMP:
                         switch (standardType) {
                             case min_datetime:
-                                attributes.put(HtmlTag.InputAttribute.MIN,
+                                this.attributes.put(HtmlTag.InputAttribute.MIN,
                                         DateTimeFormatter.ISO_LOCAL_DATE_TIME.format((LocalDateTime) values.get(0)));
                                 break;
                             case max_datetime:
-                                attributes.put(HtmlTag.InputAttribute.MAX,
+                                this.attributes.put(HtmlTag.InputAttribute.MAX,
                                         DateTimeFormatter.ISO_LOCAL_DATE_TIME.format((LocalDateTime) values.get(0)));
                                 break;
                             default:
@@ -161,23 +162,23 @@ final class InputBuilderImpl implements InputBuilder {
                     case NUMBER:
                         switch (standardType) {
                             case min_integer:
-                                attributes.put(HtmlTag.InputAttribute.MIN, values.get(0).toString());
+                                this.attributes.put(HtmlTag.InputAttribute.MIN, values.get(0).toString());
                                 break;
                             case max_integer:
-                                attributes.put(HtmlTag.InputAttribute.MAX, values.get(0).toString());
+                                this.attributes.put(HtmlTag.InputAttribute.MAX, values.get(0).toString());
                                 break;
                             case inc_integer:
-                                attributes.put(HtmlTag.InputAttribute.STEP, values.get(0).toString());
+                                this.attributes.put(HtmlTag.InputAttribute.STEP, values.get(0).toString());
                                 break;
                         }
                         break;
                     case DECIMAL:
                         switch (standardType) {
                             case min_decimal:
-                                attributes.put(HtmlTag.InputAttribute.MIN, values.get(0).toString());
+                                this.attributes.put(HtmlTag.InputAttribute.MIN, values.get(0).toString());
                                 break;
                             case max_decimal:
-                                attributes.put(HtmlTag.InputAttribute.MAX, values.get(0).toString());
+                                this.attributes.put(HtmlTag.InputAttribute.MAX, values.get(0).toString());
                                 break;
                             default:
                                 break;
@@ -186,7 +187,7 @@ final class InputBuilderImpl implements InputBuilder {
                     case TEXT:
                         switch (standardType) {
                             case pattern:
-                                attributes.put(HtmlTag.InputAttribute.PATTERN, values.get(0).toString());
+                                this.attributes.put(HtmlTag.InputAttribute.PATTERN, values.get(0).toString());
                                 break;
                             default:
                                 break;
@@ -204,7 +205,7 @@ final class InputBuilderImpl implements InputBuilder {
                                         LGR.error(Functions.getStackTraceAsString(ex));
                                     }
                                 });
-                                attributes.put(HtmlTag.InputAttribute.LIST, valueLabels);
+                                this.attributes.put(HtmlTag.InputAttribute.LIST, valueLabels);
                                 break;
                             default:
                                 break;
@@ -241,6 +242,21 @@ final class InputBuilderImpl implements InputBuilder {
     @Override
     public boolean isReadonly() {
         return this.readonly;
+    }
+
+    @Override
+    public void setInputType(HtmlInputElement.Type inputType) {
+        this.inputType = inputType;
+    }
+
+    @Override
+    public void setRequired(boolean required) {
+
+    }
+
+    @Override
+    public void setReadonly(boolean readonly) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -35,6 +35,8 @@ import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
+import org.schorn.ella.html.ActiveHtml.HtmlMetaElement;
+import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
 import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.html.MetaRules;
 import org.schorn.ella.load.ActiveObjectLoad;
@@ -60,8 +62,6 @@ import org.schorn.ella.transform.TransformProvider;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
-import org.schorn.ella.html.ActiveHtml.HtmlMetaElement;
 
 /**
  *
@@ -460,7 +460,7 @@ class ServiceProviderImpl extends AbstractContextual implements ActiveServices, 
             ObjectType objectType = ObjectType.get(context, object_type);
             HtmlElement htmlElement = objectType.htmlForm();
             try {
-                HtmlPageElement htmlPage = HtmlProvider.provider().html_page();
+                HtmlPageElement htmlPage = HtmlProvider.provider().html_page(context);
                 HtmlMetaElement htmlMeta = ActiveHtml.HtmlMetaElement.create(MetaRules.Attribute.charset);
                 htmlMeta.setValue(StandardCharsets.UTF_8);
                 htmlPage.htmlHead().append(htmlMeta);

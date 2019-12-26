@@ -24,6 +24,7 @@
 package org.schorn.ella.html;
 
 import org.schorn.ella.Provider;
+import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
 import org.schorn.ella.html.ActiveHtml.HtmlLabeler;
 import org.schorn.ella.html.ActiveHtml.HtmlPageElement;
@@ -53,7 +54,7 @@ public interface HtmlProvider extends Provider {
      *
      * @return
      */
-    public HtmlLabeler labeler();
+    public HtmlLabeler labeler() throws Exception;
 
     /**
      *
@@ -62,7 +63,7 @@ public interface HtmlProvider extends Provider {
      * @return
      * @throws Exception
      */
-    public HtmlPageElement html_page() throws Exception;
+    public HtmlPageElement html_page(AppContext context) throws Exception;
 
     /**
      * Creates the User Interface element block containing a form <form>

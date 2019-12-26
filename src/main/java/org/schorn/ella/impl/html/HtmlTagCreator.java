@@ -29,14 +29,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.schorn.ella.html.ActiveHtml;
-import org.schorn.ella.html.HtmlProvider;
-import org.schorn.ella.node.DataGroup;
-import org.schorn.ella.node.ActiveNode.ObjectType;
-import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintData;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType;
+import org.schorn.ella.node.ActiveNode.ObjectType;
+import org.schorn.ella.node.ActiveNode.ValueType;
+import org.schorn.ella.node.DataGroup;
 
 /**
  *
@@ -55,7 +53,7 @@ public class HtmlTagCreator {
         builder.add(HtmlTag.FormAttribute.ID, objectType.name());
         builder.add(HtmlTag.FormAttribute.NAME, objectType.name());
         builder.label(objectType.name());
-        builder.label(HtmlProvider.provider().labeler().get(objectType, null));
+        //builder.label(HtmlProvider.provider().labeler().get(objectType, null));
         return (HtmlTag.FormTag) builder.build();
     }
 
@@ -68,7 +66,7 @@ public class HtmlTagCreator {
      */
     static HtmlTag.InputTag createInputTag(ObjectType objectType, ValueType valueType) {
         HtmlTag.InputTag.Builder builder = builder(objectType, valueType);
-        builder.label(HtmlProvider.provider().labeler().get(objectType, valueType));
+        //builder.label(HtmlProvider.provider().labeler().get(objectType, valueType));
         // builder.label(objectType.name());
         return (HtmlTag.InputTag) builder.build();
     }
@@ -85,7 +83,7 @@ public class HtmlTagCreator {
      */
     static HtmlTag.InputTag createInputTag(ObjectType objectType, ValueType valueType, Object defaultValue) {
         HtmlTag.InputTag.Builder builder = builder(objectType, valueType);
-        builder.label(HtmlProvider.provider().labeler().get(objectType, valueType));
+        //builder.label(HtmlProvider.provider().labeler().get(objectType, valueType));
         builder.label(valueType.name());
         addValueToBuilder(builder, valueType, defaultValue);
         return (HtmlTag.InputTag) builder.build();

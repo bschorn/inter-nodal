@@ -77,8 +77,9 @@ public final class ActiveMain {
      * @throws Exception
      */
     private void initActivityCfg() throws Exception {
-        String activityDate = System.getProperty("ActivityDate", DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.now()));
-        String activityFileName = NodeConfig.ACTIVITY_FILE.asString().replace("{DATE}", activityDate);
+        LocalDate activityDate = NodeConfig.ACTIVE_DATE.asDate();
+        String activityFileName = NodeConfig.ACTIVITY_FILE.asString().replace("{DATE}",
+                activityDate.format(DateTimeFormatter.BASIC_ISO_DATE));
         String activityFile = String.format("%s%s%s",
                 NodeConfig.ACTIVITY_DIR.asString(),
                 File.separator,

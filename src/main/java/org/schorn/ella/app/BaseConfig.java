@@ -24,6 +24,7 @@
 package org.schorn.ella.app;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,7 @@ public interface BaseConfig {
             * is not in the call stack.
             * if the owner has changed, please update propertyOwner member
              */
-            this.logger().error("{}.value() was not called by the owner: {}",
+            this.logger().error("{}.asString() was not called by the owner: {}",
                     this.propertyName(), this.propertyOwner().getSimpleName());
         }
         String value = this.properties().getProperty(this.propertyKey(), this.defaultValue());
@@ -112,7 +113,21 @@ public interface BaseConfig {
                 return (Number) valueAsNumber;
             }
         } catch (Exception ex) {
-            this.logger().error("{}.valueAsNumber() - {} caught Exception: {}",
+            this.logger().error("{}.asNumber() - {} caught Exception: {}",
+                    this.getClass().getSimpleName(), this.propertyName(),
+                    Functions.getStackTraceAsString(ex));
+        }
+        return null;
+    }
+
+    default LocalDate asDate() {
+        try {
+            String value = this.asString();
+            if (value != null) {
+                return TypeConverter.recast(String.class, LocalDate.class, value);
+            }
+        } catch (Exception ex) {
+            this.logger().error("{}.asDate() - {} caught Exception: {}",
                     this.getClass().getSimpleName(), this.propertyName(),
                     Functions.getStackTraceAsString(ex));
         }

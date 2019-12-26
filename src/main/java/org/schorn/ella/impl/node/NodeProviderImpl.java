@@ -24,6 +24,7 @@
 package org.schorn.ella.impl.node;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ import org.schorn.ella.node.ActiveNode.ValueType.PrimitiveType;
 import org.schorn.ella.node.ActiveNode.ValueTypeMember;
 import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.NodeProvider;
+import org.schorn.ella.node.ValueFlag;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +94,6 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     @Override
     public void init() {
-        //this.mapInterfaceToImpl(ActiveNode.ObjectData.SeriesKey.class, SeriesKeyImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ObjectType.Builder.class, ObjectTypeBuilderImpl.class);
         this.mapInterfaceToImpl(ActiveNode.Constraints.Builder.class, ConstraintsBuilderImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ValueType.DataType.class, DataTypeImpl.class);
@@ -111,12 +112,9 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
         this.mapInterfaceToImpl(ActiveNode.TypeConversion.class, TypeConversionImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ObjectData.KeyGenerator.class, KeyGeneratorImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ValueTypeMember.class, ValueTypeMemberImpl.class);
-        //this.mapInterfaceToImpl(ActiveNode.ObjectData.SeriesKey.class, SeriesKeyImpl.class);
-        //this.mapInterfaceToImpl(NodeActions.StructDataAsJSON.class, NodeActions.StructDataAsJSON.class);
 
         this.mingletons.add(ActiveNode.ActiveRef.class);
         this.mingletons.add(ActiveNode.ObjectData.KeyGenerator.class);
-        //this.renewables.add(ActiveNode.ObjectData.SeriesKey.class);
 
         this.constraintTypes.put(ActiveNode.Constraints.ConstraintType.StandardTypes.holidays.name(), StandardConstraintType.Holidays.class);
         this.constraintTypes.put(ActiveNode.Constraints.ConstraintType.StandardTypes.day_of_week.name(), StandardConstraintType.DayOfWeek.class);
@@ -248,9 +246,9 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
     }
 
     @Override
-    public ValueType createValueType(AppContext context, String value_type, FieldType fieldType) throws Exception {
+    public ValueType createValueType(AppContext context, String value_type, FieldType fieldType, EnumSet<ValueFlag> valueFlags) throws Exception {
         return (ValueType) context.addType(createInstance(ValueType.class, context, value_type, fieldType,
-                Integer.valueOf(context.valueTypes().size()).shortValue()));
+                Integer.valueOf(context.valueTypes().size()).shortValue(), ValueFlag.getLongFromSet(valueFlags)));
     }
 
     @Override

@@ -41,7 +41,7 @@ public interface ServicesProvider extends Provider {
      * Implementation for this interface is retrieved
      */
     static ServicesProvider provider() {
-        return Provider.Providers.API.getInstance(ServicesProvider.class);
+        return Provider.Providers.SERVICES.getInstance(ServicesProvider.class);
     }
 
     /**

@@ -47,6 +47,10 @@ public interface ActiveIO {
 
     static final Logger LGR = LoggerFactory.getLogger(ActiveIO.class);
 
+    interface ResourceReader extends Contextual, Mingleton {
+
+    }
+
     interface ConsumeTransformedActivity<R> extends Consumer<R> {
     }
 

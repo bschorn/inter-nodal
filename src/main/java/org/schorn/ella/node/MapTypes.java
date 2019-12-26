@@ -108,7 +108,7 @@ public class MapTypes {
                 FieldType ftype = metaField.fieldType();
                 valueType = ValueType.get(AppContext.Common, this.name());
                 if (valueType == null) {
-                    valueType = ValueType.create(AppContext.Common, this.name(), ftype);
+                    valueType = ValueType.create(AppContext.Common, this.name(), ftype, ValueFlag.getEnumSetFromLong(0));
                     //LGR.info(String.format("ValueType: %s", valueType));
                 }
             } catch (Exception e) {

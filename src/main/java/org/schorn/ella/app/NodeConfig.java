@@ -52,6 +52,7 @@ public enum NodeConfig implements BaseConfig {
     ACTIVE_LABELS(ActiveMain.class, "Active.Labels", DataGroup.URL, ",", null),
     ACTIVE_CONTEXTS(ActiveMain.class, "Active.Contexts", DataGroup.TEXT, ",", null),
     ACTIVE_METAS(ActiveMain.class, "Active.Metas", DataGroup.TEXT, ",", null),
+    ACTIVE_DATE(ActiveMain.class, "Active.Date", DataGroup.DATE, null, null),
     ACTIVITY_DIR(ActiveMain.class, "ActivityDir", DataGroup.TEXT, null, "./activity"),
     ACTIVITY_FILE(ActiveMain.class, "ActivityFile", DataGroup.TEXT, null, "activity.{DATE}.{CONTEXT}.log"),
     //LINE_PARSER_CSV(DSVLineParser.class, "Parser.LineParser.CSV", "org.schorn.ella.node.transform.DSVLineParserImpl"),

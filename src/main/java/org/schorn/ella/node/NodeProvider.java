@@ -23,6 +23,7 @@
  */
 package org.schorn.ella.node;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -57,9 +58,10 @@ public interface NodeProvider extends Provider {
 
     /**
      * Implementation for this interface is retrieved
+     * @return
      */
     static NodeProvider provider() {
-        return Provider.Providers.META.getInstance(NodeProvider.class);
+        return Provider.Providers.NODE.getInstance(NodeProvider.class);
     }
 
     /**
@@ -147,7 +149,7 @@ public interface NodeProvider extends Provider {
 
     FieldType createFieldType(AppContext context, String field_type, DataType dataType, Constraints constraints, Integer maxWidth) throws Exception;
 
-    ValueType createValueType(AppContext context, String value_type, FieldType fieldType) throws Exception;
+    ValueType createValueType(AppContext context, String value_type, FieldType fieldType, EnumSet<ValueFlag> valueFlags) throws Exception;
 
     ValueType createDynamicValueType(AppContext context, String value_type, Object value) throws Exception;
 
@@ -161,17 +163,6 @@ public interface NodeProvider extends Provider {
 
     MemberDef createMemberDef(ActiveType activeType, BondType bondType, int index) throws Exception;
 
-    /*
-	MemberType<ValueType> createValueTypeMember(ValueType valueType, NodeBond bondType, int index);
-	MemberType<ObjectType> createObjectTypeMember(ObjectType objectType, NodeBond bondType, int index);
-	MemberType<ArrayType> createArrayTypeMember(ArrayType arrayType, NodeBond bondType, int index);
-	ObjectType createObjectType(AppContext context, String object_type, DomainType domainType,
-			ValueTypeMember[] valueTypeMembers, ObjectTypeMember[] objectTypeMembers, ArrayTypeMember[] arrayTypeMembers) throws Exception;
-     */
-
- /*
-	 * ValueType default values
-     */
     Object setDefaultValue(ValueType valueType, Object value);
 
     Object setDefaultValue(ValueType valueType, DefaultValue defaultValue);

@@ -21,47 +21,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.schorn.ella.impl.html;
+package org.schorn.ella;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import org.schorn.ella.context.AppContext;
+import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Provider;
-import org.schorn.ella.Renewable;
-import org.schorn.ella.Reusable;
-import org.schorn.ella.Singleton;
-import org.schorn.ella.util.Functions;
 
 /**
  *
  * @author schorn
  *
  */
-abstract class AbstractProvider implements Provider {
+public abstract class AbstractProvider implements Provider {
 
     private static final Logger LGR = LoggerFactory.getLogger(AbstractProvider.class);
 
     /**
      * Map of interface class to implementation class
      */
-    Map<Class<?>, Class<?>> CLASS_IMPL = new HashMap<>();
+    private final Map<Class<?>, Class<?>> implMap = new ConcurrentHashMap<>();
 
     /**
      * Previously created instances that can be reused. The objects contained
      * need to be stateless and can have a single instance run concurrently.
      */
-    Map<String, Object> REUSE_IMPL = new HashMap<>();
+    private final Map<String, Object> instanceCache = new ConcurrentHashMap<>();
+
+    private final List<Class<? extends Mingleton>> mingletons = new CopyOnWriteArrayList<>();
+    private final List<Class<? extends Renewable<?>>> renewables = new CopyOnWriteArrayList<>();
 
     @Override
     public void mapInterfaceToImpl(Class<?> interfaceFor, Class<?> implFor) {
-        this.CLASS_IMPL.put(interfaceFor, implFor);
+        this.implMap.put(interfaceFor, implFor);
+        if (Mingleton.class.isAssignableFrom(interfaceFor)) {
+            this.mingletons.add((Class<? extends Mingleton>) interfaceFor);
+        } else if (Renewable.class.isAssignableFrom(interfaceFor)) {
+            this.renewables.add((Class<? extends Renewable<?>>) interfaceFor);
+        }
+    }
+
+    @Override
+    public List<Class<? extends Mingleton>> mingletons() {
+        return this.mingletons;
+    }
+
+    @Override
+    public List<Class<? extends Renewable<?>>> renewables() {
+        return this.renewables;
+    }
+
+    @Override
+    public void registerContext(AppContext context) throws Exception {
+
     }
 
     /**
@@ -80,11 +99,12 @@ abstract class AbstractProvider implements Provider {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T createInstance(Class<T> interfaceFor, Object... params) throws Exception {
-        Class<?> classFor = CLASS_IMPL.get(interfaceFor);
+        Class<?> classFor = implMap.get(interfaceFor);
         if (classFor == null) {
-            LGR.error("{}.newInstance() - there is no implementation specified for interface {}",
-                    this.getClass().getSimpleName(), interfaceFor.getSimpleName());
-            return null;
+            //LGR.error("{}.newInstance() - there is no implementation specified for interface {}",
+            //      this.getClass().getSimpleName(), interfaceFor.getSimpleName());
+            throw new Exception(String.format("%s.newInstance() - there is no implementation specified for interface %s",
+                    this.getClass().getSimpleName(), interfaceFor.getSimpleName()));
         }
         Constructor<?> constructor = null;
         T newInstance = null;
@@ -115,10 +135,14 @@ abstract class AbstractProvider implements Provider {
             for (Object o : params) {
                 joiner.add(String.format("(%s) %s", o.getClass().getSimpleName(), o.toString()));
             }
-            LGR.error("{}.newInstance() - there is no constructor available to match the parameters {} specified for interface {}",
+            //LGR.error("{}.newInstance() - there is no constructor available to match the parameters {} specified for interface {}",
+            //      this.getClass().getSimpleName(),
+            //    joiner.toString(),
+            //  interfaceFor.getSimpleName());
+            throw new Exception(String.format("%s.newInstance() - there is no constructor available to match the parameters %s specified for interface %s",
                     this.getClass().getSimpleName(),
                     joiner.toString(),
-                    interfaceFor.getSimpleName());
+                    interfaceFor.getSimpleName()));
 
         }
         return newInstance;
@@ -130,20 +154,17 @@ abstract class AbstractProvider implements Provider {
         StringJoiner joiner = new StringJoiner(":", "", "");
         joiner.add(interfaceFor.getName());
         for (Object param : params) {
-            joiner.add(param.getClass().getName());
-            joiner.add(param.toString());
-        }
-        String key = joiner.toString();
-        Object instance = REUSE_IMPL.get(key);
-        if (instance != null) {
-            if (instance instanceof Reusable) {
-
+            if (param != null) {
+                joiner.add(param.getClass().getName());
+                joiner.add(param.toString());
             }
         }
+        String key = joiner.toString();
+        Object instance = instanceCache.get(key);
         if (instance == null) {
             instance = createInstance(interfaceFor, params);
             if (instance != null) {
-                REUSE_IMPL.put(key, instance);
+                instanceCache.put(key, instance);
             }
         }
         return (T) instance;
@@ -152,7 +173,7 @@ abstract class AbstractProvider implements Provider {
     @Override
     public <T> T getReusable(Class<T> interfaceFor, Object... params) {
         try {
-            return createReusable(interfaceFor, params);
+            return (T) createReusable(interfaceFor, params);
         } catch (Exception e) {
             LGR.error(Functions.stackTraceToString(e));
         }

@@ -24,6 +24,8 @@
 package org.schorn.ella.html;
 
 import java.util.List;
+import java.util.function.Function;
+import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode;
@@ -33,7 +35,6 @@ import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.DataGroup;
-import org.schorn.ella.node.MetaTypes;
 
 /**
  *
@@ -402,10 +403,24 @@ public interface ActiveHtml {
 
     /**
      *
+     * @param <T>
      */
     interface Builder<T extends HtmlElement> {
 
         T build() throws Exception;
+    }
+
+    /**
+     *
+     */
+    interface InputTagSelector extends Function<ValueType, HtmlInputElement.Type>, Mingleton {
+
+        static public InputTagSelector getInputTagSelector(AppContext context) {
+            return HtmlProvider.provider().getReusable(InputTagSelector.class, context);
+        }
+
+        @Override
+        HtmlInputElement.Type apply(ValueType valueType);
     }
 
     /**
@@ -418,31 +433,18 @@ public interface ActiveHtml {
         }
 
         static public HtmlInputElement.Type getInputType(ValueType valueType) {
-            MetaTypes.DataTypes metaDataTypes = MetaTypes.DataTypes.valueOf(valueType.fieldType().dataType());
-            switch (metaDataTypes) {
-                case BOOL:
-                    return HtmlInputElement.Type.CHECKBOX;
-                case DATE:
-                    return HtmlInputElement.Type.DATE;
-                case ENUM:
-                    return HtmlInputElement.Type.LIST;
-                case DECIMAL:
-                case NUMBER:
-                    return HtmlInputElement.Type.NUMBER;
-                case TIME:
-                    return HtmlInputElement.Type.TIME;
-                case TIMESTAMP:
-                    return HtmlInputElement.Type.DATETIME;
-                case TEXT:
-                    return HtmlInputElement.Type.TEXT;
-                default:
-                    return HtmlInputElement.Type.TEXT;
-            }
+            return InputTagSelector.getInputTagSelector(valueType.context()).apply(valueType);
         }
+
+        public void setInputType(HtmlInputElement.Type inputType);
 
         public void setName(String name);
 
         public void setId(String id);
+
+        public void setRequired(boolean required);
+
+        public void setReadonly(boolean readonly);
 
         public HtmlInputElement.Type getInputType();
 
@@ -596,7 +598,7 @@ public interface ActiveHtml {
     interface HtmlLabeler {
 
         static public HtmlLabeler get() throws Exception {
-            return HtmlProvider.provider().createInstance(HtmlLabeler.class);
+            return HtmlProvider.provider().getReusable(HtmlLabeler.class);
         }
 
         String get(AppContext context, String label_type);

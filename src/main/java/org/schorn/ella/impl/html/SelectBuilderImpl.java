@@ -31,7 +31,6 @@ import org.schorn.ella.html.ActiveHtml.HtmlElement;
 import org.schorn.ella.html.ActiveHtml.HtmlLabelElement;
 import org.schorn.ella.html.ActiveHtml.HtmlSelectElement;
 import org.schorn.ella.html.ActiveHtml.SelectBuilder;
-import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ArrayData;
@@ -117,9 +116,9 @@ public class SelectBuilderImpl implements SelectBuilder {
                         StringJoiner joinerLabel = new StringJoiner(" ", "", "");
                         naturalKeys.forEach(md -> joinerLabel.add(md.activeType().name()));
                         labelName = joinerLabel.toString();
-                        String label = HtmlProvider.provider().labeler().get(arrayData.memberType(), valueType);
+                        //String label = HtmlProvider.provider().labeler().get(arrayData.memberType(), valueType);
                         if (label == null) {
-                            label = HtmlProvider.provider().labeler().get(valueType);
+                            //label = HtmlProvider.provider().labeler().get(valueType);
                         }
                         if (label == null) {
                             this.setLabel(labelName);

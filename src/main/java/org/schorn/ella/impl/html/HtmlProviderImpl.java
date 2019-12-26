@@ -29,8 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.HtmlAttribute;
@@ -57,7 +56,6 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.Role;
 import org.schorn.ella.node.ActiveNode.StructData;
 import org.schorn.ella.node.ActiveNode.ValueType;
-import org.schorn.ella.node.BondType;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +76,6 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     final Map<ActiveNode.ObjectType, List<HtmlTag.InputTag>> formTags = new HashMap<>();
 
     private HtmlLabeler labeler;
-    private List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
-    private List<Class<? extends Renewable<?>>> renewables = new ArrayList<>();
 
     @Override
     public void init() throws Exception {
@@ -109,21 +105,20 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         this.mapInterfaceToImpl(ActiveHtml.HtmlTableElement.HtmlTrElement.class, HtmlTableElementImpl.HtmlTrElementImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.HtmlLabeler.class, HtmlLabelerImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.SelectBuilder.class, SelectBuilderImpl.class);
+        this.mapInterfaceToImpl(ActiveHtml.InputTagSelector.class, InputTagSelectorImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.InputBuilder.class, InputBuilderImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.FormBuilder.class, FormBuilderImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.TableBuilder.class, TableBuilderImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.TableData.class, TableDataImpl.class);
 
-        this.labeler = this.createReusable(HtmlLabeler.class);
-
-        this.renewables.add(ActiveHtml.TableData.class);
+        //this.labeler = this.createReusable(HtmlLabeler.class);
 
     }
 
     @Override
     public void registerContext(AppContext context) throws Exception {
         if (context.equals(AppContext.Common)) {
-            for (Class<?> classFor : this.mingletons) {
+            for (Class<?> classFor : this.mingletons()) {
                 this.createReusable(classFor);
                 LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
                         this.getClass().getSimpleName(),
@@ -131,7 +126,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
                         classFor.getSimpleName()
                 ));
             }
-            for (Class<?> classFor : this.renewables) {
+            for (Class<?> classFor : this.renewables()) {
                 this.createReusable(classFor);
                 LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
                         this.getClass().getSimpleName(),
@@ -143,12 +138,12 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     }
 
     @Override
-    public HtmlLabeler labeler() {
-        return labeler;
+    public HtmlLabeler labeler() throws Exception {
+        return this.createReusable(HtmlLabeler.class);
     }
 
     @Override
-    public HtmlPageElement html_page() throws Exception {
+    public HtmlPageElement html_page(AppContext context) throws Exception {
         HtmlPageElement htmlPage = ActiveHtml.HtmlPageElement.create();
 
         return htmlPage;
@@ -176,9 +171,11 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
 
         for (ActiveNode.MemberDef memberType : objectType.schema().memberDefs()) {
             ActiveType activeType = memberType.activeType();
+            /*
             if (memberType.bondType().equals(BondType.AUTOMATIC)) {
                 continue;
             }
+             */
             switch (activeType.role()) {
                 case Value:
                     if (activeType instanceof ActiveNode.ValueType) {
@@ -208,9 +205,9 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
                             naturalKeyMember = uniqueKeyMember;
                         }
                         if (uniqueKeyMember != null && naturalKeyMember != null) {
-                            ValueType uniqueKeyType = (ValueType) uniqueKeyMember.activeType();
+                            //ValueType uniqueKeyType = (ValueType) uniqueKeyMember.activeType();
                             ValueType naturalKeyType = (ValueType) naturalKeyMember.activeType();
-                            ArrayData fkSelectArray = activeType.context().runList(fkObjectType.name(), naturalKeyType.name());
+                            //ArrayData fkSelectArray = activeType.context().runList(fkObjectType.name(), naturalKeyType.name());
                             //HtmlElement selectElement = html_select(fkSelectArray, uniqueKeyType.name(), naturalKeyType.label());
                             //selectElement.addClass(HTMLConfig.HTML_SELECT_CLASS.value());
                             //formBuilder.addInput(selectElement);

@@ -36,24 +36,24 @@ import java.util.Set;
 public enum ValueFlag {
     UNDEFINED(1),
     AMOUNT(1 << 1),
+    APPLICATION(1 << 19),
     ATTRIBUTE(1 << 2),
     AUTOMATIC(1 << 3),
     CATEGORY(1 << 4),
     FACTOR(1 << 5),
+    HIDDEN(1 << 18),
     IDENTITY(1 << 6),
     PII(1 << 7),
     PRICE(1 << 8),
     QUANTITY(1 << 9),
     REFERENCE(1 << 10),
-    SYSTEM(1 << 11),
-    SPATIAL(1 << 12),
-    SEQUENCE(1 << 13),
-    TEMPORAL(1 << 14),
-    TRANSIENT(1 << 15),
-    UNIT(1 << 16),
-    UNUSED17(1 << 17),
-    UNUSED18(1 << 18),
-    UNUSED19(1 << 19),
+    REPO(1 << 11),
+    SYSTEM(1 << 12),
+    SPATIAL(1 << 13),
+    SEQUENCE(1 << 14),
+    TEMPORAL(1 << 15),
+    TRANSIENT(1 << 16),
+    UNIT(1 << 17),
     UNUSED20(1 << 20),
     UNUSED21(1 << 21),
     UNUSED22(1 << 22),
@@ -77,32 +77,40 @@ public enum ValueFlag {
         return this.flag;
     }
 
-    /**
-     * Convert a single value into a set of flags.
-     *
-     * @param value
-     * @return
-     */
-    static public EnumSet<ValueFlag> getFlagsForValue(long value) {
-        EnumSet bondTypes = EnumSet.noneOf(ValueFlag.class);
-        for (ValueFlag bondType : ValueFlag.values()) {
-            if ((bondType.flag & value) == bondType.flag) {
-                bondTypes.add(value);
-            }
-        }
-        return bondTypes;
+    public boolean hasFlag(long flag) {
+        return (this.flag & flag) != 0;
     }
 
-    /**
-     * Convert a set of flags into a single value.
-     *
-     * @param flags
-     * @return
-     */
-    static public long getValueForFlags(Set<ValueFlag> flags) {
+    static public EnumSet<ValueFlag> getEnumSetFromLong(long value) {
+        EnumSet valueFlags = EnumSet.noneOf(ValueFlag.class);
+        for (ValueFlag valueFlag : ValueFlag.values()) {
+            if ((valueFlag.flag & value) == valueFlag.flag) {
+                valueFlags.add(value);
+            }
+        }
+        return valueFlags;
+    }
+
+    static public EnumSet<ValueFlag> getEnumSetFromSet(Set<ValueFlag> flags) {
+        EnumSet enumSet = EnumSet.noneOf(ValueFlag.class);
+        for (ValueFlag valueFlag : flags) {
+            enumSet.add(valueFlag);
+        }
+        return enumSet;
+    }
+
+    static public long getLongFromSet(Set<ValueFlag> flags) {
         long value = 0;
-        for (ValueFlag bondType : ValueFlag.values()) {
-            value |= bondType.flag;
+        for (ValueFlag valueFlag : flags) {
+            value |= valueFlag.flag;
+        }
+        return value;
+    }
+
+    static public long getLongFromEnumSet(EnumSet<ValueFlag> flags) {
+        long value = 0;
+        for (ValueFlag valueFlag : flags) {
+            value |= valueFlag.flag;
         }
         return value;
     }
