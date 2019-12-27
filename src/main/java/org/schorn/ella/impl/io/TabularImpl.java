@@ -29,7 +29,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.schorn.ella.app.NodeConfig;
+import org.schorn.ella.app.AppConfig;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.io.ActiveIO;
 
@@ -55,11 +55,11 @@ public class TabularImpl implements ActiveIO.Tabular {
         this.fieldNames = new ArrayList<>();
         fieldNames.forEach(fn -> this.fieldNames.add(fn.toString()));
         {
-            String propertyValue = NodeConfig.getTabularAllowDynamicFields("*");
+            String propertyValue = AppConfig.getTabularAllowDynamicFields("*");
             if (propertyValue != null && !propertyValue.equalsIgnoreCase("0")) {
                 this.allowDynamicFields = true;
             } else {
-                propertyValue = NodeConfig.getTabularAllowDynamicFields(this.rowName);
+                propertyValue = AppConfig.getTabularAllowDynamicFields(this.rowName);
                 if (!propertyValue.equalsIgnoreCase("0")) {
                     this.allowDynamicFields = true;
                 }

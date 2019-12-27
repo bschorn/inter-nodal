@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.schorn.ella.FunctionalAction;
-import org.schorn.ella.app.NodeConfig;
+import org.schorn.ella.app.AppConfig;
 import org.schorn.ella.node.ActiveNode.Format;
 import org.schorn.ella.node.ActiveNode.Role;
 import org.schorn.ella.node.ActiveNode.StructData;
@@ -173,7 +173,7 @@ public interface ActiveTransform {
                 = String.format("%s.AUTO_DYNAMIC_TYPE", OpenNodeToActiveNode.class.getSimpleName());
 
         default boolean isAutoDynamicTypes() throws Exception {
-            return NodeConfig.AUTO_DYNAMIC_TYPE.asNumber().intValue() == 1;
+            return AppConfig.AUTO_DYNAMIC_TYPE.asNumber().intValue() == 1;
         }
 
         @Override
@@ -383,7 +383,7 @@ public interface ActiveTransform {
         List<Object> apply(String line);
 
         static public String getLineParserCSV() {
-            return NodeConfig.LINE_PARSER_CSV_PATTERN.asString();
+            return AppConfig.LINE_PARSER_CSV_PATTERN.asString();
         }
     }
 

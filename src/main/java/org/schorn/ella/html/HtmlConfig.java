@@ -25,8 +25,8 @@ package org.schorn.ella.html;
 
 import java.util.Properties;
 import java.util.StringJoiner;
-import org.schorn.ella.ComponentProperties;
-import org.schorn.ella.app.BaseConfig;
+import org.schorn.ella.ActiveConfig;
+import org.schorn.ella.Component;
 import org.schorn.ella.node.DataGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,8 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-public enum HtmlConfig implements BaseConfig {
+public enum HtmlConfig implements ActiveConfig {
+    HTML_LABEL(HtmlProvider.class, "Html.Label", DataGroup.TEXT, null, null),
     HTML_FORM_CLASS(HtmlProvider.class, "HtmlClass.Form", DataGroup.TEXT, null, "node-form"),
     HTML_FORM_LABEL_CLASS(HtmlProvider.class, "HtmlClass.FormLabel", DataGroup.TEXT, null, "node-form-label"),
     HTML_INPUT_CLASS(HtmlProvider.class, "HtmlClass.Input", DataGroup.TEXT, null, "node-input"),
@@ -81,24 +82,24 @@ public enum HtmlConfig implements BaseConfig {
         return this.dataGroup;
     }
 
+    /*
     @Override
     public boolean isMultiValue() {
         return this.delimiter != null;
     }
+     */
 
     @Override
     public String delimiter() {
         return this.delimiter;
     }
 
-    /**
-     *
-     * @return
-     */
+    /*
     @Override
     public String propertyName() {
         return this.name();
     }
+     */
 
     @Override
     public Class<?> propertyOwner() {
@@ -122,7 +123,7 @@ public enum HtmlConfig implements BaseConfig {
 
     @Override
     public Properties properties() {
-        return ComponentProperties.HTML.properties();
+        return Component.HTML.properties();
     }
 
     static public String dump() {

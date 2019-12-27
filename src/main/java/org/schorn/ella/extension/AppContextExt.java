@@ -26,7 +26,7 @@ package org.schorn.ella.extension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.schorn.ella.app.NodeConfig;
+import org.schorn.ella.app.AppConfig;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveRef;
 import org.schorn.ella.node.ActiveNode.ActiveRef.ReferenceType;
@@ -44,6 +44,7 @@ public interface AppContextExt {
 
     /**
      * EntityTypes associated with this instance
+     * @return
      */
     default List<ObjectType> aggregateTypes() {
         if (this instanceof AppContext) {
@@ -57,6 +58,7 @@ public interface AppContextExt {
 
     /**
      * EntityTypes associated with this instance
+     * @return
      */
     default List<ObjectType> entityTypes() {
         if (this instanceof AppContext) {
@@ -69,6 +71,7 @@ public interface AppContextExt {
 
     /**
      * EntityTypes associated with this instance
+     * @return
      */
     default List<ObjectType> valueObjectTypes() {
         if (this instanceof AppContext) {
@@ -91,7 +94,7 @@ public interface AppContextExt {
         if (this instanceof AppContext) {
             AppContext context = (AppContext) this;
             if (context.hasRepo()) {
-                String autovercfg = context.getProperty(NodeConfig.AUTO_VERSIONING.propertyKey(), "1");
+                String autovercfg = context.getProperty(AppConfig.AUTO_VERSIONING.propertyKey(), "1");
                 return !autovercfg.equals("0");
             } else {
                 return false;

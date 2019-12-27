@@ -37,68 +37,103 @@ import java.util.StringJoiner;
  *
  * @author bschorn
  */
-public enum ComponentProperties implements ActiveProperties, ClassLocator {
+public enum Component implements ActiveProperties, ClassLocator {
     PROVIDER,
+    APP,
     NODE,
+    IO,
+    REPO,
     SERVER,
     WEB,
     HTML;
 
-    protected Path resourcesPath = null;
-    protected Exception exception = null;
-    protected Properties properties = null;
-    protected ClassLocator classLocator = null;
-    static public final Properties SYSTEM = new Properties();
+    static private final Properties OVERRIDES = new Properties();
 
-    static public void init(Properties properties) {
-        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-            String[] keyParts = entry.getKey().toString().split("\\.");
-            ComponentProperties cp = ComponentProperties.valueOf(keyParts[0].toUpperCase());
-            if (cp != null) {
-                StringJoiner keyJoiner = new StringJoiner(".", "", "");
-                for (int i = 1; i < keyParts.length; i++) {
-                    keyJoiner.add(keyParts[i]);
-                }
-                cp.setProperty(keyJoiner.toString(), entry.getValue().toString());
-            } else {
-                SYSTEM.setProperty(entry.getKey().toString(), entry.getValue().toString());
-            }
+    private final Properties properties = new Properties();
+    private Path resourcesPath = null;
+    private ClassLocator classLocator = null;
+    private Exception exception = null;
+
+    static public void init(Properties overrides) {
+        for (Map.Entry<Object, Object> entry : overrides.entrySet()) {
+            OVERRIDES.setProperty(entry.getKey().toString(), entry.getValue().toString());
         }
-        for (ComponentProperties componentProperty : ComponentProperties.values()) {
+        for (Component componentProperty : Component.values()) {
             componentProperty.init0();
         }
     }
 
-    static public void init() {
-        for (ComponentProperties componentProperty : ComponentProperties.values()) {
-            componentProperty.init0();
+    static public Component parse(String name) {
+        for (Component cp : Component.values()) {
+            if (cp.name().equalsIgnoreCase(name)) {
+                return cp;
+            }
         }
+        return null;
     }
 
     protected void init0() {
         Properties properties0 = null;
         try {
-            String root = SYSTEM.getProperty("Active.Resources");
+            String root = System.getProperty("Active.Resources");
             if (root != null) {
                 this.resourcesPath = Paths.get(root);
             } else {
                 this.resourcesPath = Paths.get(Thread.currentThread().getContextClassLoader().getResource("").toURI());
             }
-            String environment = SYSTEM.getProperty("Active.Environment");
-            String propertiesFilePath = String.format("%s%s%s%s%s-%s.properties",
-                    this.resourcesPath.toString(), File.separator, "props", File.separator, this.name().toLowerCase(), environment);
-            Path path = Paths.get(propertiesFilePath);
-            if (Files.exists(path)) {
-                properties0 = new Properties();
-                properties0.load(new FileInputStream(propertiesFilePath));
-            } else {
-                throw new Exception(String.format("File not found: %s", propertiesFilePath));
+            /*
+                x.cfg
+             */
+            {
+                String propertiesFilePath = String.format("%s%s%s%s%s.cfg",
+                        this.resourcesPath.toString(), File.separator, "props", File.separator, this.name().toLowerCase());
+                Path path = Paths.get(propertiesFilePath);
+                if (Files.exists(path)) {
+                    properties0 = new Properties();
+                    properties0.load(new FileInputStream(propertiesFilePath));
+                } else {
+                    throw new Exception(String.format("File not found: %s", propertiesFilePath));
+                }
+            }
+            /*
+                x.dev.cfg
+             */
+            {
+                String environment = System.getProperty("Active.Environment");
+                String propertiesFilePath = String.format("%s%s%s%s%s.%s.cfg",
+                        this.resourcesPath.toString(), File.separator, "props", File.separator, this.name().toLowerCase(), environment);
+                Path path = Paths.get(propertiesFilePath);
+                if (Files.exists(path)) {
+                    properties0 = new Properties();
+                    properties0.load(new FileInputStream(propertiesFilePath));
+                } else {
+                    throw new Exception(String.format("File not found: %s", propertiesFilePath));
+                }
+            }
+            /*
+                command line overrides
+             */
+            for (Map.Entry<Object, Object> entry : OVERRIDES.entrySet()) {
+                String[] keyParts = entry.getKey().toString().split("\\.");
+                if (keyParts[0].equalsIgnoreCase(this.name())) {
+                    StringJoiner keyJoiner = new StringJoiner(".", "", "");
+                    for (int i = 1; i < keyParts.length; i++) {
+                        keyJoiner.add(keyParts[i]);
+                    }
+                    this.properties.setProperty(keyJoiner.toString(), entry.getValue().toString());
+                }
             }
         } catch (Exception ex) {
             this.exception = ex;
             ex.printStackTrace();
         } finally {
-            this.properties = properties0;
+            for (Map.Entry<Object, Object> entry : properties0.entrySet()) {
+                String key = entry.getKey().toString();
+                if (this.properties.containsKey(key)) {
+                    String value = entry.getValue().toString();
+                    this.properties.setProperty(entry.getKey().toString(), entry.getValue().toString());
+                }
+            }
             this.classLocator = ClassLocator.create(this.properties);
         }
     }

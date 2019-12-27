@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.schorn.ella.app;
+package org.schorn.ella;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,11 +39,9 @@ import org.slf4j.Logger;
  * @author schorn
  *
  */
-public interface BaseConfig {
+public interface ActiveConfig {
 
     Properties properties();
-
-    String propertyName();
 
     String propertyKey();
 
@@ -54,8 +52,6 @@ public interface BaseConfig {
     String defaultValue();
 
     DataGroup dataGroup();
-
-    boolean isMultiValue();
 
     String delimiter();
 
@@ -72,6 +68,10 @@ public interface BaseConfig {
                 validAccess = true;
                 break;
             }
+            if (this.propertyOwner().isAssignableFrom(element.getClass())) {
+                validAccess = true;
+                break;
+            }
         }
         if (!validAccess) {
             /*
@@ -80,7 +80,7 @@ public interface BaseConfig {
             * if the owner has changed, please update propertyOwner member
              */
             this.logger().error("{}.asString() was not called by the owner: {}",
-                    this.propertyName(), this.propertyOwner().getSimpleName());
+                    this.propertyKey(), this.propertyOwner().getSimpleName());
         }
         String value = this.properties().getProperty(this.propertyKey(), this.defaultValue());
         if (value != null) {
@@ -114,7 +114,7 @@ public interface BaseConfig {
             }
         } catch (Exception ex) {
             this.logger().error("{}.asNumber() - {} caught Exception: {}",
-                    this.getClass().getSimpleName(), this.propertyName(),
+                    this.getClass().getSimpleName(), this.propertyKey(),
                     Functions.getStackTraceAsString(ex));
         }
         return null;
@@ -128,7 +128,7 @@ public interface BaseConfig {
             }
         } catch (Exception ex) {
             this.logger().error("{}.asDate() - {} caught Exception: {}",
-                    this.getClass().getSimpleName(), this.propertyName(),
+                    this.getClass().getSimpleName(), this.propertyKey(),
                     Functions.getStackTraceAsString(ex));
         }
         return null;
@@ -148,7 +148,7 @@ public interface BaseConfig {
             }
         } catch (Exception ex) {
             this.logger().error("{}.valueAs() - {} caught Exception: {}",
-                    this.getClass().getSimpleName(), this.propertyName(),
+                    this.getClass().getSimpleName(), this.propertyKey(),
                     Functions.getStackTraceAsString(ex));
         }
         return null;

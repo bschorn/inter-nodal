@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2019 Bryan Schorn.
+ * Copyright 2019 bschorn.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.schorn.ella.server;
+package org.schorn.ella.io;
 
-import org.schorn.ella.ActiveConfig;
 import java.util.Properties;
-import java.util.StringJoiner;
+import org.schorn.ella.ActiveConfig;
 import org.schorn.ella.Component;
-import org.schorn.ella.app.*;
-import org.schorn.ella.context.ActiveContext;
+import org.schorn.ella.app.ActiveMain;
 import org.schorn.ella.node.DataGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  *
- *
- * CONFIG_ENUM(PropertyOwner, PropertyKey, DefaultValue)
- *
- * PropertyOwner - the class from which the property will be accessed/used
- * (error will be logged if accessed by non-owner class) PropertyKey - the KEY
- * in System.getProperty(KEY,default); DefaultValue - the DEFAULT in
- * System.getProperty(key,DEFAULT);
- *
- * @author schorn
- *
+ * @author bschorn
  */
-public enum ServerConfig implements ActiveConfig {
-    ACTIVE_MASTER_SERVER(ActiveContext.Action.class, "Active.MasterServer", DataGroup.TEXT, ",", null),
-    ACTIVE_MASTER_SERVER_ADDRESS(ActiveContext.Data.class, "Active.MasterServerAddress", DataGroup.URL, ",", null),
-    ACTIVE_SERVERS(AdminServer.class, "Active.Servers", DataGroup.TEXT, ",", null),
-    ADMIN_SERVER_CFG_MAX_IO_THREADS(AdminServer.Cfg.class, "AdminServer.Cfg.MaxIOThreads", DataGroup.NUMBER, null, "5");
-
-    private static final Logger LGR = LoggerFactory.getLogger(ServerConfig.class);
+public enum IOConfig implements ActiveConfig {
+    ACTIVITY_DIR(ActiveMain.class, "IO.ActivityDir", DataGroup.TEXT, null, "./activity"),
+    ACTIVITY_FILE(ActiveMain.class, "IO.ActivityFile", DataGroup.TEXT, null, "activity.{DATE}.{CONTEXT}.log"),    ;
+    private static final Logger LGR = LoggerFactory.getLogger(IOConfig.class);
 
     private final Class<?> propertyOwner;
     private final String propertyKey;
@@ -60,7 +46,7 @@ public enum ServerConfig implements ActiveConfig {
     private final DataGroup dataGroup;
     private final String delimiter;
 
-    ServerConfig(Class<?> propertyOwner, String propertyKey, DataGroup dataGroup, String delimiter, String defaultValue) {
+    IOConfig(Class<?> propertyOwner, String propertyKey, DataGroup dataGroup, String delimiter, String defaultValue) {
         this.propertyOwner = propertyOwner;
         this.propertyKey = propertyKey;
         this.dataGroup = dataGroup;
@@ -69,28 +55,14 @@ public enum ServerConfig implements ActiveConfig {
     }
 
     @Override
-    public DataGroup dataGroup() {
-        return this.dataGroup;
-    }
-
-    /*
-    @Override
-    public boolean isMultiValue() {
-        return this.delimiter != null;
-    }
-     */
-
-    @Override
     public String delimiter() {
         return this.delimiter;
     }
 
-    /*
     @Override
-    public String propertyName() {
-        return this.name();
+    public DataGroup dataGroup() {
+        return this.dataGroup;
     }
-     */
 
     @Override
     public Class<?> propertyOwner() {
@@ -114,15 +86,7 @@ public enum ServerConfig implements ActiveConfig {
 
     @Override
     public Properties properties() {
-        return Component.SERVER.properties();
-    }
-
-    static public String dump() {
-        StringJoiner joiner = new StringJoiner("\n\t", "[\n\t", "\n]\n");
-        for (ServerConfig config : ServerConfig.values()) {
-            joiner.add(String.format("%-35s: %-40s %-60s", config.name(), config.propertyKey, config.asString()));
-        }
-        return joiner.toString();
+        return Component.IO.properties();
     }
 
 }

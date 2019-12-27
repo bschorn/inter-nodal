@@ -52,6 +52,8 @@ public enum DataGroup {
     ENUM,
     UUID,
     URL,
+    URI,
+    ARRAY,
     MAP,
     CUSTOM,;
 
@@ -62,6 +64,7 @@ public enum DataGroup {
     boolean isDecimal = false;
     boolean isTemporal = false;
     boolean isEnumerable = false;
+    boolean isVector = false;
     boolean isDictionary = false;
     boolean isCustom = false;
 
@@ -97,14 +100,21 @@ public enum DataGroup {
                 this.isBinary = true;
                 break;
             case "URL":
+            case "URI":
                 this.isQuoted = true;
+                this.isBinary = false;
+                break;
+            case "ARRAY":
+                this.isVector = true;
                 this.isBinary = false;
                 break;
             case "MAP":
                 this.isDictionary = true;
                 this.isBinary = false;
+                break;
             case "CUSTOM":
                 this.isCustom = true;
+                break;
             default:
                 break;
         }
@@ -170,6 +180,8 @@ public enum DataGroup {
                 return NodeProvider.provider().typeConvert(value.getClass(), UUID.class, value);
             case URL:
                 return NodeProvider.provider().typeConvert(value.getClass(), URL.class, value);
+            case URI:
+                return NodeProvider.provider().typeConvert(value.getClass(), URI.class, value);
             case MAP:
                 return NodeProvider.provider().typeConvert(value.getClass(), Map.class, value);
             case CUSTOM:

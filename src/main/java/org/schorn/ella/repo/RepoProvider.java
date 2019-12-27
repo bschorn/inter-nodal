@@ -24,7 +24,6 @@
 package org.schorn.ella.repo;
 
 import java.util.function.Supplier;
-
 import org.schorn.ella.Provider;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.event.ActiveEvent;
@@ -43,6 +42,7 @@ public interface RepoProvider extends Provider {
 
     /**
      * Implementation for this interface is retrieved
+     * @return
      */
     static RepoProvider provider() {
         return Provider.Providers.REPO.getInstance(RepoProvider.class);

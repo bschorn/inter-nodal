@@ -25,7 +25,8 @@ package org.schorn.ella.app;
 
 import java.util.Properties;
 import java.util.StringJoiner;
-import org.schorn.ella.ComponentProperties;
+import org.schorn.ella.ActiveConfig;
+import org.schorn.ella.Component;
 import org.schorn.ella.extension.AppContextExt;
 import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.transform.ActiveTransform.DSVLineParser;
@@ -46,23 +47,20 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-public enum NodeConfig implements BaseConfig {
-    ACTIVE_SPEC(ActiveMain.class, "Active.Spec", DataGroup.URL, ",", null),
-    ACTIVE_LANG(ActiveMain.class, "Active.Language", DataGroup.TEXT, ",", null),
-    ACTIVE_LABELS(ActiveMain.class, "Active.Labels", DataGroup.URL, ",", null),
-    ACTIVE_CONTEXTS(ActiveMain.class, "Active.Contexts", DataGroup.TEXT, ",", null),
-    ACTIVE_METAS(ActiveMain.class, "Active.Metas", DataGroup.TEXT, ",", null),
-    ACTIVE_DATE(ActiveMain.class, "Active.Date", DataGroup.DATE, null, null),
-    ACTIVITY_DIR(ActiveMain.class, "ActivityDir", DataGroup.TEXT, null, "./activity"),
-    ACTIVITY_FILE(ActiveMain.class, "ActivityFile", DataGroup.TEXT, null, "activity.{DATE}.{CONTEXT}.log"),
+public enum AppConfig implements ActiveConfig {
+    //ACTIVE_SPEC(ActiveMain.class, "Active.Spec", DataGroup.URL, ",", null),
+    LANGUAGE(ActiveMain.class, "App.Language", DataGroup.TEXT, ",", null),
+    CONTEXT(ActiveMain.class, "App.Context", DataGroup.TEXT, ",", null),
+    META(ActiveMain.class, "App.Meta", DataGroup.TEXT, ",", null),
+    DATE(ActiveMain.class, "App.Date", DataGroup.DATE, null, null),
     //LINE_PARSER_CSV(DSVLineParser.class, "Parser.LineParser.CSV", "org.schorn.ella.node.transform.DSVLineParserImpl"),
     LINE_PARSER_CSV_PATTERN(DSVLineParser.class, "Parser_LineParser_CSV_Pattern", DataGroup.TEXT, null, "(?:(?<=\")([^\"]*)(?=\"))|(?<=,|^)([^,]*)(?=,|$)"),
-    TABULAR_ALLOW_DYNAMIC_FIELDS(NodeConfig.class, "Tabular_allowDynamicFields_%s", DataGroup.TEXT, null, null),
-    TABULAR_ALLOW_DYNAMIC_FIELDS_ALWAYS(NodeConfig.class, "Tabular_allowDynamicFields_*", DataGroup.TEXT, null, "0"),
+    TABULAR_ALLOW_DYNAMIC_FIELDS(AppConfig.class, "Tabular_allowDynamicFields_%s", DataGroup.TEXT, null, null),
+    TABULAR_ALLOW_DYNAMIC_FIELDS_ALWAYS(AppConfig.class, "Tabular_allowDynamicFields_*", DataGroup.TEXT, null, "0"),
     AUTO_DYNAMIC_TYPE(OpenNodeToActiveNode.class, "AutoDynamicType", DataGroup.TEXT, null, "0"),
     AUTO_VERSIONING(AppContextExt.class, "AutoVersioning", DataGroup.TEXT, null, "1"),;
 
-    private static final Logger LGR = LoggerFactory.getLogger(NodeConfig.class);
+    private static final Logger LGR = LoggerFactory.getLogger(AppConfig.class);
 
     private final Class<?> propertyOwner;
     private final String propertyKey;
@@ -70,7 +68,7 @@ public enum NodeConfig implements BaseConfig {
     private final DataGroup dataGroup;
     private final String delimiter;
 
-    NodeConfig(Class<?> propertyOwner, String propertyKey, DataGroup dataGroup, String delimiter, String defaultValue) {
+    AppConfig(Class<?> propertyOwner, String propertyKey, DataGroup dataGroup, String delimiter, String defaultValue) {
         this.propertyOwner = propertyOwner;
         this.propertyKey = propertyKey;
         this.dataGroup = dataGroup;
@@ -78,10 +76,12 @@ public enum NodeConfig implements BaseConfig {
         this.defaultValue = defaultValue;
     }
 
+    /*
     @Override
     public boolean isMultiValue() {
         return this.delimiter != null;
     }
+     */
 
     @Override
     public String delimiter() {
@@ -93,11 +93,12 @@ public enum NodeConfig implements BaseConfig {
         return this.dataGroup;
     }
 
+    /*
     @Override
     public String propertyName() {
         return this.name();
     }
-
+    */
     @Override
     public Class<?> propertyOwner() {
         return this.propertyOwner;
@@ -120,7 +121,7 @@ public enum NodeConfig implements BaseConfig {
 
     @Override
     public Properties properties() {
-        return ComponentProperties.NODE.properties();
+        return Component.NODE.properties();
     }
 
 
@@ -133,7 +134,7 @@ public enum NodeConfig implements BaseConfig {
      */
     static public String getTabularAllowDynamicFields(String typeName) {
         String propertyKey = String.format(TABULAR_ALLOW_DYNAMIC_FIELDS.propertyKey, typeName);
-        for (NodeConfig config : NodeConfig.values()) {
+        for (AppConfig config : AppConfig.values()) {
             if (config.propertyKey.equals(propertyKey)) {
                 return config.asString();
             }
@@ -143,7 +144,7 @@ public enum NodeConfig implements BaseConfig {
 
     static public String dump() {
         StringJoiner joiner = new StringJoiner("\n\t", "[\n\t", "\n]\n");
-        for (NodeConfig config : NodeConfig.values()) {
+        for (AppConfig config : AppConfig.values()) {
             joiner.add(String.format("%-35s: %-40s %-60s", config.name(), config.propertyKey, config.asString()));
         }
         return joiner.toString();

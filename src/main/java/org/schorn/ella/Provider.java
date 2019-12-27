@@ -102,10 +102,10 @@ public interface Provider {
             String classPath = System.getProperty(this.interfaceClass.getSimpleName(), implPath.toString());
             System.setProperty(this.interfaceClass.getSimpleName(), classPath);
             try {
-                this.instance = ComponentProperties.PROVIDER.newInstance(interfaceClass);
+                this.instance = Component.PROVIDER.newInstance(interfaceClass);
                 if (this.instance != null) {
                     this.instance.init();
-                    PROVIDERS.add(this);
+                    //PROVIDERS.add(this);
                 } else {
                     LGR.error("{}.ctor() - {} has no implementation at: '{}'",
                             this.getClass().getSimpleName(), this.name(),

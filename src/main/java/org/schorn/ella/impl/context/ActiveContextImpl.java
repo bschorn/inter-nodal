@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import org.schorn.ella.ComponentProperties;
+import org.schorn.ella.Component;
 import org.schorn.ella.Provider;
 import org.schorn.ella.context.ActiveContext;
 import org.schorn.ella.context.AppContext;
@@ -260,7 +260,7 @@ public class ActiveContextImpl implements ActiveContext {
         public String getProperty(String propertyKey) {
             String propertyValue = this.stringMap.get(propertyKey);
             if (propertyValue == null) {
-                propertyValue = ComponentProperties.NODE.getProperty(propertyKey);
+                propertyValue = Component.NODE.getProperty(propertyKey);
                 if (propertyValue == null) {
                     LGR.warn("{}.getProperty() - there was no property entry for '{}'",
                             this.getClass().getSimpleName(), propertyKey);
@@ -273,7 +273,7 @@ public class ActiveContextImpl implements ActiveContext {
         public String getProperty(String propertyKey, String defaultValue) {
             String propertyValue = this.stringMap.get(propertyKey);
             if (propertyValue == null) {
-                propertyValue = ComponentProperties.NODE.getProperty(propertyKey);
+                propertyValue = Component.NODE.getProperty(propertyKey);
                 if (propertyValue == null) {
                     return defaultValue;
                 }

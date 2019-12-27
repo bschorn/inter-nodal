@@ -24,7 +24,6 @@
 package org.schorn.ella.app;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,7 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.schorn.ella.ComponentProperties;
+import org.schorn.ella.Component;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.lang.ActiveLang;
 import org.schorn.ella.node.MetaReader;
@@ -77,11 +76,11 @@ public final class ActiveMain {
      * @throws Exception
      */
     private void initActivityCfg() throws Exception {
-        LocalDate activityDate = NodeConfig.ACTIVE_DATE.asDate();
-        String activityFileName = NodeConfig.ACTIVITY_FILE.asString().replace("{DATE}",
+        LocalDate activityDate = AppConfig.DATE.asDate();
+        String activityFileName = AppConfig.ACTIVITY_FILE.asString().replace("{DATE}",
                 activityDate.format(DateTimeFormatter.BASIC_ISO_DATE));
         String activityFile = String.format("%s%s%s",
-                NodeConfig.ACTIVITY_DIR.asString(),
+                AppConfig.ACTIVITY_DIR.asString(),
                 File.separator,
                 activityFileName
         );
@@ -113,12 +112,12 @@ public final class ActiveMain {
     }
 
     private void initMeta() {
-        for (String context : NodeConfig.ACTIVE_CONTEXTS.asArray(",")) {
+        for (String context : AppConfig.CONTEXT.asArray(",")) {
             if (!this.contexts.contains(context)) {
                 this.contexts.add(context);
             }
         }
-        for (String metaFileMapEntry : NodeConfig.ACTIVE_METAS.asArray(",")) {
+        for (String metaFileMapEntry : AppConfig.META.asArray(",")) {
             String[] mapEntry = metaFileMapEntry.split(":");
             if (mapEntry.length == 2) {
                 String context = mapEntry[0];
@@ -129,7 +128,7 @@ public final class ActiveMain {
                         if (metaFile.startsWith(".")) {
                             metaFile = metaFile.substring(2);
                             String[] dirFiles = metaFile.split("[\\\\/]");
-                            metaPath = ComponentProperties.NODE.getResourcedPath(dirFiles);
+                            metaPath = Component.NODE.getResourcedPath(dirFiles);
                         }
                         if (Files.exists(metaPath)) {
                             this.metaSuppliersMap.put(context, new MetaReader.FileMetaSupplier(metaPath));
@@ -151,8 +150,9 @@ public final class ActiveMain {
         }
     }
 
+    /*
     private void initLabels() throws Exception {
-        String language = NodeConfig.ACTIVE_LANG.asString();
+        String language = AppConfig.LANGUAGE.asString();
         if (language == null) {
             LGR.error("{}.initLabels() - there is no Active.Lang specified.",
                     this.getClass().getSimpleName());
@@ -161,7 +161,7 @@ public final class ActiveMain {
         this.activeLang = ActiveLang.create(language);
         for (AppContext context : AppContext.values()) {
             if (context.hasRepo()) {
-                List labelUrls = (List) NodeConfig.ACTIVE_LABELS.asNaturalType();
+                List labelUrls = (List) AppConfig.ACTIVE_LABEL.asNaturalType();
                 for (Object ourl : labelUrls) {
                     if (ourl instanceof URL) {
                         URL url = (URL) ourl;
@@ -177,10 +177,11 @@ public final class ActiveMain {
             }
         }
     }
+     */
 
     public void start(String[] args) throws Exception {
         AppContext.meta(Collections.unmodifiableMap(this.metaSuppliersMap));
-        this.initLabels();
+        //this.initLabels();
         AppContext.recover();
         AdminServer.instance().initServers();
         AdminServer.instance().initApplets();
@@ -189,7 +190,7 @@ public final class ActiveMain {
     }
 
     private ActiveMain(String[] args) throws Exception {
-        ComponentProperties.init(CommandLineArgs.init(args).getProperties());
+        Component.init(CommandLineArgs.init(args).getProperties());
         this.initActivityCfg();
         this.initStatic();
         this.initDefaultValues();
