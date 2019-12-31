@@ -26,27 +26,25 @@ package org.schorn.ella.impl.context;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.ActiveContext.Data;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.http.ActiveHTTP;
 import org.schorn.ella.io.EndPoint;
 import org.schorn.ella.repo.ActiveRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class ContextDataImpl implements Data {
+class ContextDataImpl extends AbstractContextual implements Data {
 
     @SuppressWarnings("unused")
     static private final Logger LGR = LoggerFactory.getLogger(ContextDataImpl.class);
 
-    private final AppContext context;
     private final boolean hasRepo;
     private final ActiveRepo repo;
     private final Map<Class<?>, Predicate<?>> repoFilters;
@@ -54,10 +52,10 @@ class ContextDataImpl implements Data {
     private final ActiveHTTP.ContextServer activeHTTP;
 
     ContextDataImpl(AppContext context, boolean hasRepo) throws Exception {
-        this.context = context;
+        super(context);
         this.hasRepo = hasRepo;
         if (this.hasRepo) {
-            this.repo = ActiveRepo.get(this.context);
+            this.repo = ActiveRepo.get(this.context());
         } else {
             this.repo = null;
         }

@@ -33,11 +33,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
+import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.util.Functions;
 
 /**
  *
@@ -59,144 +57,6 @@ public interface ReaderWorkerWriter {
     public interface ReaderFrame<I> extends Supplier<I>, Runnable {
     }
 
-
-    /*
-    public class ItemReaderFrame implements ReaderFrame<Frame.Item>, Runnable {
-
-    	private static final Logger LGR = LoggerFactory.getLogger(ItemReaderFrame.class);
-        @SuppressWarnings("rawtypes")
-        EndPoint endPoint;
-        Consumer<Frame.Item> consumer;
-        
-        @SuppressWarnings("rawtypes")
-        public ItemReaderFrame(EndPoint endPoint, Consumer<Frame.Item> consumer) {
-            this.endPoint = endPoint;
-            this.consumer = consumer;
-        }
-        
-        
-		@Override
-		public Item get() {
-			return null;
-		}
-
-		@Override
-		public void run() {
-		}
-    	
-    }
-     */
- /*
-    public class LineWriterNode implements WriterNode<String> {
-
-        private static final Logger LGR = LoggerFactory.getLogger(LineWriterNode.class);
-
-        @SuppressWarnings("rawtypes")
-        EndPoint endPoint;
-        //ConcurrentLinkedQueue<String> queue;
-        Supplier<String> supplier;
-        BufferedWriter writer;
-        Path path;
-        AtomicBoolean keepLooping = new AtomicBoolean(false);
-        Thread writeThread;
-
-        @SuppressWarnings("rawtypes")
-        public LineWriterNode(EndPoint endPoint, Supplier<String> supplier) throws IOException {
-            this.endPoint = endPoint;
-            //this.queue = null;
-            this.supplier = supplier;
-            this.path = ((EndPoint.FilePoint) this.endPoint).get();
-            if (this.path != null) {
-                if (Files.exists(path)) {
-                	this.writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND);
-                } else {
-                	this.writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE_NEW);
-                }
-            } else {
-                LGR.error(String.format("%s - there was no path specified for the endpoint.",
-                        this.getClass().getSimpleName()));
-            }
-            this.writeThread = new Thread(this);
-            this.writeThread.start();
-        }
-
-        @SuppressWarnings("rawtypes")
-        public LineWriterNode(EndPoint endPoint) throws Exception {
-            this.endPoint = endPoint;
-            //this.queue = new ConcurrentLinkedQueue<>();
-            this.path = ((EndPoint.FilePoint) this.endPoint).get();
-            if (this.path != null) {
-                if (Files.exists(path)) {
-                	this.writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND);
-                } else {
-                	this.writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE_NEW);
-                }
-            } else {
-                LGR.error(String.format("%s - there was no path specified for the endpoint.",
-                        this.getClass().getSimpleName()));
-            }
-        }
-
-        @Override
-        public void accept(String line) {
-            switch (this.endPoint.type()) {
-                case File:
-                    writeToFile(line);
-                    break;
-                default:
-            }
-        }
-
-        public void close() throws InterruptedException, IOException {
-            switch (this.endPoint.type()) {
-                case File:
-                    closeFileLoop();
-                    break;
-                default:
-            }
-        }
-
-        @Override
-        public void run() {
-            switch (this.endPoint.type()) {
-                case File:
-                    writeFileLoop();
-                    break;
-                default:
-            }
-        }
-
-        protected void closeFileLoop() throws InterruptedException, IOException {
-            this.keepLooping.set(false);
-            this.writeThread.join();
-            this.writer.close();
-        }
-
-        protected void writeFileLoop() {
-
-            while (keepLooping.get()) {
-                String line = this.supplier.get();
-                if (line == null) {
-                    writeToFile(line);
-                }
-            }
-        }
-
-        protected void writeToFile(String line) {
-            try {
-                if (line == null) {
-                    this.writer.close();
-                } else {
-                    this.writer.write(line);
-                    this.writer.newLine();
-                    this.writer.flush();
-                }
-            } catch (Exception ex) {
-                LGR.error(ex.getMessage());
-            }
-        }
-    }
-     */
     /**
      * Line Reader from EndPoint
      *

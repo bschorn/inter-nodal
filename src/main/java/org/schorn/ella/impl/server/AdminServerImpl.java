@@ -30,33 +30,36 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.node.ActiveNode.ArrayData;
+import org.schorn.ella.server.ActiveServer;
 import org.schorn.ella.server.ActiveServer.AppletState;
 import org.schorn.ella.server.ActiveServer.ContextApplet;
 import org.schorn.ella.server.ActiveServer.ContextServer;
 import org.schorn.ella.server.ActiveServer.ServerEvent;
 import org.schorn.ella.services.ContentAPI;
 import org.schorn.ella.services.ContentFormatter;
-import org.schorn.ella.server.AdminServer;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-public class AdminServerImpl implements AdminServer {
+public class AdminServerImpl implements ActiveServer.AdminServer {
 
     static final Logger LGR = LoggerFactory.getLogger(AdminServerImpl.class);
 
-    private final Integer ioMaxThreads = AdminServer.Cfg.MAX_IO_THREADS.valueAs(Integer.class);
-    private final ExecutorService ioThreadPool = Executors.newFixedThreadPool(ioMaxThreads);
+    private final Integer ioMaxThreads;
+    private final ExecutorService ioThreadPool;
     private final CopyOnWriteArrayList<ContextServer> activeServers = new CopyOnWriteArrayList<>();
     private final List<ContextApplet> applets = new ArrayList<>();
+
+    AdminServerImpl() {
+        this.ioMaxThreads = ActiveServer.Config.get().maxIOThreads();
+        this.ioThreadPool = Executors.newFixedThreadPool(this.ioMaxThreads);
+    }
 
     void add(ContextServer activeServer) {
         this.activeServers.add(activeServer);
@@ -81,33 +84,31 @@ public class AdminServerImpl implements AdminServer {
 
     @Override
     public void initServers() throws Exception {
-        String[] classNames = AdminServer.getActiveServers();
-        for (String className : classNames) {
+        for (Class<?> activeCustomizationClass : ActiveServer.Config.get().servers()) {
             try {
-                if (className != null) {
-                    Class<?> activeCustomizationClass = Class.forName(className);
-                    if (ContextServer.class.isAssignableFrom(activeCustomizationClass)) {
-                        ContextServer activeServer = (ContextServer) activeCustomizationClass.newInstance();
-                        if (activeServer != null) {
-                            LGR.info("{}.initServers() - adding ContextServer: -> {}",
+                if (ContextServer.class.isAssignableFrom(activeCustomizationClass)) {
+                    ContextServer activeServer
+                            = (ContextServer) activeCustomizationClass.getDeclaredConstructor().newInstance();
+                    if (activeServer != null) {
+                        LGR.info("{}.initServers() - adding ContextServer: -> {}",
+                                this.getClass().getSimpleName(),
+                                activeServer.name());
+                        try {
+                            this.add(activeServer);
+                            activeServer.init();
+                        } catch (Exception ex) {
+                            LGR.error("{}.load() - failed on ContextServer.init() -> {}. Exception: {}",
                                     this.getClass().getSimpleName(),
-                                    activeServer.name());
-                            try {
-                                this.add(activeServer);
-                                activeServer.init();
-                            } catch (Exception ex) {
-                                LGR.error("{}.load() - failed on ContextServer.init() -> {}. Exception: {}",
-                                        this.getClass().getSimpleName(),
-                                        activeServer.name(), Functions.getStackTraceAsString(ex));
-                                this.del(activeServer);
-                            }
+                                    activeServer.name(), Functions.getStackTraceAsString(ex));
+                            this.del(activeServer);
                         }
                     }
                 }
             } catch (Exception ex) {
                 LGR.error("{}.initServers() - failed to load class '{}'. Exception: {}",
                         this.getClass().getSimpleName(),
-                        className, Functions.getStackTraceAsString(ex));
+                        activeCustomizationClass.getSimpleName(),
+                        Functions.getStackTraceAsString(ex));
             }
         }
         for (ContextServer activeServer : this.servers()) {

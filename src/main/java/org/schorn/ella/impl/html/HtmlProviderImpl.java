@@ -44,7 +44,6 @@ import org.schorn.ella.html.ActiveHtml.InputBuilder;
 import org.schorn.ella.html.ActiveHtml.SelectBuilder;
 import org.schorn.ella.html.ActiveHtml.TableBuilder;
 import org.schorn.ella.html.ActiveHtml.TableData;
-import org.schorn.ella.html.HtmlConfig;
 import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.impl.html.HtmlSelectElementImpl.ValueLabelImpl;
 import org.schorn.ella.node.ActiveNode;
@@ -79,6 +78,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
 
     @Override
     public void init() throws Exception {
+        this.mapInterfaceToImpl(ActiveHtml.Config.class, HtmlConfigImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.HtmlAttribute.class, HtmlAttributeImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.HtmlMetaElement.class, HtmlMetaElementImpl.class);
         this.mapInterfaceToImpl(ActiveHtml.HtmlPageElement.class, HtmlPageElementImpl.class);
@@ -164,7 +164,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         HtmlLabelElement labelElement = ActiveHtml.HtmlLabelElement.create();
         labelElement.setFor(form_id);
         labelElement.setTextContent(form_label);
-        labelElement.addClass(HtmlConfig.HTML_FORM_LABEL_CLASS.asString());
+        labelElement.addClass(ActiveHtml.Config.get(objectType.context()).htmlFormLabelClass());
         divElement.append(labelElement);
 
         ActiveHtml.FormBuilder formBuilder = ActiveHtml.FormBuilder.builder(form_id, form_name);
@@ -225,7 +225,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         }
 
         HtmlFormElement formElement = formBuilder.build();
-        formElement.addClass(HtmlConfig.HTML_FORM_CLASS.asString());
+        formElement.addClass(ActiveHtml.Config.get(objectType.context()).htmlFormClass());
         divElement.append(formElement);
 
         return divElement;
@@ -277,8 +277,8 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         builder.setName(valueName);
         builder.setLabel(labelName);
         builder.addClassDiv(arrayData.name(), valueName);
-        builder.addClassLabel(HtmlConfig.HTML_SELECT_LABEL_CLASS.asString());
-        builder.addClassSelect(HtmlConfig.HTML_SELECT_CLASS.asString());
+        builder.addClassLabel(ActiveHtml.Config.get(arrayData.context()).htmlSelectLabelClass());
+        builder.addClassSelect(ActiveHtml.Config.get(arrayData.context()).htmlSelectClass());
         return builder.build();
     }
 
@@ -306,8 +306,8 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
             enumListBuilder.setLabel(label);
         }
         enumListBuilder.addClassDiv(objectType.name(), valueType.name());
-        enumListBuilder.addClassLabel(HtmlConfig.HTML_SELECT_LABEL_CLASS.asString());
-        enumListBuilder.addClassSelect(HtmlConfig.HTML_SELECT_CLASS.asString());
+        enumListBuilder.addClassLabel(ActiveHtml.Config.get(objectType.context()).htmlSelectLabelClass());
+        enumListBuilder.addClassSelect(ActiveHtml.Config.get(objectType.context()).htmlSelectClass());
         return enumListBuilder.build();
     }
 
@@ -339,7 +339,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         HtmlLabelElement labelElement = ActiveHtml.HtmlLabelElement.create();
         labelElement.setFor(input_id);
         labelElement.setTextContent(input_label);
-        labelElement.addClass(HtmlConfig.HTML_INPUT_LABEL_CLASS.asString());
+        labelElement.addClass(ActiveHtml.Config.get(objectType.context()).htmlInputLabelClass());
         divElement.append(labelElement);
 
         InputBuilder inputBuilder = InputBuilder.builder(objectType, valueType);
@@ -347,7 +347,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         inputBuilder.setId(input_id);
 
         HtmlInputElement inputElement = inputBuilder.build();
-        inputElement.addClass(HtmlConfig.HTML_INPUT_CLASS.asString());
+        inputElement.addClass(ActiveHtml.Config.get(objectType.context()).htmlInputClass());
         divElement.append(inputElement);
         if (inputBuilder.getInputType() == HtmlInputElement.Type.HIDDEN) {
             divElement.addAttribute(HtmlAttribute.create("hidden", Boolean.TRUE));
@@ -370,7 +370,8 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     public HtmlElement html_table(TableData tableData) throws Exception {
         TableBuilder tableBuilder = TableBuilder.builder();
         if (tableData.getCaption().length() > 30) {
-            tableBuilder.setCaption(tableData.getCaption(), HtmlConfig.HTML_TABLE_SMALL_CAPTION_CLASS.asString());
+            tableBuilder.setCaption(tableData.getCaption(),
+                    ActiveHtml.Config.get(tableData.context()).htmlTableSmallCaptionClass());
         } else {
             tableBuilder.setCaption(tableData.getCaption());
         }

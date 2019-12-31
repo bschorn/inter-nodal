@@ -35,7 +35,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectType;
-import org.schorn.ella.node.MapReader;
 import org.schorn.ella.node.MetaReader;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
@@ -50,6 +49,7 @@ public interface AppServer {
 
     static final Logger LGR = LoggerFactory.getLogger(AppServer.class);
 
+    /*
     static public String getProperty(AppContext activeContext, String propertyKey) {
         for (AppServer activeServer : Support.instance.servers()) {
             if (activeContext.equals(activeServer.context())) {
@@ -65,7 +65,7 @@ public interface AppServer {
         //LGR.error("PropertyKey {} was not set because context: {} was not found", propertyKey, activeContext.getName());
         return null;
     }
-
+    */
     /**
      *
      *
@@ -100,40 +100,29 @@ public interface AppServer {
      * @throws Exception
      */
     static public void load() throws Exception {
-        String activeServers = ServerConfig.ACTIVE_SERVERS.asString();
-        String[] classNames = activeServers.split(",");
-        for (String className : classNames) {
-            try {
-                if (className != null) {
-                    Class<?> activeCustomizationClass = Class.forName(className);
-                    if (AppServer.class.isAssignableFrom(activeCustomizationClass)) {
-                        AppServer activeServer = (AppServer) activeCustomizationClass.newInstance();
-                        if (activeServer != null) {
-                            LGR.info("{}.load() - adding ActiveServer: -> {}",
-                                    AppServer.class.getSimpleName(),
-                                    activeServer.name());
-                            try {
-                                Support.instance.add(activeServer);
-                                LGR.info("{}.load() - calling ActiveServer.init() -> {}",
-                                        AppServer.class.getSimpleName(),
-                                        activeServer.name());
-                                activeServer.init();
-                                LGR.info("{}.load() - accepting ActiveServer -> {}",
-                                        AppServer.class.getSimpleName(),
-                                        activeServer.name());
-                            } catch (Exception ex) {
-                                LGR.error("{}.load() - failed on ActiveServer.init() -> {}. Exception: {}",
-                                        AppServer.class.getSimpleName(),
-                                        activeServer.name(), Functions.getStackTraceAsString(ex));
-                                Support.instance.del(activeServer);
-                            }
-                        }
+        for (Class<?> activeCustomizationClass : ActiveServer.Config.get().servers()) {
+            if (AppServer.class.isAssignableFrom(activeCustomizationClass)) {
+                AppServer activeServer = (AppServer) activeCustomizationClass.getDeclaredConstructor().newInstance();
+                if (activeServer != null) {
+                    LGR.info("{}.load() - adding ActiveServer: -> {}",
+                            AppServer.class.getSimpleName(),
+                            activeServer.name());
+                    try {
+                        Support.instance.add(activeServer);
+                        LGR.info("{}.load() - calling ActiveServer.init() -> {}",
+                                AppServer.class.getSimpleName(),
+                                activeServer.name());
+                        activeServer.init();
+                        LGR.info("{}.load() - accepting ActiveServer -> {}",
+                                AppServer.class.getSimpleName(),
+                                activeServer.name());
+                    } catch (Exception ex) {
+                        LGR.error("{}.load() - failed on ActiveServer.init() -> {}. Exception: {}",
+                                AppServer.class.getSimpleName(),
+                                activeServer.name(), Functions.getStackTraceAsString(ex));
+                        Support.instance.del(activeServer);
                     }
                 }
-            } catch (Exception ex) {
-                LGR.error("{}.load() - failed to load class '{}'. Exception: {}",
-                        AppServer.class.getSimpleName(),
-                        className, Functions.getStackTraceAsString(ex));
             }
         }
         for (AppServer activeServer : Support.instance.servers()) {
@@ -285,11 +274,7 @@ public interface AppServer {
         }
     }
 
-    /**
-     *
-     * @param mapFile
-     * @throws Exception
-     */
+    /*
     default void registerMap(String mapFile) throws Exception {
         if (mapFile == null) {
             throw new Exception(String.format("%s.registerMap() - mapFile() returned null.",
@@ -309,6 +294,7 @@ public interface AppServer {
                     this.getClass().getSimpleName()));
         }
     }
+     */
 
     /**
      * Applet Interface

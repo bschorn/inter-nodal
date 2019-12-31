@@ -27,11 +27,9 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import org.schorn.ella.io.EndPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.io.EndPoint;
 
 /**
  *
@@ -39,8 +37,8 @@ import org.schorn.ella.io.EndPoint;
  * @author schorn
  *
  */
-public class EndPoints {
-
+public enum EndPoints {
+    ;
     static final Logger LGR = LoggerFactory.getLogger(EndPoints.class);
 
     /**

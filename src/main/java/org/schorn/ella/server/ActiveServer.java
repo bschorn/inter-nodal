@@ -23,10 +23,11 @@
  */
 package org.schorn.ella.server;
 
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-
 import org.schorn.ella.context.AppContext;
+import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.services.ContentAPI;
 import org.schorn.ella.services.ContentFormatter;
 
@@ -36,6 +37,21 @@ import org.schorn.ella.services.ContentFormatter;
  *
  */
 public interface ActiveServer {
+
+    public interface Config {
+
+        static public Config get() {
+            return ServerProvider.provider().getReusable(Config.class);
+        }
+        boolean masterServer();
+
+        URI masterServerAddress();
+
+        int maxIOThreads();
+
+        List<Class<?>> servers(); // com.schorn.jane.bank.app.ActiveBankServer
+
+    }
 
     public enum ServerEvent {
         RECO,
@@ -263,4 +279,28 @@ public interface ActiveServer {
         NA,;
     }
 
+    public interface AdminServer {
+
+        ExecutorService executorForIO();
+
+        void initServers() throws Exception;
+
+        void initApplets() throws Exception;
+
+        void startApplets() throws Exception;
+
+        void stopApplets() throws Exception;
+
+        ContentAPI getContentAPI(String context_server);
+
+        ContentFormatter getContentFormatter(String context_server);
+
+        void event(ServerEvent event);
+
+        ActiveNode.ArrayData status();
+
+        static AdminServer instance() {
+            return ServerProvider.provider().getAdminServer();
+        }
+    }
 }

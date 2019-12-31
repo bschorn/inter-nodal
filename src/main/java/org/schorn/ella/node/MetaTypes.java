@@ -147,7 +147,9 @@ public class MetaTypes {
                 return;
             }
             try {
-                this.dtype = DataType.create(AppContext.Common, this.name(), this.ptypeClass.newInstance(), constraintTypes);
+                this.dtype = DataType.create(AppContext.Common, this.name(),
+                        this.ptypeClass.getDeclaredConstructor().newInstance(),
+                        constraintTypes);
                 if (dtype != null) {
                     //LGR.info(String.format("DataType: %s", dtype.toString()));
                 }

@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import org.schorn.ella.Component;
 import org.schorn.ella.Provider;
+import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.ActiveContext;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.context.AppContext.ContextRole;
@@ -256,6 +256,7 @@ public class ActiveContextImpl implements ActiveContext {
             return null;
         }
 
+        /*
         @Override
         public String getProperty(String propertyKey) {
             String propertyValue = this.stringMap.get(propertyKey);
@@ -280,7 +281,9 @@ public class ActiveContextImpl implements ActiveContext {
             }
             return propertyValue;
         }
+         */
 
+ /*
         @Override
         public void setPropertyT(Object propertyId, Object propertyObj) {
             this.objectMap.put(propertyId, propertyObj);
@@ -290,23 +293,22 @@ public class ActiveContextImpl implements ActiveContext {
         public void setProperty(String propertyKey, String propertyValue) {
             this.stringMap.put(propertyKey, propertyValue);
         }
-
+        */
     }
 
     /**
      *
      *
      */
-    static class ActionImpl implements Action {
+    static class ActionImpl extends AbstractContextual implements Action {
 
         static private final Logger LGR = LoggerFactory.getLogger(ActionImpl.class);
 
-        private final AppContext context;
         private boolean open;
         private final boolean submitToRepo;
 
         ActionImpl(AppContext context) {
-            this.context = context;
+            super(context);
             this.open = false;
             this.submitToRepo = submitToRepo(); // default method implemented in the interface Action
         }
@@ -314,7 +316,7 @@ public class ActiveContextImpl implements ActiveContext {
         @Override
         public void exit(String why) {
             LGR.error("{}.exit() - Exit has been called for AppContext: '{}'. \nWhy? -> {}",
-                    this.getClass().getSimpleName(), this.context.name(), why);
+                    this.getClass().getSimpleName(), this.context().name(), why);
         }
 
         @Override
@@ -330,21 +332,21 @@ public class ActiveContextImpl implements ActiveContext {
         @Override
         public void submit(ObjectData objectData) {
             if (this.submitToRepo) {
-                this.context.repo().submit(objectData);
+                this.context().repo().submit(objectData);
             } else {
-                this.context.http().update(objectData.objectType(), objectData);
+                this.context().http().update(objectData.objectType(), objectData);
             }
         }
 
         @Override
         public void load(ObjectData objectData, Identity identity) {
             /*
-			 * This bypasses the persistence (non-activity).
-			 * Should add little better security than Identity is of type Component.
-			 * 
+            * This bypasses the persistence (non-activity).
+            * Should add little better security than Identity is of type Component.
+            *
              */
             if (identity != null && identity.type().equals(IdentityType.Component)) {
-                ActiveRepo.LoaderRepo repo = ActiveRepo.LoaderRepo.get(this.context);
+                ActiveRepo.LoaderRepo repo = ActiveRepo.LoaderRepo.get(this.context());
                 if (repo != null) {
                     repo.accept(objectData);
                 }

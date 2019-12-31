@@ -102,7 +102,7 @@ public interface Provider {
             String classPath = System.getProperty(this.interfaceClass.getSimpleName(), implPath.toString());
             System.setProperty(this.interfaceClass.getSimpleName(), classPath);
             try {
-                this.instance = Component.PROVIDER.newInstance(interfaceClass);
+                this.instance = Component.Provider.newInstance(interfaceClass);
                 if (this.instance != null) {
                     this.instance.init();
                     //PROVIDERS.add(this);

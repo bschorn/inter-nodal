@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.server.AdminServer;
+import org.schorn.ella.server.ActiveServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +111,7 @@ public interface ActiveServices extends Mingleton {
      * @return
      */
     static public ContentAPI contextAPI(String context_server) {
-        return AdminServer.instance().getContentAPI(context_server);
+        return ActiveServer.AdminServer.instance().getContentAPI(context_server);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

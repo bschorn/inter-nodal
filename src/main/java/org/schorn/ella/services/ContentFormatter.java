@@ -24,7 +24,7 @@
 package org.schorn.ella.services;
 
 import org.schorn.ella.FunctionalException;
-import org.schorn.ella.server.AdminServer;
+import org.schorn.ella.server.ActiveServer.AdminServer;
 
 /**
  *

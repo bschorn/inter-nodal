@@ -23,10 +23,12 @@
  */
 package org.schorn.ella.html;
 
+import java.net.URI;
 import java.util.List;
 import java.util.function.Function;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
+import org.schorn.ella.context.ActiveContext.Contextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.ActiveNode.ActiveData;
@@ -42,6 +44,42 @@ import org.schorn.ella.node.DataGroup;
  *
  */
 public interface ActiveHtml {
+
+    public interface Config extends Contextual {
+
+        static public Config get(AppContext context) {
+            return HtmlProvider.provider().getReusable(Config.class, context);
+        }
+
+        URI htmlLabels();
+
+        String htmlFormClass();
+
+        String htmlFormLabelClass();
+
+        String htmlInputClass();
+
+        String htmlInputLabelClass();
+
+        String htmlSelectClass();
+
+        String htmlSelectLabelClass();
+
+        String htmlTableClass();
+
+        String htmlTableTHeadClass();
+
+        String htmlTableTFootClass();
+
+        String htmlTableTBodyClass();
+
+        String htmlTableTRowClass();
+
+        String htmlTableTColClass();
+
+        String htmlTableSmallCaptionClass();
+
+    }
 
     /**
      *
@@ -595,10 +633,10 @@ public interface ActiveHtml {
     /**
      *
      */
-    interface HtmlLabeler {
+    interface HtmlLabeler extends Contextual {
 
-        static public HtmlLabeler get() throws Exception {
-            return HtmlProvider.provider().getReusable(HtmlLabeler.class);
+        static public HtmlLabeler get(AppContext context) throws Exception {
+            return HtmlProvider.provider().getReusable(HtmlLabeler.class, context);
         }
 
         String get(AppContext context, String label_type);

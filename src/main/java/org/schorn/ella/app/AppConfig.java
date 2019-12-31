@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2019 Bryan Schorn.
+ * Copyright 2019 bschorn.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,150 +23,94 @@
  */
 package org.schorn.ella.app;
 
-import java.util.Properties;
-import java.util.StringJoiner;
-import org.schorn.ella.ActiveConfig;
+import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import org.schorn.ella.Component;
-import org.schorn.ella.extension.AppContextExt;
-import org.schorn.ella.node.DataGroup;
-import org.schorn.ella.transform.ActiveTransform.DSVLineParser;
-import org.schorn.ella.transform.ActiveTransform.OpenNodeToActiveNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
- *
- * CONFIG_ENUM(PropertyOwner, PropertyKey, DefaultValue)
- *
- * PropertyOwner - the class from which the property will be accessed/used
- * (error will be logged if accessed by non-owner class) PropertyKey - the KEY
- * in System.getProperty(KEY,default); DefaultValue - the DEFAULT in
- * System.getProperty(key,DEFAULT);
- *
- * @author schorn
- *
+ * @author bschorn
  */
-public enum AppConfig implements ActiveConfig {
-    //ACTIVE_SPEC(ActiveMain.class, "Active.Spec", DataGroup.URL, ",", null),
-    LANGUAGE(ActiveMain.class, "App.Language", DataGroup.TEXT, ",", null),
-    CONTEXT(ActiveMain.class, "App.Context", DataGroup.TEXT, ",", null),
-    META(ActiveMain.class, "App.Meta", DataGroup.TEXT, ",", null),
-    DATE(ActiveMain.class, "App.Date", DataGroup.DATE, null, null),
-    //LINE_PARSER_CSV(DSVLineParser.class, "Parser.LineParser.CSV", "org.schorn.ella.node.transform.DSVLineParserImpl"),
-    LINE_PARSER_CSV_PATTERN(DSVLineParser.class, "Parser_LineParser_CSV_Pattern", DataGroup.TEXT, null, "(?:(?<=\")([^\"]*)(?=\"))|(?<=,|^)([^,]*)(?=,|$)"),
-    TABULAR_ALLOW_DYNAMIC_FIELDS(AppConfig.class, "Tabular_allowDynamicFields_%s", DataGroup.TEXT, null, null),
-    TABULAR_ALLOW_DYNAMIC_FIELDS_ALWAYS(AppConfig.class, "Tabular_allowDynamicFields_*", DataGroup.TEXT, null, "0"),
-    AUTO_DYNAMIC_TYPE(OpenNodeToActiveNode.class, "AutoDynamicType", DataGroup.TEXT, null, "0"),
-    AUTO_VERSIONING(AppContextExt.class, "AutoVersioning", DataGroup.TEXT, null, "1"),;
+public class AppConfig implements ActiveApp.Config {
 
-    private static final Logger LGR = LoggerFactory.getLogger(AppConfig.class);
+    static public AppConfig create(Map<String, Object> params) {
 
-    private final Class<?> propertyOwner;
-    private final String propertyKey;
-    private final String defaultValue;
-    private final DataGroup dataGroup;
-    private final String delimiter;
+        Map<String, Object> configMap = Component.ActiveApp.configMap();
+        String environment = (String) configMap.get("environment");
+        LocalDate date = (LocalDate) configMap.get("date");
+        String language = (String) configMap.get("language");
+        URI resources = URI.create((String) configMap.get("resources"));
+        String context = (String) configMap.get("context");
+        List<String> contexts = (List<String>) configMap.get("contexts");
 
-    AppConfig(Class<?> propertyOwner, String propertyKey, DataGroup dataGroup, String delimiter, String defaultValue) {
-        this.propertyOwner = propertyOwner;
-        this.propertyKey = propertyKey;
-        this.dataGroup = dataGroup;
-        this.delimiter = delimiter;
-        this.defaultValue = defaultValue;
-    }
-
-    /*
-    @Override
-    public boolean isMultiValue() {
-        return this.delimiter != null;
-    }
-     */
-
-    @Override
-    public String delimiter() {
-        return this.delimiter;
-    }
-
-    @Override
-    public DataGroup dataGroup() {
-        return this.dataGroup;
-    }
-
-    /*
-    @Override
-    public String propertyName() {
-        return this.name();
-    }
-    */
-    @Override
-    public Class<?> propertyOwner() {
-        return this.propertyOwner;
-    }
-
-    @Override
-    public String propertyKey() {
-        return this.propertyKey;
-    }
-
-    @Override
-    public String defaultValue() {
-        return this.defaultValue;
-    }
-
-    @Override
-    public Logger logger() {
-        return LGR;
-    }
-
-    @Override
-    public Properties properties() {
-        return Component.NODE.properties();
-    }
-
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    /**
-     * Special Configuration Method
-     *
-     * @param typeName
-     * @return
-     */
-    static public String getTabularAllowDynamicFields(String typeName) {
-        String propertyKey = String.format(TABULAR_ALLOW_DYNAMIC_FIELDS.propertyKey, typeName);
-        for (AppConfig config : AppConfig.values()) {
-            if (config.propertyKey.equals(propertyKey)) {
-                return config.asString();
+        if (params != null && !params.isEmpty()) {
+            if (params.containsKey("environment")) {
+                environment = (String) params.get("environment");
+            }
+            if (params.containsKey("date")) {
+                date = (LocalDate) params.get("date");
+            }
+            if (params.containsKey("language")) {
+                language = (String) params.get("language");
+            }
+            if (params.containsKey("resources")) {
+                resources = URI.create((String) params.get("resources"));
+            }
+            if (params.containsKey("context")) {
+                context = (String) params.get("context");
+            }
+            if (params.containsKey("contexts")) {
+                contexts = (List<String>) params.get("contexts");
             }
         }
-        return null;
+        return new AppConfig(environment, date, language, resources, context, contexts);
     }
 
-    static public String dump() {
-        StringJoiner joiner = new StringJoiner("\n\t", "[\n\t", "\n]\n");
-        for (AppConfig config : AppConfig.values()) {
-            joiner.add(String.format("%-35s: %-40s %-60s", config.name(), config.propertyKey, config.asString()));
-        }
-        return joiner.toString();
+    private final LocalDate date;
+    private final String language;
+    private final String environment;
+    private final URI resources;
+    private final String context;
+    private final List<String> contexts;
+
+    private AppConfig(String environment, LocalDate date, String language, URI resources, String context, List<String> contexts) {
+        this.environment = environment;
+        this.date = date;
+        this.language = language;
+        this.resources = resources;
+        this.context = context;
+        this.contexts = contexts;
     }
 
+    @Override
+    public LocalDate date() {
+        return this.date;
+    }
+
+    @Override
+    public String environment() {
+        return this.environment;
+    }
+
+    @Override
+    public String language() {
+        return this.language;
+    }
+
+    @Override
+    public URI resources() {
+        return this.resources;
+    }
+
+    @Override
+    public String context() {
+        return this.context;
+    }
+
+    @Override
+    public List<String> contexts() {
+        return this.contexts;
+    }
 }
-
-
-/*
-HTML_FORM_CLASS(HtmlProviderImpl.class, "HtmlFormClass", "node-form"),
-HTML_FORM_LABEL_CLASS(HtmlProviderImpl.class, "HtmlFormLabelClass", "node-form-label"),
-HTML_INPUT_CLASS(HtmlProviderImpl.class, "HtmlInputClass", "node-input"),
-HTML_INPUT_LABEL_CLASS(HtmlProviderImpl.class, "HtmlInputLabelClass", "node-input-label"),
-HTML_SELECT_CLASS(HtmlProviderImpl.class, "HtmlSelectClass", "node-select"),
-HTML_SELECT_LABEL_CLASS(HtmlProviderImpl.class, "HtmlSelectLabelClass", "node-select-label"),
-HTML_TABLE_CLASS(HtmlProviderImpl.class, "HtmlTableClass", "node-table"),
-HTML_TABLE_THEAD_CLASS(HtmlProviderImpl.class, "HtmlTableTHeadClass", "node-table-thead"),
-HTML_TABLE_TFOOT_CLASS(HtmlProviderImpl.class, "HtmlTableTFootClass", "node-table-tfoot"),
-HTML_TABLE_TBODY_CLASS(HtmlProviderImpl.class, "HtmlTableTBodyClass", "node-table-tbody"),
-HTML_TABLE_TROW_CLASS(HtmlProviderImpl.class, "HtmlTableTRowClass", "node-table-trow"),
-HTML_TABLE_TCOL_CLASS(HtmlProviderImpl.class, "HtmlTableTColClass", "node-table-tcol"),
-HTML_TABLE_SMALL_CAPTION_CLASS(HtmlProviderImpl.class, "HtmlTableSmallCaptionClass", "active-table-caption-small"),
-SQL_TEMPLATE_DIR(ActiveSQL.class, "SQLTemplateDir", "../lds-node/sql"),
-
- */

@@ -23,6 +23,7 @@
  */
 package org.schorn.ella;
 
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -32,6 +33,8 @@ import java.util.Properties;
 public interface ActiveProperties {
 
     public Properties properties();
+
+    public Map<String, Object> activeConfig();
 
     default String getProperty(String key) {
         return this.properties().getProperty(key);

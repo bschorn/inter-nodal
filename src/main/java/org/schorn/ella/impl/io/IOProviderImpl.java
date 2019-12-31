@@ -25,16 +25,14 @@ package org.schorn.ella.impl.io;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.io.ActiveIO;
 import org.schorn.ella.io.EndPoint;
 import org.schorn.ella.io.IOProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -50,6 +48,7 @@ public class IOProviderImpl extends AbstractProvider implements IOProvider {
 
     @Override
     public void init() throws Exception {
+        this.mapInterfaceToImpl(ActiveIO.Config.class, IOConfigImpl.class);
         this.mapInterfaceToImpl(ActiveIO.ActivityRecovery.class, ActivityRecoveryImpl.class);
         this.mapInterfaceToImpl(ActiveIO.ActivityRecord.class, ActivityRecordImpl.class);
         this.mapInterfaceToImpl(EndPoint.URIPoint.class, EndPoints.URIPointImpl.class);

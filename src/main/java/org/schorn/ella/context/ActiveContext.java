@@ -23,14 +23,12 @@
  */
 package org.schorn.ella.context;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import org.schorn.ella.Singleton;
 import org.schorn.ella.context.AppContext.ContextRole;
 import org.schorn.ella.http.ActiveHTTP;
-import org.schorn.ella.io.EndPoint;
 import org.schorn.ella.io.EndPoint.URIPoint;
 import org.schorn.ella.node.ActiveNode.ActiveRef;
 import org.schorn.ella.node.ActiveNode.ActiveType;
@@ -42,7 +40,7 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueType.FieldType;
 import org.schorn.ella.repo.ActiveRepo;
-import org.schorn.ella.server.ServerConfig;
+import org.schorn.ella.server.ActiveServer;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +150,7 @@ public interface ActiveContext {
     /**
      * Data (Repo) of a context
      */
-    interface Data {
+    interface Data extends Contextual {
 
         boolean hasRepo();
 
@@ -166,16 +164,11 @@ public interface ActiveContext {
 
         /**
          *
+         * @return
          */
         default URIPoint httpAddress() {
             try {
-                String address = ServerConfig.ACTIVE_MASTER_SERVER_ADDRESS.asString();
-                if (address != null) {
-                    return URIPoint.create(new URI(address));
-                } else {
-                    LGR.warn("{}.httpAddress() - unable to ascertain the address of the master server.",
-                            Data.class.getSimpleName());
-                }
+                return URIPoint.create(ActiveServer.Config.get().masterServerAddress());
             } catch (Exception e) {
                 LGR.error("{}.httpAddress() - unable to ascertain the address of the master server. Caught Exception: {}",
                         Data.class.getSimpleName(), Functions.getStackTraceAsString(e));
@@ -208,6 +201,7 @@ public interface ActiveContext {
 
         <T> T getPropertyT(Class<T> classForT, Object propertyId);
 
+        /*
         String getProperty(String propertyKey);
 
         String getProperty(String propertyKey, String defaultValue);
@@ -215,7 +209,7 @@ public interface ActiveContext {
         void setPropertyT(Object propertyId, Object propertyObj);
 
         void setProperty(String propertyKey, String propertyValue);
-
+        */
     }
 
     /**
@@ -223,9 +217,9 @@ public interface ActiveContext {
      */
     interface Activity {
 
-        void setEndPoint(EndPoint<?> endPoint);
+        //void setEndPoint(EndPoint<?> endPoint);
 
-        EndPoint<?> getEndPoint();
+        //EndPoint<?> getEndPoint();
 
         boolean hasActivity();
 
@@ -242,19 +236,14 @@ public interface ActiveContext {
     /**
      * Actions of a context
      */
-    interface Action {
+    interface Action extends Contextual {
 
         /**
          *
          *
          */
         default boolean submitToRepo() {
-            try {
-                Number number = ServerConfig.ACTIVE_MASTER_SERVER.asNumber();
-                return (number != null && number.intValue() != 0);
-            } catch (Exception e) {
-                return false;
-            }
+            return ActiveServer.Config.get().masterServer();
         }
 
         void open();

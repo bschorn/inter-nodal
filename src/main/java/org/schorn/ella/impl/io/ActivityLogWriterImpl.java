@@ -24,20 +24,17 @@
 package org.schorn.ella.impl.io;
 
 import java.io.BufferedWriter;
-import java.io.Writer;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.io.ActiveIO.ActivityLogWriter;
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.io.EndPoint;
-import org.schorn.ella.io.EndPoint.URIPoint;
+import org.schorn.ella.io.ActiveIO;
+import org.schorn.ella.io.ActiveIO.ActivityLogWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -60,32 +57,22 @@ class ActivityLogWriterImpl extends AbstractContextual implements ActivityLogWri
     public ActivityLogWriterImpl(AppContext context) {
         super(context);
         BufferedWriter bufferedWriter = null;
-        if (this.context().getEndPoint() != null) {
-            switch (this.context().getEndPoint().type()) {
-                case URI: {
-                    URIPoint uriPoint = (EndPoint.URIPoint) context.getEndPoint();
-                    Path path = Paths.get(uriPoint.get());
-                    if (path != null) {
-                        try {
-                            if (Files.exists(path)) {
-                                bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND);
-                            } else {
-                                bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.CREATE_NEW);
-                            }
-                        } catch (Exception ex) {
-                            this.setException(ex);
-                        }
-                    } else {
-                        String errMsg = String.format("%s - there was no path specified for the endpoint.",
-                                this.getClass().getSimpleName());
-                        LGR.error(errMsg);
-                        this.setException(new Exception(errMsg));
-                    }
-                    break;
+        Path path = Paths.get(ActiveIO.Config.get(context).activityURI());
+        if (path != null) {
+            try {
+                if (Files.exists(path)) {
+                    bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND);
+                } else {
+                    bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.CREATE_NEW);
                 }
-                default:
-                    break;
+            } catch (IOException ex) {
+                this.setException(ex);
             }
+        } else {
+            String errMsg = String.format("%s - there was no path specified for the endpoint.",
+                    this.getClass().getSimpleName());
+            LGR.error(errMsg);
+            this.setException(new Exception(errMsg));
         }
         this.writer = bufferedWriter;
     }

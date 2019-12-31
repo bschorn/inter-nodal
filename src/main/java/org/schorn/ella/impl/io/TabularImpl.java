@@ -25,13 +25,10 @@ package org.schorn.ella.impl.io;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.app.AppConfig;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.io.ActiveIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -53,6 +50,7 @@ public class TabularImpl implements ActiveIO.Tabular {
         this.context = context;
         this.rowName = rowName;
         this.fieldNames = new ArrayList<>();
+        /*
         fieldNames.forEach(fn -> this.fieldNames.add(fn.toString()));
         {
             String propertyValue = AppConfig.getTabularAllowDynamicFields("*");
@@ -65,7 +63,7 @@ public class TabularImpl implements ActiveIO.Tabular {
                 }
             }
         }
-
+        */
     }
 
     @Override

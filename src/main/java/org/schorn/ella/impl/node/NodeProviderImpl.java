@@ -94,6 +94,7 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     @Override
     public void init() {
+        this.mapInterfaceToImpl(ActiveNode.Config.class, NodeConfigImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ObjectType.Builder.class, ObjectTypeBuilderImpl.class);
         this.mapInterfaceToImpl(ActiveNode.Constraints.Builder.class, ConstraintsBuilderImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ValueType.DataType.class, DataTypeImpl.class);

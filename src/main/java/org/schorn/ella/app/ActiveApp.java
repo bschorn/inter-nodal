@@ -23,24 +23,22 @@
  */
 package org.schorn.ella.app;
 
-import java.io.File;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.schorn.ella.Component;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.lang.ActiveLang;
+import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.MetaReader;
 import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.node.NodeProvider;
-import org.schorn.ella.server.AdminServer;
+import org.schorn.ella.server.ActiveServer;
 import org.schorn.ella.util.CommandLineArgs;
 import org.schorn.ella.util.Functions;
 import org.schorn.ella.util.StringCached;
@@ -52,32 +50,51 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-public final class ActiveMain {
+public final class ActiveApp {
 
-    static final Logger LGR = LoggerFactory.getLogger(ActiveMain.class);
+    static final Logger LGR = LoggerFactory.getLogger(ActiveApp.class);
 
-    private final List<String> contexts = new ArrayList<>();
+    static private AppConfig APP_CONFIG = null;
+
+    public interface Config {
+
+        static public Config get() {
+            return APP_CONFIG;
+        }
+
+        LocalDate date();
+
+        String environment();
+
+        String language();
+
+        String context();
+
+        List<String> contexts();
+
+        URI resources();
+    }
+
     private final Map<String, MetaReader.MetaSupplier> metaSuppliersMap = new HashMap<>();
-    private ActiveLang activeLang = null;
 
     public void addContext(String context, MetaReader.MetaSupplier metaSupplier) {
-        if (!this.contexts.contains(context)) {
-            this.contexts.add(context);
+        if (!Config.get().contexts().contains(context)) {
+            LGR.error("{}.addContext() - context was not configured: {}.",
+                    this.getClass().getSimpleName(),
+                    context);
         }
         if (this.metaSuppliersMap.containsKey(context)) {
             LGR.info("{}.addContext() - replacing MetaReader.MetaSupplier for context: '{}'",
-                    ActiveMain.class.getSimpleName(),
+                    ActiveApp.class.getSimpleName(),
                     context);
         }
         this.metaSuppliersMap.put(context, metaSupplier);
     }
-    /**
-     *
-     * @throws Exception
-     */
+
+    /*
     private void initActivityCfg() throws Exception {
-        LocalDate activityDate = AppConfig.DATE.asDate();
-        String activityFileName = AppConfig.ACTIVITY_FILE.asString().replace("{DATE}",
+        LocalDate activityDate = Config.get().date();
+        String activityFileName = AppConfig.ACTIVITY.asString().replace("{DATE}",
                 activityDate.format(DateTimeFormatter.BASIC_ISO_DATE));
         String activityFile = String.format("%s%s%s",
                 AppConfig.ACTIVITY_DIR.asString(),
@@ -88,7 +105,7 @@ public final class ActiveMain {
         System.setProperty(AppContext.class.getSimpleName() + ".ActivityFile",
                 activityFile);
     }
-
+    */
     /**
      * For any static dependencies that require specific order of creation.
      *
@@ -112,40 +129,28 @@ public final class ActiveMain {
     }
 
     private void initMeta() {
-        for (String context : AppConfig.CONTEXT.asArray(",")) {
-            if (!this.contexts.contains(context)) {
-                this.contexts.add(context);
+        for (String context : Config.get().contexts()) {
+            URI metaURI = ActiveNode.Config.get(context).metadata();
+            if (this.metaSuppliersMap.containsKey(context)) {
+                continue;
             }
-        }
-        for (String metaFileMapEntry : AppConfig.META.asArray(",")) {
-            String[] mapEntry = metaFileMapEntry.split(":");
-            if (mapEntry.length == 2) {
-                String context = mapEntry[0];
-                String metaFile = mapEntry[1];
-                if (!this.metaSuppliersMap.containsKey(context)) {
-                    try {
-                        Path metaPath = Paths.get(metaFile);
-                        if (metaFile.startsWith(".")) {
-                            metaFile = metaFile.substring(2);
-                            String[] dirFiles = metaFile.split("[\\\\/]");
-                            metaPath = Component.NODE.getResourcedPath(dirFiles);
-                        }
-                        if (Files.exists(metaPath)) {
-                            this.metaSuppliersMap.put(context, new MetaReader.FileMetaSupplier(metaPath));
-                            LGR.info("{}.initMeta() - added context '{}' -> '{}'",
-                                    ActiveMain.class.getSimpleName(),
-                                    context,
-                                    metaPath.toAbsolutePath().toString());
-                        } else {
-                            LGR.error("{}.meta() - File does not exist: '{}'",
-                                    ActiveMain.class.getSimpleName(),
-                                    metaPath.toString());
-                        }
-                    } catch (Exception ex) {
-                        LGR.error("{}.meta() - Loading Meta File: '{}' caught Exception: {}",
-                                ActiveMain.class.getSimpleName(), metaFile, Functions.getStackTraceAsString(ex));
-                    }
+            try {
+                Path metaPath = Paths.get(metaURI);
+                if (Files.exists(metaPath)) {
+                    this.metaSuppliersMap.put(context, new MetaReader.FileMetaSupplier(metaPath));
+                    LGR.info("{}.initMeta() - added context '{}' -> '{}'",
+                            ActiveApp.class.getSimpleName(),
+                            context,
+                            metaPath.toAbsolutePath().toString());
+                } else {
+                    LGR.error("{}.meta() - File does not exist: '{}'",
+                            ActiveApp.class.getSimpleName(),
+                            metaPath.toString());
                 }
+            } catch (Exception ex) {
+                LGR.error("{}.meta() - Loading Meta File: '{}' caught Exception: {}",
+                        ActiveApp.class.getSimpleName(), metaURI.toString(),
+                        Functions.getStackTraceAsString(ex));
             }
         }
     }
@@ -183,15 +188,22 @@ public final class ActiveMain {
         AppContext.meta(Collections.unmodifiableMap(this.metaSuppliersMap));
         //this.initLabels();
         AppContext.recover();
-        AdminServer.instance().initServers();
-        AdminServer.instance().initApplets();
+        ActiveServer.AdminServer.instance().initServers();
+        ActiveServer.AdminServer.instance().initApplets();
         AppContext.record();
-        AdminServer.instance().startApplets();
+        ActiveServer.AdminServer.instance().startApplets();
     }
 
-    private ActiveMain(String[] args) throws Exception {
+    private void initAppConfig() {
+        Map<String, Object> params = new HashMap<>();
+        //params.put("date", )
+        APP_CONFIG = AppConfig.create(params);
+    }
+
+    private ActiveApp(String[] args) throws Exception {
         Component.init(CommandLineArgs.init(args).getProperties());
-        this.initActivityCfg();
+        this.initAppConfig();
+        //this.initActivityCfg();
         this.initStatic();
         this.initDefaultValues();
         this.initMeta();
@@ -202,7 +214,7 @@ public final class ActiveMain {
      */
     static public class Starter {
 
-        private static volatile ActiveMain APP = null;
+        private static volatile ActiveApp APP = null;
         static private final Object LOCK = new Object();
         private final String[] args;
 
@@ -211,12 +223,12 @@ public final class ActiveMain {
         }
 
         public Starter create() throws Exception {
-            ActiveMain app = Starter.APP;
+            ActiveApp app = Starter.APP;
             if (app == null) {
                 synchronized (LOCK) {
                     app = Starter.APP;
                     if (app == null) {
-                        Starter.APP = app = new ActiveMain(this.args);
+                        Starter.APP = app = new ActiveApp(this.args);
                     }
                 }
             }
@@ -227,7 +239,7 @@ public final class ActiveMain {
             APP.start(this.args);
         }
 
-        public ActiveMain get() {
+        public ActiveApp get() {
             return APP;
         }
     }
@@ -239,7 +251,7 @@ public final class ActiveMain {
      */
     public static void main(String[] args) {
         try {
-            ActiveMain.Starter appStarter = new ActiveMain.Starter(args);
+            ActiveApp.Starter appStarter = new ActiveApp.Starter(args);
             appStarter.create();
             appStarter.start();
 

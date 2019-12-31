@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,6 +42,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.ActiveContext.Contextual;
 import org.schorn.ella.context.AppContext;
@@ -74,6 +76,27 @@ import org.schorn.ella.node.MetaTypes.FieldTypes;
 public interface ActiveNode {
 
     String name();
+
+    public interface Config {
+
+        static public Config get(AppContext context) {
+            return NodeProvider.provider().getReusable(Config.class, context.name());
+        }
+        static public Config get(String contextName) {
+            return NodeProvider.provider().getReusable(Config.class, contextName);
+        }
+
+        URI metadata();
+
+        boolean autoDynamicType();
+
+        boolean autoVersioning();
+
+        Class<?> lineParserCSV();
+
+        Pattern lineParserCSVPattern();
+    }
+
 
     /**
      *

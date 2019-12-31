@@ -24,14 +24,12 @@
 package org.schorn.ella.impl.sql;
 
 import java.util.StringJoiner;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueData;
 import org.schorn.ella.node.ActiveNode.ValueType;
-import org.schorn.ella.sql.ActiveSQL;
 import org.schorn.ella.sql.RDBMS.TemplateTags;
 import org.schorn.ella.sql.RDBMS.TemplateTagsTransducer;
 
@@ -114,7 +112,8 @@ public class TemplateTagsTransducerImpl extends AbstractContextual implements Te
                 // the ActiveContext.getPropertyValue() asks ActiveServer which locates the ActiveServer instance that owns that context and 
                 // calls a method on the ActiveServer interface that the instance would have to implement return the value
                 // This is a kludge but keeps ActiveSQL provider decoupled from the App.
-                return content.replace(tag.tag(), objectType.context().getProperty(ActiveSQL.getPropertyKey(ActiveSQL.class, TemplateTags.TGT_SCHEMA.name(), objectType)));
+                //return content.replace(tag.tag(), objectType.context().getProperty(ActiveSQL.getPropertyKey(ActiveSQL.class, TemplateTags.TGT_SCHEMA.name(), objectType)));
+                return content;
             case TGT_TABLE:
                 return content.replace(tag.tag(), objectType.name());
             case TGT_COLUMN_NAMES:

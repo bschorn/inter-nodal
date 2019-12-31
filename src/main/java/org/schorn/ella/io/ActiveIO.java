@@ -23,6 +23,7 @@
  */
 package org.schorn.ella.io;
 
+import java.net.URI;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -47,8 +48,17 @@ public interface ActiveIO {
 
     static final Logger LGR = LoggerFactory.getLogger(ActiveIO.class);
 
-    interface ResourceReader extends Contextual, Mingleton {
+    interface Config extends Contextual {
+        static public Config get(AppContext context) {
+            return IOProvider.provider().getReusable(Config.class, context);
+        }
 
+        String activityFile();
+
+        URI activityURI();
+    }
+
+    interface ResourceReader extends Contextual, Mingleton {
     }
 
     interface ConsumeTransformedActivity<R> extends Consumer<R> {
@@ -66,6 +76,8 @@ public interface ActiveIO {
      * Recovering Activity is a single one-shot full read of the recovery source
      * as a stream directly into the Repo.
      *
+     * @param <T>
+     * @param <R>
      */
     interface ActivityRecovery<T, R> extends Contextual, Runnable, Mingleton {
 
@@ -100,6 +112,8 @@ public interface ActiveIO {
      *
      * Recording Activity
      *
+     * @param <T>
+     * @param <R>
      */
     interface ActivityRecord<T, R> extends Contextual, Runnable, Mingleton {
 

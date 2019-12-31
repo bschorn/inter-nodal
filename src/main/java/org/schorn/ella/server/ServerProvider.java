@@ -34,10 +34,11 @@ public interface ServerProvider extends Provider {
 
     /**
      * Implementation for this interface is retrieved
+     * @return
      */
     static ServerProvider provider() {
         return Provider.Providers.SERVER.getInstance(ServerProvider.class);
     }
 
-    AdminServer getAdminServer();
+    ActiveServer.AdminServer getAdminServer();
 }

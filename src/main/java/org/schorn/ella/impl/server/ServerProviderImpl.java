@@ -23,10 +23,9 @@
  */
 package org.schorn.ella.impl.server;
 
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.server.AdminServer;
+import org.schorn.ella.server.ActiveServer;
+import org.schorn.ella.server.ActiveServer.AdminServer;
 import org.schorn.ella.server.ServerProvider;
 
 /**
@@ -36,11 +35,11 @@ import org.schorn.ella.server.ServerProvider;
  */
 public class ServerProviderImpl extends AbstractProvider implements ServerProvider {
 
-    static private final AdminServer adminServer = new AdminServerImpl();
+    static private final AdminServer ADMIN_SERVER = new AdminServerImpl();
 
     @Override
     public void init() throws Exception {
-        // TODO Auto-generated method stub
+        this.mapInterfaceToImpl(ActiveServer.Config.class, ServerConfigImpl.class);
 
     }
 
@@ -52,7 +51,7 @@ public class ServerProviderImpl extends AbstractProvider implements ServerProvid
 
     @Override
     public AdminServer getAdminServer() {
-        return this.adminServer;
+        return this.ADMIN_SERVER;
     }
 
 }
