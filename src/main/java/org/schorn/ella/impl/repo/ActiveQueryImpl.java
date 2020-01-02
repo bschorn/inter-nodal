@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class ActiveQueryImpl implements ActiveQuery {
+public class ActiveQueryImpl implements ActiveQuery {
 
     /*
 	 * 

@@ -28,13 +28,11 @@ import java.io.Reader;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.util.Functions;
 import org.schorn.ella.load.ActiveObjectLoad.JsonBulkProcessor;
 import org.schorn.ella.node.OpenNode;
+import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Reads a reader() to 'chunk' up a large JSON text string into smaller pieces.
@@ -44,7 +42,7 @@ import org.schorn.ella.node.OpenNode;
  * @author schorn
  *
  */
-class JsonBulkProcessorImpl extends AbstractBulkProcessor<String, OpenNode> implements JsonBulkProcessor {
+public class JsonBulkProcessorImpl extends AbstractBulkProcessor<String, OpenNode> implements JsonBulkProcessor {
 
     private static final Logger LGR = LoggerFactory.getLogger(JsonBulkProcessorImpl.class);
 

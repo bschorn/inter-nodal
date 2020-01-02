@@ -23,17 +23,17 @@
  */
 package org.schorn.ella.impl.sql;
 
-import org.schorn.ella.sql.RDBMS;
-import org.schorn.ella.sql.RDBMS.SQLDirective;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.sql.ActiveSQL;
+import org.schorn.ella.sql.RDBMS;
+import org.schorn.ella.sql.RDBMS.SQLDirective;
 
 /**
  *
  * @author schorn
  *
  */
-class SynchronizeObjectsStableImpl extends SynchronizeObjectsImpl implements ActiveSQL.SynchronizeObjects.Stable {
+public class SynchronizeObjectsStableImpl extends SynchronizeObjectsImpl implements ActiveSQL.SynchronizeObjects.Stable {
 
     private final RDBMS.SQLDirective[] directives = new RDBMS.SQLDirective[]{
         RDBMS.Transaction(

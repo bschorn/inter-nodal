@@ -39,7 +39,7 @@ import org.schorn.ella.node.BondType;
  * @author schorn
  *
  */
-class ObjectSchemaImpl implements ObjectSchema {
+public class ObjectSchemaImpl implements ObjectSchema {
 
     final private List<MemberDef> memberTypes;
     final private int bytes;

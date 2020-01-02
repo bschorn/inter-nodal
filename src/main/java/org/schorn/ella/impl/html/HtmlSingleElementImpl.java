@@ -30,7 +30,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlSingleElement;
  * @author schorn
  *
  */
-class HtmlSingleElementImpl extends HtmlElementImpl implements HtmlSingleElement {
+public class HtmlSingleElementImpl extends HtmlElementImpl implements HtmlSingleElement {
 
     HtmlSingleElementImpl(String tag) {
         super(tag);

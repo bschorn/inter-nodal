@@ -26,22 +26,20 @@ package org.schorn.ella.impl.node;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.ActiveNode.Identity;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class IdentityImpl extends AbstractContextual implements Identity {
+public class IdentityImpl extends AbstractContextual implements Identity {
 
     static final Logger LGR = LoggerFactory.getLogger(IdentityImpl.class);
 

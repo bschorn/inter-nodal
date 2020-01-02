@@ -41,7 +41,7 @@ import org.schorn.ella.node.DataGroup;
  *
  * @param <T>
  */
-abstract class StandardConstraintType<T> implements ConstraintType<T> {
+public abstract class StandardConstraintType<T> implements ConstraintType<T> {
 
     private final String name;
     private final DataGroup dataGroup;

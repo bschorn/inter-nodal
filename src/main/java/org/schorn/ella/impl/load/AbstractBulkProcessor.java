@@ -27,7 +27,6 @@ import java.io.Reader;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
 import org.schorn.ella.load.ActiveObjectLoad.BulkProcessor;
 
 /**
@@ -36,7 +35,7 @@ import org.schorn.ella.load.ActiveObjectLoad.BulkProcessor;
  *
  * @param <R>
  */
-abstract class AbstractBulkProcessor<T, R> implements BulkProcessor<T, R> {
+public abstract class AbstractBulkProcessor<T, R> implements BulkProcessor<T, R> {
 
     private final Reader reader;
     private final Function<T, R> function;

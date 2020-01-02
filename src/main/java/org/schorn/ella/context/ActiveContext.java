@@ -226,9 +226,11 @@ public interface ActiveContext {
         void reloadActivity();
 
         /**
-         * Recording Activity will continue as long as the Context is open.
-         * context.close() or context.exit() will stop the recording (and
+         * Recording Activity will continue as long as the Context is
+         * open.context.close() or context.exit() will stop the recording (and
          * release the file)
+         *
+         * @throws java.lang.Exception
          */
         void recordActivity() throws Exception;
     }
@@ -241,6 +243,7 @@ public interface ActiveContext {
         /**
          *
          *
+         * @return
          */
         default boolean submitToRepo() {
             return ActiveServer.Config.get().masterServer();

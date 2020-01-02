@@ -27,21 +27,19 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.repo.ActiveRepo;
 import org.schorn.ella.repo.RepoData.EventLog.InternalSubscription;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class InternalSubscriptionImpl implements InternalSubscription, Consumer<ObjectData> {
+public class InternalSubscriptionImpl implements InternalSubscription, Consumer<ObjectData> {
 
     private static final Logger LGR = LoggerFactory.getLogger(InternalSubscriptionImpl.class);
 

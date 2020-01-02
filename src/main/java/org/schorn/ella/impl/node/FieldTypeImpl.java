@@ -32,7 +32,7 @@ import org.schorn.ella.node.ActiveNode.ValueType.FieldType;
  * @author schorn
  *
  */
-class FieldTypeImpl extends ActiveTypeImpl implements FieldType {
+public class FieldTypeImpl extends ActiveTypeImpl implements FieldType {
 
     private final DataType dataType;
     private final Constraints constraints;

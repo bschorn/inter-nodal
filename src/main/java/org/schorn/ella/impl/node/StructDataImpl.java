@@ -26,7 +26,6 @@ package org.schorn.ella.impl.node;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.schorn.ella.node.ActiveNode.StructData;
 
 /**
@@ -34,7 +33,7 @@ import org.schorn.ella.node.ActiveNode.StructData;
  * @author schorn
  *
  */
-abstract class StructDataImpl extends ActiveDataImpl implements StructData {
+public abstract class StructDataImpl extends ActiveDataImpl implements StructData {
 
     private final List<ActiveData> elements;
 

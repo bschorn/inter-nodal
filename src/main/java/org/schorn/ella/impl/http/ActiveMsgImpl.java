@@ -25,22 +25,20 @@ package org.schorn.ella.impl.http;
 
 import java.net.URI;
 import java.net.URL;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg;
 import org.schorn.ella.http.ActiveHTTP.ResponseParser;
 import org.schorn.ella.io.EndPoint.URIPoint;
 import org.schorn.ella.node.ActiveNode.StructData;
 import org.schorn.ella.node.OpenNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class ActiveMsgImpl<T> implements ActiveMsg<T> {
+public class ActiveMsgImpl<T> implements ActiveMsg<T> {
 
     static private final Logger LGR = LoggerFactory.getLogger(ActiveMsgImpl.class);
 

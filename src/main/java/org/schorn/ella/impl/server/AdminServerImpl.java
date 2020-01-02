@@ -56,7 +56,7 @@ public class AdminServerImpl implements ActiveServer.AdminServer {
     private final CopyOnWriteArrayList<ContextServer> activeServers = new CopyOnWriteArrayList<>();
     private final List<ContextApplet> applets = new ArrayList<>();
 
-    AdminServerImpl() {
+    public AdminServerImpl() {
         this.ioMaxThreads = ActiveServer.Config.get().maxIOThreads();
         this.ioThreadPool = Executors.newFixedThreadPool(this.ioMaxThreads);
     }

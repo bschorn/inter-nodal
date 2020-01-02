@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
-
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveOperator;
 import org.schorn.ella.node.ActiveNode.ObjectData;
@@ -43,7 +42,7 @@ import org.schorn.ella.sql.ActiveSQL;
  * @author schorn
  *
  */
-class ActiveConditionImpl implements ActiveCondition {
+public class ActiveConditionImpl implements ActiveCondition {
 
     ObjectType parentType;
     ValueType valueType;

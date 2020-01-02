@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class ContextDataImpl extends AbstractContextual implements Data {
+public class ContextDataImpl extends AbstractContextual implements Data {
 
     @SuppressWarnings("unused")
     static private final Logger LGR = LoggerFactory.getLogger(ContextDataImpl.class);

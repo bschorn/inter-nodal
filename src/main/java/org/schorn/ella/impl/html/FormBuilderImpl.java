@@ -25,7 +25,6 @@ package org.schorn.ella.impl.html;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.FormBuilder;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
@@ -36,7 +35,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlFormElement;
  * @author schorn
  *
  */
-class FormBuilderImpl implements FormBuilder {
+public class FormBuilderImpl implements FormBuilder {
 
     private String name = null;
     private String id = null;

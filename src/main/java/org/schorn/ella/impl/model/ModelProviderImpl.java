@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.model.ActiveModel;
 import org.schorn.ella.model.ModelProvider;

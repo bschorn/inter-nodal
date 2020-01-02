@@ -29,22 +29,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
-import org.schorn.ella.repo.RepoProvider;
 import org.schorn.ella.repo.RepoData.EventLogBroker;
 import org.schorn.ella.repo.RepoData.TopicsLog;
+import org.schorn.ella.repo.RepoProvider;
 
 /**
  *
  * @author schorn
  *
  */
-class TopicsLogImpl extends AbstractContextual implements TopicsLog {
+public class TopicsLogImpl extends AbstractContextual implements TopicsLog {
 
     private final Map<ObjectType, List<ObjectData>> data;
 

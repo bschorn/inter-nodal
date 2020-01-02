@@ -36,7 +36,7 @@ import org.schorn.ella.repo.RepoSupport.QueryData;
  * @author schorn
  *
  */
-class ResponderImpl extends AbstractContextual implements Responder {
+public class ResponderImpl extends AbstractContextual implements Responder {
 
     private final RepoActions.QueryExecution query;
     private final RepoActions.QueryExecutionEvents queryEvents;

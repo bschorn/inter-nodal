@@ -25,10 +25,6 @@ package org.schorn.ella.impl.repo;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
@@ -37,6 +33,8 @@ import org.schorn.ella.repo.ActiveRepo;
 import org.schorn.ella.repo.RepoSupport.ActiveQuery;
 import org.schorn.ella.repo.RepoSupport.ActiveSubscription;
 import org.schorn.ella.util.StringCached;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -44,7 +42,7 @@ import org.schorn.ella.util.StringCached;
  * @author schorn
  *
  */
-class ActiveSubscriptionImpl extends AbstractContextual implements ActiveSubscription {
+public class ActiveSubscriptionImpl extends AbstractContextual implements ActiveSubscription {
 
     private static final Logger LGR = LoggerFactory.getLogger(ActiveSubscriptionImpl.class);
 

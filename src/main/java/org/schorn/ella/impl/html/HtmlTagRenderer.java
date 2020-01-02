@@ -24,10 +24,6 @@
 package org.schorn.ella.impl.html;
 
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.HtmlDivElement;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
@@ -37,6 +33,8 @@ import org.schorn.ella.html.ActiveHtml.HtmlLabelElement;
 import org.schorn.ella.html.ActiveHtml.HtmlSelectElement;
 import org.schorn.ella.impl.html.HtmlTag.InputType;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The original implementation of HTML.
@@ -47,7 +45,7 @@ import org.schorn.ella.util.Functions;
  * @author schorn
  *
  */
-class HtmlTagRenderer {
+public class HtmlTagRenderer {
 
     private static final Logger LGR = LoggerFactory.getLogger(HtmlTagRenderer.class);
 

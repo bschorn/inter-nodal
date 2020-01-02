@@ -27,16 +27,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.event.ActiveEvent;
 import org.schorn.ella.event.ActiveEvent.DataEventManager;
 import org.schorn.ella.event.EventProvider;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

@@ -27,16 +27,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.repo.RepoActions.MaintainReferences;
 import org.schorn.ella.repo.RepoData;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -44,7 +42,7 @@ import org.schorn.ella.util.Functions;
  * @author schorn
  *
  */
-class MaintainReferencesImpl extends AbstractContextual implements MaintainReferences {
+public class MaintainReferencesImpl extends AbstractContextual implements MaintainReferences {
 
     private static final Logger LGR = LoggerFactory.getLogger(MaintainReferencesImpl.class);
 

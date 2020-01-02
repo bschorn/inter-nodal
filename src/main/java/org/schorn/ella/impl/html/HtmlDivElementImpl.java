@@ -30,7 +30,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlDivElement;
  * @author schorn
  *
  */
-class HtmlDivElementImpl extends HtmlElementImpl implements HtmlDivElement {
+public class HtmlDivElementImpl extends HtmlElementImpl implements HtmlDivElement {
 
     HtmlDivElementImpl() {
         super("div");

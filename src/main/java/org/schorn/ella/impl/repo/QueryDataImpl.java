@@ -25,7 +25,6 @@ package org.schorn.ella.impl.repo;
 
 import java.util.List;
 import java.util.function.Predicate;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.repo.RepoSupport.ActiveQuery;
@@ -37,7 +36,7 @@ import org.schorn.ella.repo.RepoSupport.QueryData;
  * @author schorn
  *
  */
-class QueryDataImpl extends AbstractContextual implements QueryData {
+public class QueryDataImpl extends AbstractContextual implements QueryData {
 
     private final ArrayData arrayData;
     private final ActiveQuery activeQuery;

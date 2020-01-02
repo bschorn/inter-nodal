@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.error;
 
 import java.time.LocalDateTime;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.error.ActiveError.ObjectDataError;
 import org.schorn.ella.node.ActiveNode.ObjectData;
@@ -34,7 +33,7 @@ import org.schorn.ella.node.ActiveNode.ObjectData;
  * @author schorn
  *
  */
-class ObjectDataErrorImpl implements ObjectDataError {
+public class ObjectDataErrorImpl implements ObjectDataError {
 
     private final AppContext context;
     private final ErrorFlag flag;

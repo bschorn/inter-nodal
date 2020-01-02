@@ -35,10 +35,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.io.EndPoint;
@@ -48,20 +44,22 @@ import org.schorn.ella.load.ActiveTabularLoad.DbRowProcessor;
 import org.schorn.ella.load.ActiveTabularLoad.LoadFromQuery;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveType;
+import org.schorn.ella.node.ActiveNode.Identity;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueData;
 import org.schorn.ella.node.ActiveNode.ValueType;
-import org.schorn.ella.node.ActiveNode.Identity;
 import org.schorn.ella.sql.DBConnect;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class LoadFromQueryImpl extends AbstractContextual implements LoadFromQuery {
+public class LoadFromQueryImpl extends AbstractContextual implements LoadFromQuery {
 
     static private final Logger LGR = LoggerFactory.getLogger(LoadFromQueryImpl.class);
 

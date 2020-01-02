@@ -23,8 +23,9 @@
  */
 package org.schorn.ella.app;
 
-import java.net.URI;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.schorn.ella.Component;
@@ -35,13 +36,25 @@ import org.schorn.ella.Component;
  */
 public class AppConfig implements ActiveApp.Config {
 
-    static public AppConfig create(Map<String, Object> params) {
+    static public AppConfig create(Map<String, Object> params) throws Exception {
 
         Map<String, Object> configMap = Component.ActiveApp.configMap();
         String environment = (String) configMap.get("environment");
-        LocalDate date = (LocalDate) configMap.get("date");
+        LocalDate date = null;
+        {
+            Object dateObj = configMap.get("date");
+            if (dateObj instanceof LocalDate) {
+                date = (LocalDate) dateObj;
+            } else if (dateObj instanceof String) {
+                String dateStr = (String) dateObj;
+                dateStr = dateStr.replace("-", "");
+                date = LocalDate.parse(dateStr, DateTimeFormatter.BASIC_ISO_DATE);
+            }
+        }
         String language = (String) configMap.get("language");
-        URI resources = URI.create((String) configMap.get("resources"));
+        //URI resources = URI.create((String) configMap.get("resources"));
+        String rootPath = (String) configMap.get("rootPath");
+        String configPath = (String) configMap.get("configPath");
         String context = (String) configMap.get("context");
         List<String> contexts = (List<String>) configMap.get("contexts");
 
@@ -50,13 +63,23 @@ public class AppConfig implements ActiveApp.Config {
                 environment = (String) params.get("environment");
             }
             if (params.containsKey("date")) {
-                date = (LocalDate) params.get("date");
+                Object dateObj = params.get("date");
+                if (dateObj instanceof LocalDate) {
+                    date = (LocalDate) dateObj;
+                } else if (dateObj instanceof String) {
+                    String dateStr = (String) dateObj;
+                    dateStr = dateStr.replace("-", "");
+                    date = LocalDate.parse(dateStr, DateTimeFormatter.BASIC_ISO_DATE);
+                }
             }
             if (params.containsKey("language")) {
                 language = (String) params.get("language");
             }
-            if (params.containsKey("resources")) {
-                resources = URI.create((String) params.get("resources"));
+            if (params.containsKey("rootPath")) {
+                rootPath = (String) params.get("rootPath");
+            }
+            if (params.containsKey("configPath")) {
+                rootPath = (String) params.get("configPath");
             }
             if (params.containsKey("context")) {
                 context = (String) params.get("context");
@@ -64,24 +87,33 @@ public class AppConfig implements ActiveApp.Config {
             if (params.containsKey("contexts")) {
                 contexts = (List<String>) params.get("contexts");
             }
+            if (contexts == null) {
+                contexts = new ArrayList<>();
+                if (context != null) {
+                    contexts.add(context);
+                }
+            }
         }
-        return new AppConfig(environment, date, language, resources, context, contexts);
+        return new AppConfig(environment, date, language, rootPath, configPath, context, contexts);
     }
 
     private final LocalDate date;
     private final String language;
     private final String environment;
-    private final URI resources;
+    private final String rootPath;
+    private final String configPath;
     private final String context;
     private final List<String> contexts;
 
-    private AppConfig(String environment, LocalDate date, String language, URI resources, String context, List<String> contexts) {
-        this.environment = environment;
-        this.date = date;
-        this.language = language;
-        this.resources = resources;
-        this.context = context;
-        this.contexts = contexts;
+    private AppConfig(String environment, LocalDate date, String language,
+            String rootPath, String configPath, String context, List<String> contexts) throws Exception {
+        this.environment = environment == null ? "noenvironment" : environment;
+        this.date = date == null ? LocalDate.now() : date;
+        this.language = language == null ? "en" : language;
+        this.rootPath = rootPath == null ? "." : rootPath;
+        this.configPath = configPath == null ? "." : configPath;
+        this.context = context == null ? "nocontext" : context;
+        this.contexts = contexts == null ? new ArrayList<>() : contexts;
     }
 
     @Override
@@ -100,8 +132,13 @@ public class AppConfig implements ActiveApp.Config {
     }
 
     @Override
-    public URI resources() {
-        return this.resources;
+    public String rootPath() {
+        return this.rootPath;
+    }
+
+    @Override
+    public String configPath() {
+        return this.configPath;
     }
 
     @Override

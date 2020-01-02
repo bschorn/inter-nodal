@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class ActivityLogWriterImpl extends AbstractContextual implements ActivityLogWriter<String> {
+public class ActivityLogWriterImpl extends AbstractContextual implements ActivityLogWriter<String> {
 
     private static final Logger LGR = LoggerFactory.getLogger(ActivityLogWriterImpl.class);
 

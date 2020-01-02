@@ -24,10 +24,6 @@
 package org.schorn.ella.impl.io;
 
 import java.util.function.Supplier;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.io.ActiveIO.ActivityLogWriter;
@@ -37,13 +33,15 @@ import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.transform.ActiveTransform.Transform;
 import org.schorn.ella.transform.TransformProvider;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class ActivityRecordImpl extends AbstractContextual implements ActivityRecord<ObjectData, String> {
+public class ActivityRecordImpl extends AbstractContextual implements ActivityRecord<ObjectData, String> {
 
     private static final Logger LGR = LoggerFactory.getLogger(ActivityRecordImpl.class);
 

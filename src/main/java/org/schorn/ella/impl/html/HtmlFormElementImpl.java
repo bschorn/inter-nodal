@@ -31,7 +31,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlFormElement;
  * @author schorn
  *
  */
-class HtmlFormElementImpl extends HtmlElementImpl implements HtmlFormElement {
+public class HtmlFormElementImpl extends HtmlElementImpl implements HtmlFormElement {
 
     HtmlFormElementImpl() {
         super("form");

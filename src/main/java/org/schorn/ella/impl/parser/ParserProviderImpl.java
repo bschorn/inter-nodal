@@ -23,6 +23,7 @@
  */
 package org.schorn.ella.impl.parser;
 
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.parser.ActiveParser;
 import org.schorn.ella.parser.ActiveParser.ReadJson;

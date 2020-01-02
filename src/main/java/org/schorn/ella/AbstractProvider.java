@@ -80,7 +80,22 @@ public abstract class AbstractProvider implements Provider {
 
     @Override
     public void registerContext(AppContext context) throws Exception {
-
+        for (Class<?> classFor : this.mingletons) {
+            this.createReusable(classFor, context);
+            LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
+                    this.getClass().getSimpleName(),
+                    context.name(),
+                    classFor.getSimpleName()
+            ));
+        }
+        for (Class<?> classFor : this.renewables) {
+            this.createReusable(classFor, context);
+            LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
+                    this.getClass().getSimpleName(),
+                    context.name(),
+                    classFor.getSimpleName()
+            ));
+        }
     }
 
     /**

@@ -35,7 +35,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class SystemsRepoImpl extends AbstractContextual implements LoaderRepo {
+public class SystemsRepoImpl extends AbstractContextual implements LoaderRepo {
 
     private final RepoCoordinators.Receiver receiver;
 

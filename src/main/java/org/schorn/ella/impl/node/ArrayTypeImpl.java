@@ -25,15 +25,15 @@ package org.schorn.ella.impl.node;
 
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.format.SupportString;
-import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.ActiveNode.ArrayType;
+import org.schorn.ella.node.BondType;
 
 /**
  *
  * @author schorn
  *
  */
-class ArrayTypeImpl extends ActiveTypeImpl implements ArrayType {
+public class ArrayTypeImpl extends ActiveTypeImpl implements ArrayType {
 
     private MemberDef memberDef;
     private boolean dynamic;

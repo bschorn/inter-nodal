@@ -32,6 +32,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
@@ -141,6 +142,7 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
      *
      * @throws Exception
      */
+    /*
     @Override
     public void registerContext(AppContext context) throws Exception {
         for (Class<?> classFor : this.mingletons) {
@@ -159,8 +161,8 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
                     classFor.getSimpleName()
             ));
         }
-
     }
+     */
 
     @Override
     public <R> R typeConvert(Class<?> classFrom, Class<R> classTo, Object valueFrom) throws Exception {

@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2019 Bryan Schorn.
+ * Copyright 2019 bschorn.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,152 +23,66 @@
  */
 package org.schorn.ella;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import org.schorn.ella.convert.TypeConverter;
-import org.schorn.ella.node.DataGroup;
-import org.schorn.ella.util.Functions;
-import org.slf4j.Logger;
+import org.schorn.ella.app.ActiveApp;
 
 /**
  *
- * @author schorn
- *
+ * @author bschorn
  */
-public interface ActiveConfig {
+public class ActiveConfig {
 
-    Properties properties();
+    static private final String SUBDIR = "config";
+    static private final String ACTIVE_CONFIG = "active.config";
+    static private final String ACTIVE_ENVIRONMENT_CONFIG = "active-<environment>.config";
+    static private final String ACTIVE_CONTEXT_CONFIG = "active.<context>.config";
+    static private final String ACTIVE_ENVIRONMENT_CONTEXT_CONFIG = "active-<environment>.<context>.config";
 
-    String propertyKey();
+    private final URI resourcesURI;
 
-    Class<?> propertyOwner();
+    private final String[] templates = new String[]{
+        ACTIVE_CONFIG, ACTIVE_ENVIRONMENT_CONFIG
+    };
 
-    Logger logger();
+    private final String[] contextTemplates = new String[]{
+        ACTIVE_CONTEXT_CONFIG,
+        ACTIVE_ENVIRONMENT_CONTEXT_CONFIG
+    };
 
-    String defaultValue();
-
-    DataGroup dataGroup();
-
-    String delimiter();
-
-    default String asString() {
-        /*
-        * Use the stack trace and look for the 'proptery owner' of the value in the
-        * call stack. Objective is to keep the usage of the configuration value
-        * limited to owner.
-         */
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        boolean validAccess = false;
-        for (StackTraceElement element : stackTraceElements) {
-            if (element.getClassName().equals(this.propertyOwner().getName())) {
-                validAccess = true;
-                break;
-            }
-            if (this.propertyOwner().isAssignableFrom(element.getClass())) {
-                validAccess = true;
-                break;
-            }
-        }
-        if (!validAccess) {
-            /*
-            * log an error anytime the config value is access and the owner
-            * is not in the call stack.
-            * if the owner has changed, please update propertyOwner member
-             */
-            this.logger().error("{}.asString() was not called by the owner: {}",
-                    this.propertyKey(), this.propertyOwner().getSimpleName());
-        }
-        String value = this.properties().getProperty(this.propertyKey(), this.defaultValue());
-        if (value != null) {
-            for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
-                value = value.replace(String.format("%s", "%" + entry.getKey() + "%"), entry.getValue());
-            }
-        }
-        return value;
+    public ActiveConfig(Path resourcesPath) {
+        this.resourcesURI = resourcesPath.toUri();
     }
 
-    default String[] asArray() {
-        if (this.asString() != null && this.asString().length() > 0) {
-            return this.asString().split(this.delimiter());
-        }
-        return new String[0];
+    public ActiveConfig(URI resourcesURI) {
+        this.resourcesURI = resourcesURI;
     }
 
-    default String[] asArray(String delimiter) {
-        if (this.asString() != null && this.asString().length() > 0) {
-            return this.asString().split(delimiter);
-        }
-        return new String[0];
+    public ActiveConfig() {
+        this.resourcesURI = URI.create(ActiveApp.Config.get().configPath());
     }
 
-    default Number asNumber() {
-        try {
-            String value = this.asString();
-            if (value != null) {
-                BigDecimal valueAsNumber = TypeConverter.recast(String.class, BigDecimal.class, value);
-                return (Number) valueAsNumber;
+    public List<URI> cascading() {
+        List<URI> files = new ArrayList<>();
+        for (String template : this.templates) {
+            files.add(URI.create(create(template).replace("<environment>", ActiveApp.Config.get().environment())));
+        }
+        for (String contextName : ActiveApp.Config.get().contexts()) {
+            for (String template : this.contextTemplates) {
+                files.add(URI.create(create(template)
+                        .replace("<environment>", ActiveApp.Config.get().environment())
+                        .replace("<context>", contextName)));
             }
-        } catch (Exception ex) {
-            this.logger().error("{}.asNumber() - {} caught Exception: {}",
-                    this.getClass().getSimpleName(), this.propertyKey(),
-                    Functions.getStackTraceAsString(ex));
         }
-        return null;
+        return files;
     }
 
-    default LocalDate asDate() {
-        try {
-            String value = this.asString();
-            if (value != null) {
-                return TypeConverter.recast(String.class, LocalDate.class, value);
-            }
-        } catch (Exception ex) {
-            this.logger().error("{}.asDate() - {} caught Exception: {}",
-                    this.getClass().getSimpleName(), this.propertyKey(),
-                    Functions.getStackTraceAsString(ex));
-        }
-        return null;
-    }
+    private String create(String template) {
+        return String.format("file:/%s/%s/%s",
+                this.resourcesURI.toString(),
+                SUBDIR, template);
 
-    /**
-     *
-     * @param <T>
-     * @param classForT
-     * @return
-     */
-    default <T> T asClassType(Class<T> classForT) {
-        try {
-            String value = this.asString();
-            if (value != null) {
-                return (T) TypeConverter.recast(String.class, classForT, value);
-            }
-        } catch (Exception ex) {
-            this.logger().error("{}.valueAs() - {} caught Exception: {}",
-                    this.getClass().getSimpleName(), this.propertyKey(),
-                    Functions.getStackTraceAsString(ex));
-        }
-        return null;
-
-    }
-
-    /**
-     *
-     * @return @throws Exception
-     */
-    default Object asNaturalType() throws Exception {
-        if (this.delimiter() == null) {
-            return this.dataGroup().toNaturalType(this.asString());
-        } else {
-            List<Object> list = new ArrayList<>();
-            String[] values = this.asArray(this.delimiter());
-            for (String value : values) {
-                list.add(this.dataGroup().toNaturalType(value));
-            }
-            return list;
-        }
     }
 }

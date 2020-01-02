@@ -82,7 +82,7 @@ public interface ClassLocator {
                     return implName;
                 }
             }
-            throw new Exception(String.format("%s.getImplClassName() - System Properties missing '%s' entry with class path of implementation.",
+            throw new Exception(String.format("%s.getImplClassName() - properties missing '%s' entry with class path of implementation.",
                     ClassLocator.class.getSimpleName(), interfaceName));
         }
 

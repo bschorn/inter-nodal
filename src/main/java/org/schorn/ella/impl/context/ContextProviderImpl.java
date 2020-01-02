@@ -25,16 +25,15 @@ package org.schorn.ella.impl.context;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Singleton;
 import org.schorn.ella.context.ActiveContext;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.context.AppContext.ContextRole;
 import org.schorn.ella.context.ContextProvider;
 import org.schorn.ella.context.ContextRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -76,10 +75,6 @@ public class ContextProviderImpl extends AbstractProvider implements ContextProv
                     this.getClass().getSimpleName(),
                     classFor.getSimpleName());
         }
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
     }
 
     @SuppressWarnings("unchecked")

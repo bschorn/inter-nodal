@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class SummaryImpl extends AbstractContextual implements Summary {
+public class SummaryImpl extends AbstractContextual implements Summary {
 
     private static final Logger LGR = LoggerFactory.getLogger(SummaryImpl.class);
 

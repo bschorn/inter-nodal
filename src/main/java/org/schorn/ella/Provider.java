@@ -25,7 +25,6 @@ package org.schorn.ella;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.context.ContextProvider;
 import org.schorn.ella.error.ErrorProvider;
@@ -56,11 +55,6 @@ public interface Provider {
 
     static final Logger LGR = LoggerFactory.getLogger(Provider.class);
 
-    /**
-     *
-     */
-    static final List<Providers> PROVIDERS = new ArrayList<>();
-
     public enum Providers {
         CONTEXT(ContextProvider.class, true),
         NODE(NodeProvider.class, false),
@@ -85,6 +79,7 @@ public interface Provider {
         Providers(Class<? extends Provider> interfaceClass, boolean dataProvider) {
             this.interfaceClass = interfaceClass;
             this.dataProvider = dataProvider;
+            /*
             String[] parts = this.interfaceClass.getName().split("\\.");
             StringJoiner implPath = new StringJoiner(".", "", "Impl");
             for (int i = 0; i < parts.length; i += 1) {
@@ -93,19 +88,22 @@ public interface Provider {
                 }
                 implPath.add(parts[i]);
             }
+             */
             /*
             * By default we expect the providers to be at a class path relative to 
             * their interface: a.b.c.Provider -> a.b.impl.c.ProviderImpl
             * If the property has already been set (overridden) then we use it,
             * otherwise we default to implPath
             */
-            String classPath = System.getProperty(this.interfaceClass.getSimpleName(), implPath.toString());
-            System.setProperty(this.interfaceClass.getSimpleName(), classPath);
+            //String classPath = System.getProperty(this.interfaceClass.getSimpleName(), implPath.toString());
+            //System.setProperty(this.interfaceClass.getSimpleName(), classPath);
             try {
+                LGR.info("{}.ctor() - Enum: {}",
+                        this.getClass().getSimpleName(),
+                        this.name());
                 this.instance = Component.Provider.newInstance(interfaceClass);
                 if (this.instance != null) {
                     this.instance.init();
-                    //PROVIDERS.add(this);
                 } else {
                     LGR.error("{}.ctor() - {} has no implementation at: '{}'",
                             this.getClass().getSimpleName(), this.name(),

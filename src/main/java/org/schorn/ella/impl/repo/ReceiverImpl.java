@@ -28,15 +28,15 @@ import org.schorn.ella.context.AppContext;
 import org.schorn.ella.repo.RepoActions.LogActivity;
 import org.schorn.ella.repo.RepoActions.MaintainReferences;
 import org.schorn.ella.repo.RepoActions.RegisterActivity;
-import org.schorn.ella.repo.RepoProvider;
 import org.schorn.ella.repo.RepoCoordinators.Receiver;
+import org.schorn.ella.repo.RepoProvider;
 
 /**
  *
  * @author schorn
  *
  */
-class ReceiverImpl extends AbstractContextual implements Receiver {
+public class ReceiverImpl extends AbstractContextual implements Receiver {
 
     private final LogActivity persist;
     private final RegisterActivity store;

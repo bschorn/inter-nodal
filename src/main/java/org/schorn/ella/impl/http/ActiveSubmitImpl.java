@@ -30,22 +30,20 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg;
-import org.schorn.ella.http.ActiveHTTP.ActiveSubmit;
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg.MsgStatus;
+import org.schorn.ella.http.ActiveHTTP.ActiveSubmit;
 import org.schorn.ella.io.EndPoint.URIPoint;
 import org.schorn.ella.util.HTTPStatusCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class ActiveSubmitImpl implements ActiveSubmit {
+public class ActiveSubmitImpl implements ActiveSubmit {
 
     static private final Logger LGR = LoggerFactory.getLogger(ActiveSubmitImpl.class);
 

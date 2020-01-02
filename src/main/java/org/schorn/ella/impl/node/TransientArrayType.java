@@ -30,7 +30,7 @@ import org.schorn.ella.context.AppContext;
  * @author schorn
  *
  */
-class TransientArrayType extends ArrayTypeImpl {
+public class TransientArrayType extends ArrayTypeImpl {
 
     TransientArrayType(AppContext context, String name, MemberDef memberDef) {
         super(context, name, memberDef, (short) -1);

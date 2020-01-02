@@ -23,6 +23,7 @@
  */
 package org.schorn.ella.impl.server;
 
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.server.ActiveServer;
 import org.schorn.ella.server.ActiveServer.AdminServer;
@@ -35,12 +36,12 @@ import org.schorn.ella.server.ServerProvider;
  */
 public class ServerProviderImpl extends AbstractProvider implements ServerProvider {
 
-    static private final AdminServer ADMIN_SERVER = new AdminServerImpl();
+    private volatile AdminServer adminServer = null;
 
     @Override
     public void init() throws Exception {
         this.mapInterfaceToImpl(ActiveServer.Config.class, ServerConfigImpl.class);
-
+        //this.adminServer = new AdminServerImpl();
     }
 
     @Override
@@ -51,7 +52,16 @@ public class ServerProviderImpl extends AbstractProvider implements ServerProvid
 
     @Override
     public AdminServer getAdminServer() {
-        return this.ADMIN_SERVER;
+        AdminServer adminServer0 = this.adminServer;
+        if (adminServer0 == null) {
+            synchronized (AdminServer.class) {
+                adminServer0 = this.adminServer;
+                if (adminServer0 == null) {
+                    this.adminServer = adminServer0 = new AdminServerImpl();
+                }
+            }
+        }
+        return this.adminServer;
     }
 
 }

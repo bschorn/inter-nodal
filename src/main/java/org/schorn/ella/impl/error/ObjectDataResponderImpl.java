@@ -24,13 +24,11 @@
 package org.schorn.ella.impl.error;
 
 import java.util.EnumSet;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.error.ActiveError.ObjectDataResponder;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -38,7 +36,7 @@ import org.schorn.ella.util.Functions;
  * @author schorn
  *
  */
-abstract class ObjectDataResponderImpl implements ObjectDataResponder {
+public abstract class ObjectDataResponderImpl implements ObjectDataResponder {
 
     private static final Logger LGR = LoggerFactory.getLogger(ObjectDataResponderImpl.class);
 

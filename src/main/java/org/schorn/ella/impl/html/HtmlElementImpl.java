@@ -28,20 +28,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.html.ActiveHtml.HtmlAttribute;
 import org.schorn.ella.html.ActiveHtml.HtmlElement;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class HtmlElementImpl implements HtmlElement {
+public class HtmlElementImpl implements HtmlElement {
 
     static public final String[] INDENT = new String[]{"  ", "    ", "      ", "        ", "          ", "            ", "              "};
     static public final String LINEFEED = "\n";

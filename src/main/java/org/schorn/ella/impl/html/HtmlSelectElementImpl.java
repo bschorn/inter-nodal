@@ -25,7 +25,6 @@ package org.schorn.ella.impl.html;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.schorn.ella.html.ActiveHtml.HtmlAttribute;
 import org.schorn.ella.html.ActiveHtml.HtmlOptionElement;
 import org.schorn.ella.html.ActiveHtml.HtmlSelectElement;
@@ -36,7 +35,7 @@ import org.schorn.ella.node.ActiveNode.ObjectData;
  * @author schorn
  *
  */
-class HtmlSelectElementImpl extends HtmlElementImpl implements HtmlSelectElement {
+public class HtmlSelectElementImpl extends HtmlElementImpl implements HtmlSelectElement {
 
     /**
      * ValueLabel is a one entry <option> in a <select>

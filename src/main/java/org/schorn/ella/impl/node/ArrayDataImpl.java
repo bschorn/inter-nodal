@@ -29,14 +29,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
+import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.error.ActiveError;
-import org.schorn.ella.error.ActiveError.DataErrorManager;
-import org.schorn.ella.node.ActiveNode.ArrayData;
-import org.schorn.ella.util.Functions;
 
 /**
  * Array Data Implementation

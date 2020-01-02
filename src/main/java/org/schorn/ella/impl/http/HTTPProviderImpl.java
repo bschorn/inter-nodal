@@ -23,6 +23,7 @@
  */
 package org.schorn.ella.impl.http;
 
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg;
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg.MsgAction;

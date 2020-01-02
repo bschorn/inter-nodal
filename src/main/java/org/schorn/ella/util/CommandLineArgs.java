@@ -23,6 +23,9 @@
  */
 package org.schorn.ella.util;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -48,6 +51,7 @@ public class CommandLineArgs {
     }
 
     private final Properties properties = new Properties();
+    private final Map<String, Object> propertiesMap = new HashMap<>();
 
     private CommandLineArgs(String[] args) {
         String paramName = null;
@@ -57,6 +61,14 @@ public class CommandLineArgs {
             if (arg.startsWith("-")) {
                 if (paramName != null && paramValue != null) {
                     this.properties.setProperty(paramName, paramValue);
+                    Object obj = this.propertiesMap.get(paramName);
+                    if (obj == null) {
+                        this.propertiesMap.put(paramName, paramValue);
+                    } else {
+                        if (obj instanceof List) {
+
+                        }
+                    }
                     paramName = null;
                     paramValue = null;
                 } else if (paramName != null) {

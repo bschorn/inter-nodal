@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.repo;
 
 import java.util.function.Predicate;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveData;
@@ -42,7 +41,7 @@ import org.schorn.ella.repo.RepoSupport.ActiveFilter;
  * @author schorn
  *
  */
-class ActiveFilterImpl extends AbstractContextual implements ActiveFilter {
+public class ActiveFilterImpl extends AbstractContextual implements ActiveFilter {
 
     private final Predicate<ActiveData> predicate;
 

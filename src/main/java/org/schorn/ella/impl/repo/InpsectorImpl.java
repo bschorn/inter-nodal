@@ -25,10 +25,10 @@ package org.schorn.ella.impl.repo;
 
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.repo.RepoCoordinators.Inspector;
 import org.schorn.ella.repo.RepoActions.ActivityActionable;
 import org.schorn.ella.repo.RepoActions.ActivityEntitled;
 import org.schorn.ella.repo.RepoActions.ValidateActivity;
+import org.schorn.ella.repo.RepoCoordinators.Inspector;
 import org.schorn.ella.repo.RepoProvider;
 
 /**
@@ -37,7 +37,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class InpsectorImpl extends AbstractContextual implements Inspector {
+public class InpsectorImpl extends AbstractContextual implements Inspector {
 
     private final ValidateActivity validate;
     private final ActivityActionable actionable;

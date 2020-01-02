@@ -30,10 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.Format;
@@ -46,6 +43,8 @@ import org.schorn.ella.transform.ActiveTransform.OpenNodeToActiveNode;
 import org.schorn.ella.transform.ActiveTransform.Transform;
 import org.schorn.ella.transform.TransformProvider;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

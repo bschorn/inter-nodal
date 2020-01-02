@@ -69,7 +69,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class ServiceProviderImpl extends AbstractContextual implements ActiveServices, ActiveServices.RepoWriter, ActiveServices.RepoReader, ActiveServices.RepoMetaData, ActiveServices.ContentTypeOutput {
+public class ServiceProviderImpl extends AbstractContextual implements ActiveServices, ActiveServices.RepoWriter, ActiveServices.RepoReader, ActiveServices.RepoMetaData, ActiveServices.ContentTypeOutput {
 
     protected ServiceProviderImpl(AppContext context) {
         super(context);

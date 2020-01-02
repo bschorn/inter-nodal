@@ -29,10 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveData;
@@ -41,6 +37,8 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.repo.RepoData.CurrentState;
 import org.schorn.ella.repo.RepoData.EventLogBroker;
 import org.schorn.ella.repo.RepoProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -48,7 +46,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class CurrentStateImpl extends AbstractContextual implements CurrentState {
+public class CurrentStateImpl extends AbstractContextual implements CurrentState {
 
     @SuppressWarnings("unused")
     private static final Logger LGR = LoggerFactory.getLogger(CurrentStateImpl.class);

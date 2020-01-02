@@ -26,7 +26,6 @@ package org.schorn.ella.impl.node;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.format.SupportString;
 import org.schorn.ella.node.ActiveNode.Constraints.ConstraintType;
@@ -38,7 +37,7 @@ import org.schorn.ella.node.ActiveNode.ValueType.PrimitiveType;
  * @author schorn
  *
  */
-class DataTypeImpl implements DataType {
+public class DataTypeImpl implements DataType {
 
     private final AppContext context;
     private final String name;

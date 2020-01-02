@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class EnumListBuilderImpl extends SelectBuilderImpl implements SelectBuilder {
+public class EnumListBuilderImpl extends SelectBuilderImpl implements SelectBuilder {
 
     static final Logger LGR = LoggerFactory.getLogger(EnumListBuilderImpl.class);
 

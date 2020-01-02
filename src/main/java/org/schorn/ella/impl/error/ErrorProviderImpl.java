@@ -28,10 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.error.ActiveError.DataErrorManager;
@@ -39,6 +36,8 @@ import org.schorn.ella.error.ActiveError.ErrorFlag;
 import org.schorn.ella.error.ActiveError.ObjectDataError;
 import org.schorn.ella.error.ErrorProvider;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

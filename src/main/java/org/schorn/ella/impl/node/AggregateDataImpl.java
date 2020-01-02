@@ -25,7 +25,6 @@ package org.schorn.ella.impl.node;
 
 import java.util.List;
 import java.util.function.Predicate;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.AggregateData;
@@ -36,7 +35,7 @@ import org.schorn.ella.node.ActiveNode.ObjectType;
  * @author schorn
  *
  */
-class AggregateDataImpl extends AbstractContextual implements AggregateData {
+public class AggregateDataImpl extends AbstractContextual implements AggregateData {
 
     private final ObjectType objectType;
     private final ActiveData[] data;

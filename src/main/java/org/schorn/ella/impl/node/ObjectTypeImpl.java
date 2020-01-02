@@ -36,7 +36,7 @@ import org.schorn.ella.node.DataGroup;
  * @author schorn
  *
  */
-class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
+public class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
 
     private final ObjectSchema schema;
     private final List<ObjectType> baseTypes;

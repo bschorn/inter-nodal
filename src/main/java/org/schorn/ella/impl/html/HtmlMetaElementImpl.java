@@ -25,15 +25,15 @@ package org.schorn.ella.impl.html;
 
 import java.nio.charset.Charset;
 import org.schorn.ella.html.ActiveHtml;
-import org.schorn.ella.html.MetaRules;
 import org.schorn.ella.html.ActiveHtml.HtmlMetaElement;
+import org.schorn.ella.html.MetaRules;
 
 /**
  *
  * @author schorn
  *
  */
-class HtmlMetaElementImpl extends HtmlSingleElementImpl implements HtmlMetaElement {
+public class HtmlMetaElementImpl extends HtmlSingleElementImpl implements HtmlMetaElement {
 
     protected final MetaRules.Attribute attribute;
     protected String value = null;

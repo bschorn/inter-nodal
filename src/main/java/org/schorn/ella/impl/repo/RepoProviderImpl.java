@@ -26,10 +26,7 @@ package org.schorn.ella.impl.repo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
@@ -41,9 +38,11 @@ import org.schorn.ella.repo.RepoActions;
 import org.schorn.ella.repo.RepoCoordinators;
 import org.schorn.ella.repo.RepoData;
 import org.schorn.ella.repo.RepoData.EventLogBroker;
-import org.schorn.ella.repo.RepoSupport.ConditionStatementParser;
 import org.schorn.ella.repo.RepoProvider;
 import org.schorn.ella.repo.RepoSupport;
+import org.schorn.ella.repo.RepoSupport.ConditionStatementParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

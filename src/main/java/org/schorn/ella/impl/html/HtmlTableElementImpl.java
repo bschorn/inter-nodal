@@ -31,7 +31,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlTableElement;
  * @author schorn
  *
  */
-class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableElement {
+public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableElement {
 
     HtmlTableElementImpl() {
         super("table");

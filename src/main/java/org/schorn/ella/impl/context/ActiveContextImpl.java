@@ -68,7 +68,7 @@ public class ActiveContextImpl implements ActiveContext {
      *
      *
      */
-    static class RegistryImpl implements Registry {
+    static public class RegistryImpl implements Registry {
 
         static private final Logger LGR = LoggerFactory.getLogger(RegistryImpl.class);
 

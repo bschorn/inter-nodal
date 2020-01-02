@@ -25,13 +25,8 @@ package org.schorn.ella.impl.html;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.HtmlTableElement;
-import org.schorn.ella.html.ActiveHtml.TableBuilder;
 import org.schorn.ella.html.ActiveHtml.HtmlTableElement.HtmlCaptionElement;
 import org.schorn.ella.html.ActiveHtml.HtmlTableElement.HtmlTBodyElement;
 import org.schorn.ella.html.ActiveHtml.HtmlTableElement.HtmlTFootElement;
@@ -39,17 +34,20 @@ import org.schorn.ella.html.ActiveHtml.HtmlTableElement.HtmlTHeadElement;
 import org.schorn.ella.html.ActiveHtml.HtmlTableElement.HtmlTdElement;
 import org.schorn.ella.html.ActiveHtml.HtmlTableElement.HtmlThElement;
 import org.schorn.ella.html.ActiveHtml.HtmlTableElement.HtmlTrElement;
+import org.schorn.ella.html.ActiveHtml.TableBuilder;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.ValueData;
 import org.schorn.ella.node.ActiveNode.ValueType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class TableBuilderImpl implements TableBuilder {
+public class TableBuilderImpl implements TableBuilder {
 
     static final Logger LGR = LoggerFactory.getLogger(TableBuilderImpl.class);
 

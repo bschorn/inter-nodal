@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-final class InputBuilderImpl implements InputBuilder {
+public final class InputBuilderImpl implements InputBuilder {
 
     static final Logger LGR = LoggerFactory.getLogger(InputBuilderImpl.class);
 

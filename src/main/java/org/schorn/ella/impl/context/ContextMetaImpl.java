@@ -44,7 +44,7 @@ import org.schorn.ella.node.NodeProvider;
  * @author schorn
  *
  */
-class ContextMetaImpl implements Meta {
+public class ContextMetaImpl implements Meta {
 
     private final AppContext context;
     private Identity[] identities = new Identity[0];

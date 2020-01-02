@@ -25,19 +25,19 @@ package org.schorn.ella.impl.repo;
 
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.repo.RepoProvider;
-import org.schorn.ella.repo.RepoActions.ActivityTrigger;
 import org.schorn.ella.event.ActiveEvent.DataEventManager;
 import org.schorn.ella.event.ActiveEvent.EventFlag;
-import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.event.EventProvider;
+import org.schorn.ella.node.ActiveNode.ObjectData;
+import org.schorn.ella.repo.RepoActions.ActivityTrigger;
+import org.schorn.ella.repo.RepoProvider;
 
 /**
  *
  * @author schorn
  *
  */
-class TriggerImpl extends AbstractContextual implements ActivityTrigger {
+public class TriggerImpl extends AbstractContextual implements ActivityTrigger {
 
     private final EventFlag flag;
 

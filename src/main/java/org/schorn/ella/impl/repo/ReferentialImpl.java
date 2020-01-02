@@ -35,7 +35,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class ReferentialImpl extends AbstractContextual implements RepoActions.MaintainReferences {
+public class ReferentialImpl extends AbstractContextual implements RepoActions.MaintainReferences {
 
     private final RepoActions.MaintainReferences refMgr;
 

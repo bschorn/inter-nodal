@@ -26,7 +26,6 @@ package org.schorn.ella.impl.repo;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveData;
@@ -34,8 +33,8 @@ import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.Role;
-import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueData;
+import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.node.OpenNode;
 import org.schorn.ella.node.OpenNode.OpenArray;
@@ -51,7 +50,7 @@ import org.schorn.ella.util.StringCached;
  * @author schorn
  *
  */
-class UpdateDataImpl extends AbstractContextual implements UpdateData {
+public class UpdateDataImpl extends AbstractContextual implements UpdateData {
 
     private ConcurrentHashMap<Integer, Thread> OKEY_LOCK = new ConcurrentHashMap<>();
 

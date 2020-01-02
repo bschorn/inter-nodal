@@ -29,7 +29,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
-
 import org.schorn.ella.html.ActiveHtml.HtmlAttribute;
 
 /**
@@ -37,7 +36,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlAttribute;
  * @author schorn
  *
  */
-class HtmlAttributeImpl implements HtmlAttribute {
+public class HtmlAttributeImpl implements HtmlAttribute {
 
     protected final String name;
     protected Object value;

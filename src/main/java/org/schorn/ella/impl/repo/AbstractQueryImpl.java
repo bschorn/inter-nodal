@@ -25,10 +25,6 @@ package org.schorn.ella.impl.repo;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ArrayData;
@@ -40,6 +36,8 @@ import org.schorn.ella.repo.RepoActions;
 import org.schorn.ella.repo.RepoData;
 import org.schorn.ella.repo.RepoSupport.ActiveQuery;
 import org.schorn.ella.repo.RepoSupport.QueryData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -60,7 +58,7 @@ import org.schorn.ella.repo.RepoSupport.QueryData;
  * @author schorn
  *
  */
-abstract class AbstractQueryImpl extends AbstractContextual implements RepoActions.QueryExecution {
+public abstract class AbstractQueryImpl extends AbstractContextual implements RepoActions.QueryExecution {
 
     private static final Logger LGR = LoggerFactory.getLogger(AbstractQueryImpl.class);
 

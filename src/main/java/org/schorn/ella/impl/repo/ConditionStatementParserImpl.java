@@ -26,7 +26,6 @@ package org.schorn.ella.impl.repo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveOperator;
@@ -40,7 +39,7 @@ import org.schorn.ella.util.Functions;
  * @author schorn
  *
  */
-class ConditionStatementParserImpl extends AbstractContextual implements ConditionStatementParser {
+public class ConditionStatementParserImpl extends AbstractContextual implements ConditionStatementParser {
 
     /**
      * There are variations of these (URLQueryString, SQL, ...)

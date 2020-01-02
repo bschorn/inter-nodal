@@ -25,7 +25,6 @@ package org.schorn.ella.impl.html;
 
 import java.util.List;
 import java.util.function.Predicate;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml.TableData;
 
@@ -34,7 +33,7 @@ import org.schorn.ella.html.ActiveHtml.TableData;
  * @author schorn
  *
  */
-class TableDataImpl implements TableData {
+public class TableDataImpl implements TableData {
 
     private final ArrayData resultData;
     private final String caption;

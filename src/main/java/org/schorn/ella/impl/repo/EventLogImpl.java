@@ -28,21 +28,19 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.repo.RepoData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class EventLogImpl extends AbstractContextual implements RepoData.EventLog {
+public class EventLogImpl extends AbstractContextual implements RepoData.EventLog {
 
     @SuppressWarnings("unused")
     private static final Logger LGR = LoggerFactory.getLogger(EventLogImpl.class);

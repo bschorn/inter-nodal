@@ -26,16 +26,12 @@ package org.schorn.ella;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.URI;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.StringJoiner;
 import org.schorn.ella.app.ActiveApp.Config;
@@ -52,20 +48,40 @@ public enum Component implements ClassLocator {
     Provider,
     ActiveApp,
     ActiveContext,
-    ActiveNode,
+    ActiveEvent,
+    ActiveHtml,
+    ActiveHTTP,
     ActiveIO,
+    ActiveNode,
     ActiveRepo,
     ActiveServer,
     ActiveServices,
-    ActiveHtml;
+    ActiveSQL,
+    ActiveTransform;
 
     static private final Logger LGR = LoggerFactory.getLogger(Component.class);
-    static private final Properties PROPERTIES = new Properties();
     static private final Map<Component, Map<String, Object>> COMPONENTS = new HashMap<>();
 
-    private final Properties properties = new Properties();
     private Path resourcesPath = null;
     private ClassLocator classLocator = null;
+
+    public Properties classPathProperties() {
+        Map<String, Object> classMap = COMPONENTS.get(this);
+        if (classMap != null && classMap.containsKey("ClassPath")) {
+            Object object = classMap.get("ClassPath");
+            if (object != null && object instanceof Map) {
+                Map<String, Object> map = (Map<String, Object>) object;
+                Properties properties = new Properties();
+                for (Entry<String, Object> entry : map.entrySet()) {
+                    if (entry.getValue() != null) {
+                        properties.setProperty(entry.getKey(), entry.getValue().toString());
+                    }
+                }
+                return properties;
+            }
+        }
+        return new Properties();
+    }
 
     public Map<String, Object> configMap() {
         Map<String, Object> componentMap = COMPONENTS.get(this);
@@ -95,29 +111,6 @@ public enum Component implements ClassLocator {
         return componentMap;
     }
 
-    /*
-    public Path getResourcePath() {
-        return this.resourcesPath;
-    }
-     */
-
- /*
-    public Path getResourcedPath(String... dirsFile) throws FileNotFoundException {
-        String filePath = this.resourcesPath.toString();
-        StringJoiner pathJoiner = new StringJoiner(File.separator, "", "");
-        pathJoiner.add(this.resourcesPath.toString());
-        for (String dirFile : dirsFile) {
-            pathJoiner.add(dirFile);
-        }
-        filePath = pathJoiner.toString();
-        Path resourcedPath = Paths.get(filePath);
-        if (Files.exists(resourcedPath)) {
-            return resourcedPath;
-        }
-        throw new FileNotFoundException(String.format("File not found: '%s'", filePath));
-    }
-     */
-
     @Override
     public Class<?> getImplClass(String interfaceName) throws Exception {
         return this.classLocator.getImplClass(interfaceName);
@@ -138,41 +131,73 @@ public enum Component implements ClassLocator {
         return this.classLocator.newInstance(interfaceName);
     }
 
-    static public void init(Properties properties) throws Exception {
-        readFromProperties(properties);
-        String resourcePath = (String) ActiveApp.configMap().get("resources");
-        String environment = (String) ActiveApp.configMap().get("environment");
-        String context = (String) ActiveApp.configMap().get("context");
-        Path activeConfig = Paths.get(resourcePath, "config", "active.config");
-        Path environmentConfig = Paths.get(resourcePath, "config",
-                String.format("active-%s.config", environment));
-        Path contextConfig = Paths.get(resourcePath, "config",
-                String.format("active.%s.config", context));
-        Path environmentContextConfig = Paths.get(resourcePath, "config",
-                String.format("active-%s.%s.config", environment, context));
-        if (Files.exists(activeConfig)) {
-            readFromURI(activeConfig.toUri());
+    static public void bootstrap(Properties properties) throws Exception {
+        loadFromMap(readFromProperties(properties));
+    }
+
+    static private Map<String, Object> readFromProperties(Properties properties) throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        for (String name : properties.stringPropertyNames()) {
+            map.put(name, properties.getProperty(name));
         }
-        if (Files.exists(environmentConfig)) {
-            readFromURI(environmentConfig.toUri());
+        return convert(map);
+    }
+
+    static private Map<String, Object> convert(Map<String, Object> map) {
+        Map<String, Object> newMap = new HashMap<>();
+        for (String key : map.keySet()) {
+            String[] keys = key.split("\\.");
+            Component component = Component.parse(keys[0]);
+            if (component == null) {
+                // not a component
+                newMap.put(key, map.get(key));
+            } else {
+                // component
+                Map<String, Object> componentMap = (Map<String, Object>) newMap.get(component.name());
+                if (componentMap == null) {
+                    // new component
+                    componentMap = new HashMap<>();
+                    newMap.put(component.name(), componentMap);
+                }
+                if (keys.length == 3) {
+                    // Component.Config.date : 20191231
+                    String configKey = keys[1];
+                    Map<String, Object> configMap = (Map<String, Object>) componentMap.get(configKey);
+                    if (configMap == null) {
+                        configMap = new HashMap<>();
+                        componentMap.put(configKey, configMap);
+                    }
+                    configMap.put(keys[2], map.get(key));
+                }
+            }
         }
-        if (Files.exists(contextConfig)) {
-            readFromURI(contextConfig.toUri());
-        }
-        if (Files.exists(environmentContextConfig)) {
-            readFromURI(environmentContextConfig.toUri());
+        return newMap;
+    }
+
+    static public void init() throws Exception {
+        loadFromMap(mergeConfigs());
+        for (Component component : Component.values()) {
+            component.classLocator = ClassLocator.create(component.classPathProperties());
         }
     }
 
-    static public void readFromProperties(Properties properties) throws Exception {
-        HashMap<String, Object> configMap = new HashMap<>();
-        for (final String name : properties.stringPropertyNames()) {
-            configMap.put(name, properties.getProperty(name));
+    static private Map<String, Object> mergeConfigs() throws Exception {
+        Map<String, Object> mergedMap = null;
+        ActiveConfig activeConfig = new ActiveConfig();
+        for (URI configURI : activeConfig.cascading()) {
+            Map<String, Object> currentMap = readFromURI(configURI);
+            if (mergedMap == null) {
+                mergedMap = currentMap;
+            } else {
+                Map<String, Object> tempMap = new HashMap<>(mergedMap);
+                currentMap.forEach((key, value) -> tempMap.merge(key, value, (v1, v2) -> v2));
+                mergedMap = tempMap;
+            }
         }
-        readFromMap(configMap);
+        return mergedMap;
     }
 
-    static public void readFromURI(URI uri) throws Exception {
+    static private Map<String, Object> readFromURI(URI uri) throws Exception {
         StringJoiner joiner = new StringJoiner(System.lineSeparator(), "", "");
         ResourceReader.readLines(uri.toURL(), line -> joiner.add(line));
         YAMLFactory yamlFactory = new YAMLFactory();
@@ -181,22 +206,25 @@ public enum Component implements ClassLocator {
         TypeReference<HashMap<String, Object>> typeRef
                 = new TypeReference<HashMap<String, Object>>() {
         };
-        HashMap<String, Object> map = mapper.readValue(joiner.toString(), typeRef);
-        readFromMap(map);
+        return mapper.readValue(joiner.toString(), typeRef);
     }
 
-    static void readFromMap(HashMap<String, Object> map) {
+    static private void loadFromMap(Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             try {
                 Component component = Component.parse(entry.getKey());
+                if (component == null) {
+                    // TODO log what is being skipped b/c there is no component
+                    continue;
+                }
                 if (COMPONENTS.containsKey(component)) {
                     Map<String, Object> current = COMPONENTS.get(component);
-                    Map<String, Object> override = (HashMap<String, Object>) entry.getValue();
+                    Map<String, Object> override = (Map<String, Object>) entry.getValue();
                     Map<String, Object> cumulative = new HashMap<>(current);
                     override.forEach((key, value) -> cumulative.merge(key, value, (v1, v2) -> v2));
                     COMPONENTS.put(component, cumulative);
                 } else {
-                    COMPONENTS.put(component, (HashMap<String, Object>) entry.getValue());
+                    COMPONENTS.put(component, (Map<String, Object>) entry.getValue());
                 }
             } catch (Exception ex) {
                 LGR.error("{}.reformat() - entry.key: {} value: {} - Caught Exception: {}",
@@ -221,34 +249,7 @@ public enum Component implements ClassLocator {
         return null;
     }
 
-    static String[] indent = new String[]{" ", "  ", "   ", "    "};
-
-    static void dump(Map<String, Object> map, int depth) {
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            if (entry.getValue() instanceof Map) {
-                dump((Map<String, Object>) entry.getValue(), depth + 1);
-            } else if (entry.getValue() instanceof ArrayList) {
-                List list = (List) entry.getValue();
-                for (Object object : list) {
-                    if (object instanceof Map) {
-                        dump((Map<String, Object>) object, depth + 1);
-                    } else if (object instanceof String) {
-                        System.out.println(String.format("%s%s: %s",
-                                indent[depth],
-                                entry.getKey().toString(),
-                                object == null ? "null" : object.toString()));
-                    }
-                }
-            } else {
-                System.out.println(String.format("%s%s: %s <- (%s)",
-                        indent[depth],
-                        entry.getKey().toString(),
-                        entry.getValue() == null ? "null" : entry.getValue().toString(),
-                        entry.getValue() == null ? "" : entry.getValue().getClass().getSimpleName()));
-            }
-        }
-    }
-
+/*
     protected void init0() {
         Properties properties0 = null;
         try {
@@ -258,9 +259,6 @@ public enum Component implements ClassLocator {
             } else {
                 this.resourcesPath = Paths.get(Thread.currentThread().getContextClassLoader().getResource("").toURI());
             }
-            /*
-                x.cfg
-             */
             {
                 String propertiesFilePath = String.format("%s%s%s%s%s.cfg",
                         this.resourcesPath.toString(), File.separator, "props", File.separator, this.name().toLowerCase());
@@ -272,9 +270,6 @@ public enum Component implements ClassLocator {
                     throw new Exception(String.format("File not found: %s", propertiesFilePath));
                 }
             }
-            /*
-                x.dev.cfg
-             */
             {
                 String environment = System.getProperty("Active.Environment");
                 String propertiesFilePath = String.format("%s%s%s%s%s.%s.cfg",
@@ -287,9 +282,6 @@ public enum Component implements ClassLocator {
                     throw new Exception(String.format("File not found: %s", propertiesFilePath));
                 }
             }
-            /*
-                command line overrides
-             */
             for (Map.Entry<Object, Object> entry : PROPERTIES.entrySet()) {
                 String[] keyParts = entry.getKey().toString().split("/.");
                 if (keyParts[0].equalsIgnoreCase(this.name())) {
@@ -326,5 +318,6 @@ public enum Component implements ClassLocator {
             ex.printStackTrace();
         }
     }
+    */
 
 }

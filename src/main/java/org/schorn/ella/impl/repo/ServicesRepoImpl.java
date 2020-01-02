@@ -35,7 +35,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class ServicesRepoImpl extends AbstractContextual implements ServicesRepo {
+public class ServicesRepoImpl extends AbstractContextual implements ServicesRepo {
 
     private final RepoCoordinators.Inspector approver;
     private final RepoCoordinators.Receiver storage;

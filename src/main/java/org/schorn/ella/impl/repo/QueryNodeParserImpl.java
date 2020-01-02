@@ -27,10 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectType;
@@ -45,13 +41,15 @@ import org.schorn.ella.repo.RepoSupport.ActiveQuery;
 import org.schorn.ella.repo.RepoSupport.ConditionStatementParser;
 import org.schorn.ella.repo.RepoSupport.QueryNodeParser;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class QueryNodeParserImpl extends AbstractContextual implements QueryNodeParser {
+public class QueryNodeParserImpl extends AbstractContextual implements QueryNodeParser {
 
     private static final Logger LGR = LoggerFactory.getLogger(QueryNodeParserImpl.class);
     private static final String ID_TAG = "Id"; // optional

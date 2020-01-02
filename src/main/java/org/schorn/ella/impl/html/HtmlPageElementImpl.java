@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class HtmlPageElementImpl extends HtmlElementImpl implements HtmlPageElement {
+public class HtmlPageElementImpl extends HtmlElementImpl implements HtmlPageElement {
 
     private static final Logger LGR = LoggerFactory.getLogger(HtmlPageElementImpl.class);
 

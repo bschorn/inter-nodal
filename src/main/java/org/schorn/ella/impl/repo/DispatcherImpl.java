@@ -25,8 +25,8 @@ package org.schorn.ella.impl.repo;
 
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.repo.RepoActions.NotifyOfActivity;
 import org.schorn.ella.repo.RepoActions.ActivityTrigger;
+import org.schorn.ella.repo.RepoActions.NotifyOfActivity;
 import org.schorn.ella.repo.RepoCoordinators.Dispatcher;
 import org.schorn.ella.repo.RepoProvider;
 
@@ -35,7 +35,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class DispatcherImpl extends AbstractContextual implements Dispatcher {
+public class DispatcherImpl extends AbstractContextual implements Dispatcher {
 
     private final ActivityTrigger trigger;
     private final NotifyOfActivity notify;

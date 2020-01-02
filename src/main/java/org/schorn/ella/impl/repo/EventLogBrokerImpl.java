@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
@@ -41,7 +40,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class EventLogBrokerImpl extends AbstractContextual implements EventLogBroker {
+public class EventLogBrokerImpl extends AbstractContextual implements EventLogBroker {
 
     static private final Map<AppContext, EventLogBroker> CONTEXT_BROKER = new HashMap<>();
 

@@ -35,7 +35,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlLabelElement;
  * @author schorn
  *
  */
-class HtmlFieldsetElementImpl extends HtmlElementImpl implements HtmlFieldsetElement {
+public class HtmlFieldsetElementImpl extends HtmlElementImpl implements HtmlFieldsetElement {
 
     HtmlTag.InputType inputType;
     HtmlDivElement divElement;

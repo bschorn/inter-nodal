@@ -36,7 +36,7 @@ import org.schorn.ella.repo.RepoProvider;
  * @author schorn
  *
  */
-class StoreImpl extends AbstractContextual implements RegisterActivity {
+public class StoreImpl extends AbstractContextual implements RegisterActivity {
 
     private final RepoData.EventLog repoStore;
 

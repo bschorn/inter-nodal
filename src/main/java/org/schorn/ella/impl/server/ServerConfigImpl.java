@@ -47,7 +47,7 @@ public class ServerConfigImpl implements ActiveServer.Config {
     private URI masterServerAddress = null;
     private int maxIOThreads = 5;
 
-    ServerConfigImpl() throws ClassNotFoundException, URISyntaxException {
+    public ServerConfigImpl() throws ClassNotFoundException, URISyntaxException {
         Map<String, Object> map = Component.ActiveServer.configMap();
         if (map.containsKey("servers")) {
             List<String> list = (List<String>) map.get("servers");

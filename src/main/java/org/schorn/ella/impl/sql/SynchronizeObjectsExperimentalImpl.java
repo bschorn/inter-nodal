@@ -23,18 +23,18 @@
  */
 package org.schorn.ella.impl.sql;
 
+import org.schorn.ella.context.AppContext;
+import org.schorn.ella.sql.ActiveSQL;
 import org.schorn.ella.sql.RDBMS;
 import org.schorn.ella.sql.RDBMS.SQLDialect;
 import org.schorn.ella.sql.RDBMS.SQLDirective;
-import org.schorn.ella.context.AppContext;
-import org.schorn.ella.sql.ActiveSQL;
 
 /**
  *
  * @author schorn
  *
  */
-class SynchronizeObjectsExperimentalImpl extends SynchronizeObjectsImpl implements ActiveSQL.SynchronizeObjects.Experimental {
+public class SynchronizeObjectsExperimentalImpl extends SynchronizeObjectsImpl implements ActiveSQL.SynchronizeObjects.Experimental {
 
     private final RDBMS.SQLDirective[] directives = new RDBMS.SQLDirective[]{
         RDBMS.PhrasalTemplates.CREATE_TEMP_TARGET_TABLE,

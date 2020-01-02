@@ -24,9 +24,9 @@
 package org.schorn.ella.impl.node;
 
 import org.schorn.ella.format.SupportString;
-import org.schorn.ella.node.BondType;
 import org.schorn.ella.node.ActiveNode.ActiveType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
+import org.schorn.ella.node.BondType;
 
 /**
  * ObjectMemberType
@@ -34,7 +34,7 @@ import org.schorn.ella.node.ActiveNode.MemberDef;
  * @author schorn
  *
  */
-class MemberDefImpl implements MemberDef {
+public class MemberDefImpl implements MemberDef {
 
     private final ActiveType activeType;
     private final BondType bondType;

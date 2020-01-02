@@ -30,7 +30,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
@@ -47,7 +46,7 @@ import org.schorn.ella.sql.RDBMS.SQLProgramData;
  * @author schorn
  *
  */
-abstract class SynchronizeObjectsImpl extends AbstractContextual implements SynchronizeObjects, SQLProgramCode, SQLProgramData {
+public abstract class SynchronizeObjectsImpl extends AbstractContextual implements SynchronizeObjects, SQLProgramCode, SQLProgramData {
 
     private final RDBMS.SQLDialect dialect;
     private final RDBMS.SQLInterpreter interpreter;

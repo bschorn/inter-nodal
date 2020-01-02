@@ -72,7 +72,10 @@ public final class ActiveApp {
 
         List<String> contexts();
 
-        URI resources();
+        String rootPath();
+
+        String configPath();
+
     }
 
     private final Map<String, MetaReader.MetaSupplier> metaSuppliersMap = new HashMap<>();
@@ -91,21 +94,6 @@ public final class ActiveApp {
         this.metaSuppliersMap.put(context, metaSupplier);
     }
 
-    /*
-    private void initActivityCfg() throws Exception {
-        LocalDate activityDate = Config.get().date();
-        String activityFileName = AppConfig.ACTIVITY.asString().replace("{DATE}",
-                activityDate.format(DateTimeFormatter.BASIC_ISO_DATE));
-        String activityFile = String.format("%s%s%s",
-                AppConfig.ACTIVITY_DIR.asString(),
-                File.separator,
-                activityFileName
-        );
-
-        System.setProperty(AppContext.class.getSimpleName() + ".ActivityFile",
-                activityFile);
-    }
-    */
     /**
      * For any static dependencies that require specific order of creation.
      *
@@ -194,15 +182,14 @@ public final class ActiveApp {
         ActiveServer.AdminServer.instance().startApplets();
     }
 
-    private void initAppConfig() {
-        Map<String, Object> params = new HashMap<>();
-        //params.put("date", )
-        APP_CONFIG = AppConfig.create(params);
+    private void initAppConfig() throws Exception {
+        APP_CONFIG = AppConfig.create(Component.ActiveApp.configMap());
     }
 
     private ActiveApp(String[] args) throws Exception {
-        Component.init(CommandLineArgs.init(args).getProperties());
+        Component.bootstrap(CommandLineArgs.init(args).getProperties());
         this.initAppConfig();
+        Component.init();
         //this.initActivityCfg();
         this.initStatic();
         this.initDefaultValues();

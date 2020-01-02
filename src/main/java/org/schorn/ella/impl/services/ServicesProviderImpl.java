@@ -25,10 +25,7 @@ package org.schorn.ella.impl.services;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
@@ -39,6 +36,8 @@ import org.schorn.ella.repo.RepoSupport.ActiveQuery.QueryFlag;
 import org.schorn.ella.services.ActiveServices;
 import org.schorn.ella.services.NamedQuery;
 import org.schorn.ella.services.ServicesProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

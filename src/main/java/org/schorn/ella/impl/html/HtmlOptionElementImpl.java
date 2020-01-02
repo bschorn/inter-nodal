@@ -23,19 +23,18 @@
  */
 package org.schorn.ella.impl.html;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.html.ActiveHtml.HtmlAttribute;
 import org.schorn.ella.html.ActiveHtml.HtmlOptionElement;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class HtmlOptionElementImpl extends HtmlElementImpl implements HtmlOptionElement {
+public class HtmlOptionElementImpl extends HtmlElementImpl implements HtmlOptionElement {
 
     static final Logger LGR = LoggerFactory.getLogger(HtmlOptionElementImpl.class);
 

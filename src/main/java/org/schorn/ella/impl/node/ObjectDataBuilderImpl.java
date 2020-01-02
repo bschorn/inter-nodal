@@ -29,13 +29,12 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
 import org.schorn.ella.error.ActiveError;
 import org.schorn.ella.error.ActiveError.DataErrorManager;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ActiveType;
-import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.ArrayData;
+import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.MemberDef;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectData.Builder;
@@ -53,7 +52,7 @@ import org.schorn.ella.util.Functions;
  * @author schorn
  *
  */
-class ObjectDataBuilderImpl implements Builder {
+public class ObjectDataBuilderImpl implements Builder {
 
     /*
 	 * ActiveType -> ActiveData

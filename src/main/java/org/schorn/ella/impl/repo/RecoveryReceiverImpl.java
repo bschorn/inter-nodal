@@ -31,7 +31,7 @@ import org.schorn.ella.repo.RepoCoordinators.RecoveryReceiver;
  * @author schorn
  *
  */
-class RecoveryReceiverImpl extends ReceiverImpl implements RecoveryReceiver {
+public class RecoveryReceiverImpl extends ReceiverImpl implements RecoveryReceiver {
 
     RecoveryReceiverImpl(AppContext context) {
         super(context);

@@ -31,7 +31,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlInputElement;
  * @author schorn
  *
  */
-class HtmlInputElementImpl extends HtmlElementImpl implements HtmlInputElement {
+public class HtmlInputElementImpl extends HtmlElementImpl implements HtmlInputElement {
 
     HtmlInputElementImpl() {
         super("input");

@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class ContextActivityImpl implements Activity {
+public class ContextActivityImpl implements Activity {
 
     static private final Logger LGR = LoggerFactory.getLogger(ContextActivityImpl.class);
 

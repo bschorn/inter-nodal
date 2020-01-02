@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectType;
@@ -42,7 +41,7 @@ import org.schorn.ella.server.ActiveServer;
  * @author schorn
  *
  */
-class ActiveUpdateImpl extends AbstractContextual implements ActiveUpdate {
+public class ActiveUpdateImpl extends AbstractContextual implements ActiveUpdate {
 
     private final ObjectType targetType;
     private final OpenNode updateNode;

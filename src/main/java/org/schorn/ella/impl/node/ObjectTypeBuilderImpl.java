@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-class ObjectTypeBuilderImpl implements Builder {
+public class ObjectTypeBuilderImpl implements Builder {
 
     private static final Logger LGR = LoggerFactory.getLogger(ObjectTypeBuilderImpl.class);
 

@@ -33,7 +33,7 @@ import org.schorn.ella.node.ValueFlag;
  *
  * @author bschorn
  */
-class InputTagSelectorImpl implements InputTagSelector {
+public class InputTagSelectorImpl implements InputTagSelector {
 
     @Override
     public ActiveHtml.HtmlInputElement.Type apply(ValueType valueType) {

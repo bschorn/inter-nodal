@@ -26,25 +26,23 @@ package org.schorn.ella.impl.http;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg;
 import org.schorn.ella.http.ActiveHTTP.ActiveSubmit;
 import org.schorn.ella.http.ActiveHTTP.ContextServer;
 import org.schorn.ella.io.EndPoint.URIPoint;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
-import org.schorn.ella.util.Functions;
 import org.schorn.ella.node.OpenNode;
+import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author schorn
  *
  */
-class ContextServerImpl implements ContextServer {
+public class ContextServerImpl implements ContextServer {
 
     static private final Logger LGR = LoggerFactory.getLogger(ContextServerImpl.class);
 

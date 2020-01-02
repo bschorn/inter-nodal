@@ -23,18 +23,14 @@
  */
 package org.schorn.ella.impl.event;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.util.Functions;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.event.ActiveEvent.DataEventManager;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ObjectData;
+import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

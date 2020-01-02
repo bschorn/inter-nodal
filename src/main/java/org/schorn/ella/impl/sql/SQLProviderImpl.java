@@ -25,6 +25,7 @@ package org.schorn.ella.impl.sql;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.schorn.ella.AbstractProvider;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
