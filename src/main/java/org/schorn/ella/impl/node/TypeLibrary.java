@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.schorn.ella.context.AppContext;
 
 /**
@@ -41,11 +40,11 @@ public class TypeLibrary {
 
     Map<Class<?>, Map<String, Object>> typeMap = new HashMap<>();
 
-    TypeLibrary(AppContext context) {
+    public TypeLibrary(AppContext context) {
         this.context = context;
     }
 
-    AppContext context() {
+    public AppContext context() {
         return this.context;
     }
 

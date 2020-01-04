@@ -26,7 +26,6 @@ package org.schorn.ella.impl.load;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
-
 import org.schorn.ella.load.ActiveTabularLoad.LoadFromQuery.Result;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 
@@ -41,7 +40,7 @@ public class LoadFromQueryResultImpl implements Result {
     private Exception exception = null;
     private boolean killed = false;
 
-    LoadFromQueryResultImpl(ObjectType objectType, String sql) {
+    public LoadFromQueryResultImpl(ObjectType objectType, String sql) {
         this.objectType = objectType;
         this.sql = sql;
         this.startTime = LocalDateTime.now();

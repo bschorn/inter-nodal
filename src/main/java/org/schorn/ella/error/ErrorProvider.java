@@ -40,7 +40,8 @@ public interface ErrorProvider extends Provider {
      * Implementation for this interface is retrieved
      */
     static ErrorProvider provider() {
-        return Provider.Providers.ERROR.getInstance(ErrorProvider.class);
+        //return Provider.Providers.ERROR.getInstance(ErrorProvider.class);
+        return null;
     }
 
     /**

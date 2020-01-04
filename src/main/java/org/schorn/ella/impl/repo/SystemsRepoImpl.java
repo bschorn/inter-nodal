@@ -39,7 +39,7 @@ public class SystemsRepoImpl extends AbstractContextual implements LoaderRepo {
 
     private final RepoCoordinators.Receiver receiver;
 
-    SystemsRepoImpl(AppContext context) {
+    public SystemsRepoImpl(AppContext context) {
         super(context);
         this.receiver = RepoProvider.provider().getMingleton(RepoCoordinators.RecoveryReceiver.class, context);
     }

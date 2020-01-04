@@ -37,7 +37,7 @@ public abstract class StructDataImpl extends ActiveDataImpl implements StructDat
 
     private final List<ActiveData> elements;
 
-    StructDataImpl(ObjectType objectType, List<ActiveData> elements) {
+    public StructDataImpl(ObjectType objectType, List<ActiveData> elements) {
         super(objectType);
         if (elements == null) {
             this.elements = new ArrayList<>(0);
@@ -51,7 +51,7 @@ public abstract class StructDataImpl extends ActiveDataImpl implements StructDat
         }
     }
 
-    StructDataImpl(ArrayType arrayType, List<ActiveData> elements) {
+    public StructDataImpl(ArrayType arrayType, List<ActiveData> elements) {
         super(arrayType);
         this.elements = elements;
     }

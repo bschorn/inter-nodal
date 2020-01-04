@@ -25,7 +25,6 @@ package org.schorn.ella.impl.event;
 
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.event.ActiveEvent;
@@ -33,8 +32,8 @@ import org.schorn.ella.event.ActiveEvent.EventLogListener;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectType;
-import org.schorn.ella.repo.RepoProvider;
 import org.schorn.ella.repo.RepoData.EventLogBroker;
+import org.schorn.ella.repo.RepoProvider;
 
 /**
  *
@@ -46,7 +45,7 @@ public class EventLogListenerImpl extends AbstractContextual implements EventLog
     private ActiveEvent.DataEventManager manager;
     private final ActiveEvent.EventFlag flag = ActiveEvent.EventFlag.REPO_CHANGE_EVENT;
 
-    protected EventLogListenerImpl(AppContext context) {
+    public EventLogListenerImpl(AppContext context) {
         super(context);
         EventLogBroker broker = RepoProvider.provider().getMingleton(EventLogBroker.class, context);
         broker.join(this);

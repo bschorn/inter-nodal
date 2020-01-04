@@ -40,7 +40,7 @@ public class MemberDefImpl implements MemberDef {
     private final BondType bondType;
     private final int index;
 
-    MemberDefImpl(ActiveType memberType, BondType bondType, Integer index) {
+    public MemberDefImpl(ActiveType memberType, BondType bondType, Integer index) {
         this.activeType = memberType;
         this.bondType = bondType;
         this.index = index;

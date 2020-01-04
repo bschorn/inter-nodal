@@ -26,7 +26,6 @@ package org.schorn.ella.impl.repo;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-
 import org.schorn.ella.repo.ByteArray;
 
 /**
@@ -41,7 +40,7 @@ public class ByteArrayImpl<T> implements ByteArray<T> {
     byte[] data;
     ReadWrite<T> readWrite;
 
-    ByteArrayImpl(int offset, int capacity) {
+    public ByteArrayImpl(int offset, int capacity) {
         this.offset = offset;
         this.capacity = capacity;
         this.data = new byte[offset * capacity];

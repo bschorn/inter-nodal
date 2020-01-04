@@ -45,12 +45,12 @@ public class ActiveFilterImpl extends AbstractContextual implements ActiveFilter
 
     private final Predicate<ActiveData> predicate;
 
-    ActiveFilterImpl(AppContext context) {
+    public ActiveFilterImpl(AppContext context) {
         super(context);
         this.predicate = null;
     }
 
-    ActiveFilterImpl(AppContext context, Predicate<ActiveData> predicate) {
+    public ActiveFilterImpl(AppContext context, Predicate<ActiveData> predicate) {
         super(context);
         this.predicate = predicate;
     }

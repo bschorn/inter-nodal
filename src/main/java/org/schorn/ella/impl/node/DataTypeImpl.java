@@ -44,7 +44,7 @@ public class DataTypeImpl implements DataType {
     private final PrimitiveType<?> primitiveType;
     private final List<ConstraintType<?>> constraintTypes;
 
-    DataTypeImpl(AppContext context, String name, PrimitiveType<?> primitiveType, ConstraintType<?>[] constraintTypes) {
+    public DataTypeImpl(AppContext context, String name, PrimitiveType<?> primitiveType, ConstraintType<?>[] constraintTypes) {
         this.context = context;
         this.name = name;
         this.primitiveType = primitiveType;

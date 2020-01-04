@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.parser;
 
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.context.AppContext;
 import org.schorn.ella.parser.ActiveParser;
 import org.schorn.ella.parser.ActiveParser.ReadJson;
 import org.schorn.ella.parser.ActiveParser.WriteJson;
@@ -39,10 +38,6 @@ public class ParserProviderImpl extends AbstractProvider implements ParserProvid
 
     @Override
     public void init() {
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
     }
 
     public ReadJson getReadJson() {

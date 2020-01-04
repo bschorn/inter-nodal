@@ -58,6 +58,7 @@ public class ContextProviderImpl extends AbstractProvider implements ContextProv
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     @Override
     public void init() throws Exception {
+        this.mapInterfaceToImpl(AppContext.class, AppContextImpl.class);
         this.mapInterfaceToImpl(ActiveContext.Meta.class, ContextMetaImpl.class);
         this.mapInterfaceToImpl(ActiveContext.Action.class, ActiveContextImpl.ActionImpl.class);
         this.mapInterfaceToImpl(ActiveContext.Activity.class, ContextActivityImpl.class);
@@ -66,7 +67,6 @@ public class ContextProviderImpl extends AbstractProvider implements ContextProv
         this.mapInterfaceToImpl(ActiveContext.Error.class, ActiveContextImpl.ErrorImpl.class);
         this.mapInterfaceToImpl(ActiveContext.Property.class, ActiveContextImpl.PropertyImpl.class);
         this.mapInterfaceToImpl(ActiveContext.Registry.class, ActiveContextImpl.RegistryImpl.class);
-        this.mapInterfaceToImpl(AppContext.class, AppContextImpl.class);
 
         this.singletons.add(ActiveContext.Registry.class);
         for (Class<?> classFor : this.singletons) {
@@ -77,6 +77,15 @@ public class ContextProviderImpl extends AbstractProvider implements ContextProv
         }
     }
 
+    @Override
+    protected boolean registerPreCreateCheck(AppContext context, Class<?> interfaceOf) {
+        if (interfaceOf.equals(AppContext.class)) {
+            return false;
+        }
+        return true;
+    }
+
+
     @SuppressWarnings("unchecked")
     @Override
     public <T> T createContext(Class<T> interfaceFor, String name, ContextRole mode) throws Exception {
@@ -84,7 +93,11 @@ public class ContextProviderImpl extends AbstractProvider implements ContextProv
         if (ContextRegistry.isRegistered(name)) {
             context = ContextRegistry.get(name);
         } else {
-            context = (AppContext) this.createInstance(interfaceFor, name, mode);
+            if (mode == ContextRole.DEFAULT) {
+                context = (AppContext) this.createReusable(interfaceFor, name);
+            } else {
+                context = (AppContext) this.createReusable(interfaceFor, name, mode);
+            }
             if (context != null) {
                 ContextRegistry.register(context);
             }

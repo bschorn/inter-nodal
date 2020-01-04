@@ -50,7 +50,7 @@ public class ActivityRecordImpl extends AbstractContextual implements ActivityRe
     private ActivityLogWriter<?> writer;
 
     @SuppressWarnings("unchecked")
-    ActivityRecordImpl(AppContext context) {
+    public ActivityRecordImpl(AppContext context) {
         super(context);
         this.supplier = (Supplier<ObjectData>) ActivityRecord.getActivitySupplier(this.context());
         this.transform = (Transform<ObjectData, String>) TransformProvider.provider().getTransform(this.context(), Format.ActiveNode, Format.JsonRecord);

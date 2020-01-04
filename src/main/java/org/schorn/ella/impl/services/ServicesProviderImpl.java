@@ -23,11 +23,7 @@
  */
 package org.schorn.ella.impl.services;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
@@ -48,35 +44,10 @@ public class ServicesProviderImpl extends AbstractProvider implements ServicesPr
 
     private static final Logger LGR = LoggerFactory.getLogger(ServicesProviderImpl.class);
 
-    private List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
-    private List<Class<? extends Renewable<?>>> renewables = new ArrayList<>();
-
     @Override
     public void init() throws Exception {
         this.mapInterfaceToImpl(NamedQuery.class, NamedQueryImpl.class);
         this.mapInterfaceToImpl(ActiveServices.class, ServiceProviderImpl.class);
-
-        this.mingletons.add(ActiveServices.class);
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
-        for (Class<?> classFor : this.mingletons) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
-        for (Class<?> classFor : this.renewables) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
     }
 
     @Override

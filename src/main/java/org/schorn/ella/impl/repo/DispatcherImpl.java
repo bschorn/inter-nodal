@@ -40,7 +40,7 @@ public class DispatcherImpl extends AbstractContextual implements Dispatcher {
     private final ActivityTrigger trigger;
     private final NotifyOfActivity notify;
 
-    DispatcherImpl(AppContext context) {
+    public DispatcherImpl(AppContext context) {
         super(context);
         this.trigger = RepoProvider.provider().getMingleton(ActivityTrigger.class, context);
         this.notify = RepoProvider.provider().getMingleton(NotifyOfActivity.class, context);

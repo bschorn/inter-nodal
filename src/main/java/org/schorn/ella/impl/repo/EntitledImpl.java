@@ -37,7 +37,7 @@ import org.schorn.ella.repo.RepoActions.ActivityEntitled;
  */
 public class EntitledImpl extends AbstractContextual implements ActivityEntitled {
 
-    EntitledImpl(AppContext context) {
+    public EntitledImpl(AppContext context) {
         super(context);
     }
 

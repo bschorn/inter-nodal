@@ -26,7 +26,6 @@ package org.schorn.ella.impl.node;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.regex.Pattern;
 import org.schorn.ella.Component;
 import org.schorn.ella.node.ActiveNode;
 
@@ -41,10 +40,10 @@ public class NodeConfigImpl implements ActiveNode.Config {
     private URI metadata;
     private Boolean autoDynamicType = false;
     private Boolean autoVersioning = true;
-    private Class<?> lineParserCSV = org.schorn.ella.impl.transform.DSVLineParserImpl.class;
-    private Pattern lineParserCSVPattern = Pattern.compile("(?:(?<=\")([^\"]*)(?=\"))|(?<=,|^)([^,]*)(?=,|$)");
+    //private Class<?> lineParserCSV = org.schorn.ella.impl.transform.DSVLineParserImpl.class;
+    //private Pattern lineParserCSVPattern = Pattern.compile("(?:(?<=\")([^\"]*)(?=\"))|(?<=,|^)([^,]*)(?=,|$)");
 
-    NodeConfigImpl(String contextName) throws URISyntaxException, ClassNotFoundException {
+    public NodeConfigImpl(String contextName) throws URISyntaxException, ClassNotFoundException {
         Map<String, Object> map = Component.ActiveNode.configMap(contextName);
         if (map.containsKey("metadata")) {
             this.metadata = new URI((String) map.get("metadata"));
@@ -55,6 +54,7 @@ public class NodeConfigImpl implements ActiveNode.Config {
         if (map.containsKey("autoVersioning")) {
             this.autoVersioning = (Boolean) map.get("autoVersioning");
         }
+        /*
         if (map.containsKey("lineParserCSV")) {
             String className = (String) map.get("lineParserCSV");
             this.lineParserCSV = Class.forName(className);
@@ -63,6 +63,7 @@ public class NodeConfigImpl implements ActiveNode.Config {
             String regex = (String) map.get("lineParserCSVPattern");
             this.lineParserCSVPattern = Pattern.compile(regex);
         }
+         */
     }
 
     @Override
@@ -80,6 +81,7 @@ public class NodeConfigImpl implements ActiveNode.Config {
         return this.autoVersioning;
     }
 
+    /*
     @Override
     public Class<?> lineParserCSV() {
         return this.lineParserCSV;
@@ -89,5 +91,5 @@ public class NodeConfigImpl implements ActiveNode.Config {
     public Pattern lineParserCSVPattern() {
         return this.lineParserCSVPattern;
     }
-
+    */
 }

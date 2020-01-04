@@ -110,9 +110,6 @@ public interface AppContext extends Mingleton, ActiveContext.Action, ActiveConte
      */
     static public AppContext create(String name) throws Exception {
         AppContext context = ContextProvider.provider().createContext(AppContext.class, name, ContextRole.DEFAULT);
-        //String activityFile = System.getProperty(AppContext.class.getSimpleName() + ".ActivityFile").replace("{CONTEXT}", context.name());
-        //File f = new File(activityFile);
-        //context.setEndPoint(EndPoint.URIPoint.create(f.toURI()));
         return context;
     }
 

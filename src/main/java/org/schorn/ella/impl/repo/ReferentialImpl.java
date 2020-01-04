@@ -39,7 +39,7 @@ public class ReferentialImpl extends AbstractContextual implements RepoActions.M
 
     private final RepoActions.MaintainReferences refMgr;
 
-    ReferentialImpl(AppContext context) {
+    public ReferentialImpl(AppContext context) {
         super(context);
         this.refMgr = RepoProvider.provider().getMingleton(RepoActions.MaintainReferences.class, context);
     }

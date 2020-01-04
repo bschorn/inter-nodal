@@ -42,7 +42,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.ActiveContext.Contextual;
 import org.schorn.ella.context.AppContext;
@@ -91,10 +90,6 @@ public interface ActiveNode {
         boolean autoDynamicType();
 
         boolean autoVersioning();
-
-        Class<?> lineParserCSV();
-
-        Pattern lineParserCSVPattern();
     }
 
 

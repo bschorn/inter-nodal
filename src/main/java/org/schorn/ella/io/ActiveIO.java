@@ -24,6 +24,7 @@
 package org.schorn.ella.io;
 
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -65,6 +66,40 @@ public interface ActiveIO {
     }
 
     interface RecordTransformedActivity<R> extends Consumer<R> {
+    }
+
+    interface ActivityFile extends Contextual, Mingleton {
+
+        /**
+         * This one is for ActiveContext.Activity which needs to know if there
+         * is any activity already from a previous instance.
+         *
+         * @param context
+         * @return
+         * @throws Exception
+         */
+        static ActivityFile create(AppContext context) throws Exception {
+            return IOProvider.provider().createInstance(ActivityFile.class, context);
+        }
+
+        /**
+         * This is for ActiveIO.* which avoids the 'throws Exception' since the
+         * 'create' method would have already provided any exceptions.
+         *
+         * @param context
+         * @return
+         */
+        static ActivityFile get(AppContext context) {
+            return IOProvider.provider().getReusable(ActivityFile.class, context);
+        }
+
+        boolean hasActivity();
+
+        String asString();
+
+        Path asPath();
+
+        URI asURI();
     }
 
     interface ActivityLogWriter<R> extends Consumer<R>, AutoCloseable, Contextual, FunctionalException {

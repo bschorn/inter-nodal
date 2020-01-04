@@ -47,7 +47,7 @@ public class TopicsLogImpl extends AbstractContextual implements TopicsLog {
 
     private final Map<ObjectType, List<ObjectData>> data;
 
-    TopicsLogImpl(AppContext context) {
+    public TopicsLogImpl(AppContext context) {
         super(context);
         this.data = new HashMap<>();
         EventLogBroker broker = RepoProvider.provider().getMingleton(EventLogBroker.class, context);

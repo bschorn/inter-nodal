@@ -23,12 +23,8 @@
  */
 package org.schorn.ella.impl.repo;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.event.ActiveEvent;
 import org.schorn.ella.event.ActiveEvent.EventFlag;
@@ -53,14 +49,6 @@ import org.slf4j.LoggerFactory;
 public class RepoProviderImpl extends AbstractProvider implements RepoProvider {
 
     private static final Logger LGR = LoggerFactory.getLogger(RepoProviderImpl.class);
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 *                                
-	 *                                MEMBERS
-	 *                                
-	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    private List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
-    private List<Class<? extends Renewable<?>>> renewables = new ArrayList<>();
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *                                
@@ -101,64 +89,13 @@ public class RepoProviderImpl extends AbstractProvider implements RepoProvider {
         this.mapInterfaceToImpl(ActiveRepo.ServicesRepo.class, ServicesRepoImpl.class);
         this.mapInterfaceToImpl(ActiveRepo.LoaderRepo.class, SystemsRepoImpl.class);
 
-        /*
-		 * Mingletons: one instance per NodeContext.
-         */
-        this.mingletons.add(RepoData.EventLog.class);
-        this.mingletons.add(RepoData.TopicsLog.class);
-        this.mingletons.add(RepoData.CurrentState.class);
-        this.mingletons.add(RepoActions.ValidateActivity.class);
-        this.mingletons.add(RepoActions.ActivityActionable.class);
-        this.mingletons.add(RepoActions.ActivityEntitled.class);
-        this.mingletons.add(RepoActions.ActivityTrigger.class);
-        this.mingletons.add(RepoActions.NotifyOfActivity.class);
-        this.mingletons.add(RepoActions.LogActivity.class);
-        this.mingletons.add(RepoActions.RegisterActivity.class);
-        this.mingletons.add(RepoActions.ValidateActivity.class);
-        this.mingletons.add(RepoActions.QueryExecution.class);
-        this.mingletons.add(RepoActions.QueryExecutionEvents.class);
-        this.mingletons.add(RepoActions.MaintainReferences.class);
-        this.mingletons.add(RepoSupport.QueryNodeParser.class);
-        this.mingletons.add(RepoCoordinators.Inspector.class);
-        this.mingletons.add(RepoCoordinators.Receiver.class);
-        this.mingletons.add(RepoCoordinators.Responder.class);
-        this.mingletons.add(RepoCoordinators.Dispatcher.class);
-        this.mingletons.add(RepoCoordinators.Summary.class);
-        this.mingletons.add(ActiveRepo.ServicesRepo.class);
-        this.mingletons.add(ActiveRepo.LoaderRepo.class);
-
-        /*
-		 * Renewables: using an instance of an object to create
-		 * subsequent instances (instance factory)
-         */
-        this.renewables.add(RepoSupport.QueryData.class);
-        this.renewables.add(RepoSupport.UpdateData.class);
-        this.renewables.add(RepoSupport.ActiveUpdate.class);
-        this.renewables.add(RepoSupport.ActiveFilter.class);
-        this.renewables.add(RepoSupport.FilteredObjectData.class);
-
     }
 
     @Override
     public void registerContext(AppContext context) throws Exception {
-        for (Class<?> classFor : this.mingletons) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
-        for (Class<?> classFor : this.renewables) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
+        super.registerContext(context);
         /*
-		 * We need to make sure this gets created here before some dependencies come looking for it
+         * We need to make sure this gets created here before some dependencies come looking for it
          */
         @SuppressWarnings("unused")
         EventLogBroker broker = this.getMingleton(EventLogBroker.class, context);

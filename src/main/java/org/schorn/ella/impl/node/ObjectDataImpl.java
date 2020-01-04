@@ -62,7 +62,7 @@ public class ObjectDataImpl extends StructDataImpl implements ObjectData {
      * @param members
      * @param keyData
      */
-    protected ObjectDataImpl(ObjectType objectType, List<ActiveData> members) {
+    public ObjectDataImpl(ObjectType objectType, List<ActiveData> members) {
         super(objectType, members);
         boolean nonBlank = false;
         boolean nonNull = false;
@@ -91,7 +91,7 @@ public class ObjectDataImpl extends StructDataImpl implements ObjectData {
         this.isIncomplete = isIncomplete;
     }
 
-    protected ObjectDataImpl(ObjectType objectType, List<ActiveData> members, List<ActiveType> missingTypes) {
+    public ObjectDataImpl(ObjectType objectType, List<ActiveData> members, List<ActiveType> missingTypes) {
         this(objectType, members);
         this.missingTypes = missingTypes;
     }

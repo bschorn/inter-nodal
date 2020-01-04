@@ -53,7 +53,7 @@ public class EventLogImpl extends AbstractContextual implements RepoData.EventLo
     private final List<ObjectData> eventSource;
     private final List<InternalSubscriptionImpl> subscriptions;
 
-    EventLogImpl(AppContext context) {
+    public EventLogImpl(AppContext context) {
         super(context);
         this.eventSource = new ArrayList<>(INITIAL_SIZE);
         this.subscriptions = new CopyOnWriteArrayList<>();

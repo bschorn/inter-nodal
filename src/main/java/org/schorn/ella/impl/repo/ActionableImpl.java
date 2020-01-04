@@ -35,7 +35,7 @@ import org.schorn.ella.repo.RepoActions.ActivityActionable;
  */
 public class ActionableImpl extends AbstractContextual implements ActivityActionable {
 
-    ActionableImpl(AppContext context) {
+    public ActionableImpl(AppContext context) {
         super(context);
     }
 

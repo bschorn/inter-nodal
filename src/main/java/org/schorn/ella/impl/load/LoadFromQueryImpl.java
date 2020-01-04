@@ -82,7 +82,7 @@ public class LoadFromQueryImpl extends AbstractContextual implements LoadFromQue
     private EndPoint.DatabasePoint dbEndPoint;
     private boolean killSwitch = false;
 
-    protected LoadFromQueryImpl(AppContext context) {
+    public LoadFromQueryImpl(AppContext context) {
         super(context);
     }
 

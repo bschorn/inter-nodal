@@ -43,7 +43,7 @@ public abstract class ActiveTypeImpl implements ActiveType {
     private final int activeId;
     private final short activeIdx;
 
-    protected ActiveTypeImpl(AppContext context, String name, Short activeIdx) {
+    public ActiveTypeImpl(AppContext context, String name, Short activeIdx) {
         this.context = context;
         this.nameCached = new StringCached(name);
         this.activeId = NEXT_ACTIVE_TYPE_ID.getAndIncrement();

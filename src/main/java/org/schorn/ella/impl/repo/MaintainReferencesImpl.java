@@ -49,7 +49,7 @@ public class MaintainReferencesImpl extends AbstractContextual implements Mainta
     private final RepoData.CurrentState repoData;
     private final Map<Integer, List<ObjectData>> waitingChildren;
 
-    protected MaintainReferencesImpl(AppContext context) {
+    public MaintainReferencesImpl(AppContext context) {
         super(context);
         this.repoData = RepoData.CurrentState.get(context);
         this.waitingChildren = new HashMap<>();

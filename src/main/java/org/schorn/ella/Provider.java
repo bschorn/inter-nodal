@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.context.ContextProvider;
-import org.schorn.ella.error.ErrorProvider;
 import org.schorn.ella.event.EventProvider;
 import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.http.HTTPProvider;
@@ -60,7 +59,7 @@ public interface Provider {
         NODE(NodeProvider.class, false),
         TRANSFORM(TransformProvider.class, false),
         PARSER(ParserProvider.class, false),
-        ERROR(ErrorProvider.class, false),
+        //ERROR(ErrorProvider.class, false),
         EVENT(EventProvider.class, true),
         IO(IOProvider.class, true),
         REPO(RepoProvider.class, true),
@@ -230,6 +229,10 @@ public interface Provider {
      * @param implFor
      */
     void mapInterfaceToImpl(Class<?> interfaceFor, Class<?> implFor);
+
+    default List<Class<? extends Singleton>> singletons() {
+        return new ArrayList<>();
+    }
 
     default List<Class<? extends Mingleton>> mingletons() {
         return new ArrayList<>();

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.transform.ActiveTransform;
 
@@ -43,11 +42,15 @@ public class DSVLineParserImpl extends TransformExceptionImpl implements ActiveT
 
     public DSVLineParserImpl(AppContext context) {
         this.context = context;
-        String regex = ActiveTransform.DSVLineParser.getLineParserCSV();
-        if (regex == null) {
-            regex = "(?:(?<=\")([^\"]*)(?=\"))|(?<=,|^)([^,]*)(?=,|$)";
+        Pattern pattern0 = Pattern.compile("(?:(?<=\")([^\"]*)(?=\"))|(?<=,|^)([^,]*)(?=,|$)");
+        ActiveTransform.Config config = ActiveTransform.Config.get(context);
+        if (config != null) {
+            Pattern pattern1 = config.lineParserCSVPattern();
+            if (pattern1 != null) {
+                pattern0 = pattern1;
+            }
         }
-        this.pattern = Pattern.compile(regex);
+        this.pattern = pattern0;
     }
 
     @Override

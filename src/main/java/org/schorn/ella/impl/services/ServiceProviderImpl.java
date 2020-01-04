@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ServiceProviderImpl extends AbstractContextual implements ActiveServices, ActiveServices.RepoWriter, ActiveServices.RepoReader, ActiveServices.RepoMetaData, ActiveServices.ContentTypeOutput {
 
-    protected ServiceProviderImpl(AppContext context) {
+    public ServiceProviderImpl(AppContext context) {
         super(context);
     }
 
@@ -132,6 +132,9 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param view
+     * @return
      */
     @Override
     public ArrayData getRepo(String context_str, String view) {
@@ -145,6 +148,12 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      * Query for Table
+     * @param context_str
+     * @param object_type
+     * @param value
+     * @param value_type
+     * @return
+     * @throws java.lang.Exception
      */
     @Override
     public ArrayData getQuery(String context_str, String object_type, String value_type, String value) throws Exception {
@@ -158,6 +167,11 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param object_type
+     * @param value_type
+     * @return
+     * @throws java.lang.Exception
      */
     @Override
     public ArrayData getList(String context_str, String object_type, String value_type) throws Exception {
@@ -173,6 +187,11 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param query_json
+     * @param eventHistory
+     * @return
+     * @throws java.lang.Exception
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
@@ -203,6 +222,11 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param update_json
+     * @param target_type
+     * @return
+     * @throws java.lang.Exception
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
@@ -257,6 +281,8 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context
+     * @return
      */
     @Override
     public String get(String context) {
@@ -275,6 +301,7 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @return
      */
     @Override
     public ArrayData getContexts() {
@@ -293,6 +320,8 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @return
      */
     @Override
     public ArrayData getObjectTypes(String context_str) {
@@ -310,6 +339,8 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @return
      */
     @Override
     public ArrayData getEntityTypes(String context_str) {
@@ -327,6 +358,9 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param object_type
+     * @return
      */
     @Override
     public ArrayData getMemberTypes(String context_str, String object_type) {
@@ -344,6 +378,9 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param active_type
+     * @return
      */
     @Override
     public ObjectData getContainerTypes(String context_str, String active_type) {
@@ -360,6 +397,10 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param object_type
+     * @param member_type
+     * @return
      */
     @Override
     public String getKeyOwnerType(String context_str, String object_type, String member_type) {
@@ -386,6 +427,9 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param object_type
+     * @return
      */
     @Override
     public Object getMemberTypeDetails(String context_str, String object_type) {
@@ -400,6 +444,10 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param object_type
+     * @param member_type
+     * @return
      */
     @Override
     public Object getMemberTypeDetails(String context_str, String object_type, String member_type) {
@@ -422,6 +470,8 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param content
+     * @return
      */
     @Override
     public String getHTMLPre(String content) {
@@ -430,6 +480,9 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param object_type
+     * @return
      */
     @Override
     public String getHTMLForm(String context_str, String object_type) {
@@ -451,6 +504,9 @@ public class ServiceProviderImpl extends AbstractContextual implements ActiveSer
 
     /**
      *
+     * @param context_str
+     * @param object_type
+     * @return
      */
     @Override
     public String getHTMLFormInPage(String context_str, String object_type) {

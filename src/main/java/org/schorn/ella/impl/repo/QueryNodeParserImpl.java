@@ -60,7 +60,7 @@ public class QueryNodeParserImpl extends AbstractContextual implements QueryNode
     /*
 	 * 
      */
-    protected QueryNodeParserImpl(AppContext context) {
+    public QueryNodeParserImpl(AppContext context) {
         super(context);
     }
 
@@ -166,7 +166,7 @@ public class QueryNodeParserImpl extends AbstractContextual implements QueryNode
      * @param whereNode
      * @return
      */
-    ActiveCondition[] getConditions(OpenNode whereNode) throws Exception {
+    public ActiveCondition[] getConditions(OpenNode whereNode) throws Exception {
         ConditionStatementParser conditionsParser = this.getConditionStatementParser(this.context());
         /*
 		 * Declare the collection (List)
@@ -207,7 +207,7 @@ public class QueryNodeParserImpl extends AbstractContextual implements QueryNode
      * @param selectNode
      * @return
      */
-    ValueTypeMember[] getSelectTypes(OpenNode selectNode) {
+    public ValueTypeMember[] getSelectTypes(OpenNode selectNode) {
         /*
 		 * Declare the collection (List)
          */
@@ -244,7 +244,7 @@ public class QueryNodeParserImpl extends AbstractContextual implements QueryNode
      * @param selectNode
      * @return
      */
-    ObjectType[] getFromTypes(OpenNode fromNode) {
+    public ObjectType[] getFromTypes(OpenNode fromNode) {
         /*
 		 * Declare the collection (List)
          */
@@ -275,7 +275,7 @@ public class QueryNodeParserImpl extends AbstractContextual implements QueryNode
      * @param openNode
      * @throws Exception
      */
-    void dissect(OpenNode openNode, Consumer<OpenNode> consumer) {
+    public void dissect(OpenNode openNode, Consumer<OpenNode> consumer) {
         switch (openNode.role()) {
             case Value:
                 consumer.accept(openNode);

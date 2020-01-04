@@ -57,7 +57,7 @@ public class CurrentStateImpl extends AbstractContextual implements CurrentState
      *
      * @param context
      */
-    CurrentStateImpl(AppContext context) {
+    public CurrentStateImpl(AppContext context) {
         super(context);
         this.data = new HashMap<>();
         EventLogBroker broker = RepoProvider.provider().getMingleton(EventLogBroker.class, context);

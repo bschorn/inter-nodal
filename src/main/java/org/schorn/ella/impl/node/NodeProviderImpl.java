@@ -23,7 +23,6 @@
  */
 package org.schorn.ella.impl.node;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +32,6 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.convert.TypeConversionImpl;
 import org.schorn.ella.convert.TypeConverter;
@@ -80,8 +77,6 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
 	 *                                MEMBERS
 	 *                                
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    private List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
-    private List<Class<? extends Renewable<?>>> renewables = new ArrayList<>();
     private Map<AppContext, TypeLibrary> library = new HashMap<>();
     private TypeConverter converter = new TypeConverter();
     private Map<UUID, INode> inodes = new TreeMap<>();
@@ -114,9 +109,6 @@ public class NodeProviderImpl extends AbstractProvider implements NodeProvider {
         this.mapInterfaceToImpl(ActiveNode.TypeConversion.class, TypeConversionImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ObjectData.KeyGenerator.class, KeyGeneratorImpl.class);
         this.mapInterfaceToImpl(ActiveNode.ValueTypeMember.class, ValueTypeMemberImpl.class);
-
-        this.mingletons.add(ActiveNode.ActiveRef.class);
-        this.mingletons.add(ActiveNode.ObjectData.KeyGenerator.class);
 
         this.constraintTypes.put(ActiveNode.Constraints.ConstraintType.StandardTypes.holidays.name(), StandardConstraintType.Holidays.class);
         this.constraintTypes.put(ActiveNode.Constraints.ConstraintType.StandardTypes.day_of_week.name(), StandardConstraintType.DayOfWeek.class);

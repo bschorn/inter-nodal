@@ -29,10 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveRef;
@@ -40,6 +36,8 @@ import org.schorn.ella.node.ActiveNode.ArrayType;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.Role;
 import org.schorn.ella.node.ActiveNode.ValueType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -54,13 +52,13 @@ public class ActiveRefImpl extends AbstractContextual implements ActiveRef {
      *
      *
      */
-    static class ReferencesImpl implements ActiveRef.References {
+    public static class ReferencesImpl implements ActiveRef.References {
 
         private final ObjectType objectType;
         private final Map<ReferenceType, List<ObjectType>> references;
         private final Map<ObjectType, List<ReferenceType>> reverse;
 
-        ReferencesImpl(ObjectType objectType) {
+        public ReferencesImpl(ObjectType objectType) {
             this.objectType = objectType;
             this.references = new HashMap<>();
             this.reverse = new HashMap<>();
@@ -208,7 +206,7 @@ public class ActiveRefImpl extends AbstractContextual implements ActiveRef {
 
     private final Map<ObjectType, References> map;
 
-    ActiveRefImpl(AppContext context) {
+    public ActiveRefImpl(AppContext context) {
         super(context);
         this.map = new HashMap<>();
     }

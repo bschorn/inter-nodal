@@ -93,7 +93,7 @@ public class ObjectDataBuilderImpl implements Builder {
     /*
 	 * Constructor
      */
-    ObjectDataBuilderImpl(ObjectType objectType) {
+    public ObjectDataBuilderImpl(ObjectType objectType) {
         this.objectType = objectType;
         this.data = new TreeMap<>();
     }

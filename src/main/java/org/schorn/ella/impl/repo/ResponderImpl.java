@@ -41,7 +41,7 @@ public class ResponderImpl extends AbstractContextual implements Responder {
     private final RepoActions.QueryExecution query;
     private final RepoActions.QueryExecutionEvents queryEvents;
 
-    ResponderImpl(AppContext context) {
+    public ResponderImpl(AppContext context) {
         super(context);
         this.query = RepoProvider.provider().getMingleton(RepoActions.QueryExecution.class, context);
         this.queryEvents = RepoProvider.provider().getMingleton(RepoActions.QueryExecutionEvents.class, context);

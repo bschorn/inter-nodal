@@ -53,7 +53,7 @@ public class NamedQueryImpl implements NamedQuery {
     private List<String> queryFilters;
     private ActiveQuery.Builder queryBuilder;
 
-    NamedQueryImpl(
+    public NamedQueryImpl(
             AppContext context,
             String name,
             String description,
@@ -85,7 +85,7 @@ public class NamedQueryImpl implements NamedQuery {
         }
     }
 
-    NamedQueryImpl(
+    public NamedQueryImpl(
             String context_str,
             String name,
             String description,

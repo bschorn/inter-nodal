@@ -132,7 +132,7 @@ public class ActiveContextImpl implements ActiveContext {
      *
      *
      */
-    static class AttributeImpl implements Attribute {
+    static public class AttributeImpl implements Attribute {
 
         static final private AtomicInteger ORDINALS = new AtomicInteger(0);
         @SuppressWarnings("unused")
@@ -141,7 +141,7 @@ public class ActiveContextImpl implements ActiveContext {
         private final ContextRole mode;
         private final Integer ordinal;
 
-        AttributeImpl(AppContext context, String name, ContextRole mode) {
+        public AttributeImpl(AppContext context, String name, ContextRole mode) {
             this.context = context;
             this.name = new StringCached(name);
             this.mode = mode;
@@ -169,7 +169,7 @@ public class ActiveContextImpl implements ActiveContext {
      *
      *
      */
-    static class ErrorImpl implements Error {
+    static public class ErrorImpl implements Error {
 
         static private final Logger LGR = LoggerFactory.getLogger(ErrorImpl.class);
 
@@ -179,7 +179,7 @@ public class ActiveContextImpl implements ActiveContext {
         private final ObjectType objectType;
         private final ArrayType arrayType;
 
-        ErrorImpl(AppContext context) {
+        public ErrorImpl(AppContext context) {
             this.context = context;
             this.valueType = MetaTypes.ValueTypes.error_message.valueType();
             this.objectType = MetaTypes.ObjectTypes.error_data.objectType();
@@ -231,7 +231,7 @@ public class ActiveContextImpl implements ActiveContext {
      *
      *
      */
-    static class PropertyImpl implements Property {
+    static public class PropertyImpl implements Property {
 
         static private final Logger LGR = LoggerFactory.getLogger(PropertyImpl.class);
 
@@ -240,7 +240,7 @@ public class ActiveContextImpl implements ActiveContext {
         private final Map<Object, Object> objectMap;
         private final Map<String, String> stringMap;
 
-        PropertyImpl(AppContext context) {
+        public PropertyImpl(AppContext context) {
             this.context = context;
             this.objectMap = new HashMap<>();
             this.stringMap = new HashMap<>();
@@ -255,59 +255,20 @@ public class ActiveContextImpl implements ActiveContext {
             }
             return null;
         }
-
-        /*
-        @Override
-        public String getProperty(String propertyKey) {
-            String propertyValue = this.stringMap.get(propertyKey);
-            if (propertyValue == null) {
-                propertyValue = Component.NODE.getProperty(propertyKey);
-                if (propertyValue == null) {
-                    LGR.warn("{}.getProperty() - there was no property entry for '{}'",
-                            this.getClass().getSimpleName(), propertyKey);
-                }
-            }
-            return propertyValue;
-        }
-
-        @Override
-        public String getProperty(String propertyKey, String defaultValue) {
-            String propertyValue = this.stringMap.get(propertyKey);
-            if (propertyValue == null) {
-                propertyValue = Component.NODE.getProperty(propertyKey);
-                if (propertyValue == null) {
-                    return defaultValue;
-                }
-            }
-            return propertyValue;
-        }
-         */
-
- /*
-        @Override
-        public void setPropertyT(Object propertyId, Object propertyObj) {
-            this.objectMap.put(propertyId, propertyObj);
-        }
-
-        @Override
-        public void setProperty(String propertyKey, String propertyValue) {
-            this.stringMap.put(propertyKey, propertyValue);
-        }
-        */
     }
 
     /**
      *
      *
      */
-    static class ActionImpl extends AbstractContextual implements Action {
+    static public class ActionImpl extends AbstractContextual implements Action {
 
         static private final Logger LGR = LoggerFactory.getLogger(ActionImpl.class);
 
         private boolean open;
         private final boolean submitToRepo;
 
-        ActionImpl(AppContext context) {
+        public ActionImpl(AppContext context) {
             super(context);
             this.open = false;
             this.submitToRepo = submitToRepo(); // default method implemented in the interface Action

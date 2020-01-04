@@ -42,7 +42,7 @@ public class ReceiverImpl extends AbstractContextual implements Receiver {
     private final RegisterActivity store;
     private final MaintainReferences ref;
 
-    ReceiverImpl(AppContext context) {
+    public ReceiverImpl(AppContext context) {
         super(context);
         this.persist = RepoProvider.provider().getMingleton(LogActivity.class, context);
         this.store = RepoProvider.provider().getMingleton(RegisterActivity.class, context);

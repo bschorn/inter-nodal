@@ -43,7 +43,7 @@ public class ObjectTypeImpl extends ActiveTypeImpl implements ObjectType {
     private final List<TypeAttribute> attributeList;
     private final Map<Class<? extends TypeAttribute>, TypeAttribute> attributeMap;
 
-    protected ObjectTypeImpl(AppContext context, String name, ObjectSchema schema,
+    public ObjectTypeImpl(AppContext context, String name, ObjectSchema schema,
             Short activeIdx, List<TypeAttribute> attributes, List<ObjectType> baseTypes) {
         super(context, name, activeIdx);
         this.schema = schema;

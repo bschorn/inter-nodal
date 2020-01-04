@@ -26,15 +26,13 @@ package org.schorn.ella.impl.repo;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.repo.RepoActions.LogActivity;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This connects the Repo's Persist interface with the Supplier interface needed
@@ -49,7 +47,7 @@ public class LogActivityImpl extends AbstractContextual implements LogActivity {
 
     private final BlockingQueue<ObjectData> queue;
 
-    LogActivityImpl(AppContext context) {
+    public LogActivityImpl(AppContext context) {
         super(context);
         this.queue = new LinkedBlockingQueue<>();
     }

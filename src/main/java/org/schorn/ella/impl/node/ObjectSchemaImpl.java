@@ -59,7 +59,7 @@ public class ObjectSchemaImpl implements ObjectSchema {
     /*
 	 * 
      */
-    ObjectSchemaImpl(List<MemberDef> memberTypes) {
+    public ObjectSchemaImpl(List<MemberDef> memberTypes) {
         this.memberTypes = memberTypes;
         int bytes = 0;
         for (MemberDef memberItem : memberTypes) {

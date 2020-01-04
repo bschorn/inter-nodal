@@ -46,7 +46,7 @@ public class IdentityImpl extends AbstractContextual implements Identity {
     /**
      * Fields of Identity ObjectData
      */
-    enum Fields implements ValueTypeMember {
+    public enum Fields implements ValueTypeMember {
         identity_type__idata_idtype,
         identity_type__idata_user,
         identity_type__idata_id,
@@ -129,7 +129,7 @@ public class IdentityImpl extends AbstractContextual implements Identity {
     /*
 	 * 
      */
-    IdentityImpl(AppContext context, ObjectData identityObj) {
+    public IdentityImpl(AppContext context, ObjectData identityObj) {
         super(context);
         this.identityObj = identityObj;
     }

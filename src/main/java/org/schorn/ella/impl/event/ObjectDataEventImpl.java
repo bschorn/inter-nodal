@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.event;
 
 import java.time.LocalDateTime;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.event.ActiveEvent.ObjectDataEvent;
 import org.schorn.ella.node.ActiveNode.ObjectData;
@@ -41,7 +40,7 @@ public class ObjectDataEventImpl implements ObjectDataEvent {
     private final ObjectData data;
     private final LocalDateTime timestamp;
 
-    ObjectDataEventImpl(AppContext context, EventFlag flag, ObjectData data) {
+    public ObjectDataEventImpl(AppContext context, EventFlag flag, ObjectData data) {
         this.context = context;
         this.flag = flag;
         this.data = data;

@@ -25,9 +25,10 @@ package org.schorn.ella.impl.context;
 
 import org.schorn.ella.context.ActiveContext.Activity;
 import org.schorn.ella.context.AppContext;
+import org.schorn.ella.io.ActiveIO;
+import org.schorn.ella.io.ActiveIO.ActivityFile;
 import org.schorn.ella.io.ActiveIO.ActivityRecord;
 import org.schorn.ella.io.ActiveIO.ActivityRecovery;
-import org.schorn.ella.io.EndPoint;
 import org.schorn.ella.server.ActiveServer;
 import org.schorn.ella.util.Functions;
 import org.slf4j.Logger;
@@ -43,28 +44,25 @@ public class ContextActivityImpl implements Activity {
     static private final Logger LGR = LoggerFactory.getLogger(ContextActivityImpl.class);
 
     private final AppContext context;
-    private EndPoint<?> endPoint;
+    private final ActivityFile activityFile;
     private ActivityRecord<?, ?> activityRecord;
 
-    ContextActivityImpl(AppContext context) {
+    public ContextActivityImpl(AppContext context) throws Exception {
         this.context = context;
+        if (context.hasRepo()) {
+            this.activityFile = ActiveIO.ActivityFile.create(context);
+        } else {
+            this.activityFile = null;
+        }
         this.activityRecord = null;
     }
 
-    /*
-    @Override
-    public void setEndPoint(EndPoint<?> endPoint) {
-        this.endPoint = endPoint;
-    }
-
-    @Override
-    public EndPoint<?> getEndPoint() {
-        return this.endPoint;
-    }
-*/
     @Override
     public boolean hasActivity() {
-        return this.endPoint.isReady();
+        if (this.activityFile != null) {
+            return this.activityFile.hasActivity();
+        }
+        return false;
     }
 
     @Override

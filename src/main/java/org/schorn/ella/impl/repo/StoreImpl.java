@@ -40,7 +40,7 @@ public class StoreImpl extends AbstractContextual implements RegisterActivity {
 
     private final RepoData.EventLog repoStore;
 
-    StoreImpl(AppContext context) {
+    public StoreImpl(AppContext context) {
         super(context);
         this.repoStore = RepoProvider.provider().getMingleton(RepoData.EventLog.class, context);
     }

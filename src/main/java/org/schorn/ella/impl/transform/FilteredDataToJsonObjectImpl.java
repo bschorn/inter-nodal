@@ -23,13 +23,7 @@
  */
 package org.schorn.ella.impl.transform;
 
-import java.math.BigDecimal;
-
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.node.ActiveNode.ArrayData;
-import org.schorn.ella.node.ActiveNode.ObjectData;
-import org.schorn.ella.node.ActiveNode.StructData;
-import org.schorn.ella.node.ActiveNode.ValueData;
 
 /**
  *

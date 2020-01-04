@@ -28,7 +28,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.schorn.ella.context.AbstractContextual;
@@ -57,29 +56,22 @@ public class ActivityRecoveryImpl extends AbstractContextual implements Activity
      * Activity Supplier
      *
      */
-    static class ActivityFileStreamable implements Supplier<String> {
+    static public class ActivityFileStreamable implements Supplier<String> {
 
         AppContext context;
         BufferedReader reader;
 
-        ActivityFileStreamable(AppContext context) throws Exception {
+        public ActivityFileStreamable(AppContext context) throws Exception {
             this.context = context;
 
-            // BEGIN
-            String activityFile = ActiveIO.Config.get(context).activityFile();
-            if (activityFile == null) {
-                throw new Exception(
-                        String.format("%s.ctor() - no activity file configured -> IO.activity : ?",
-                                this.getClass().getSimpleName()));
-            }
-            Path path = Paths.get(activityFile);
-            if (Files.exists(path)) {
-                this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toString()), "UTF-8"));
+            Path activityPath = ActiveIO.ActivityFile.create(context).asPath();
+            if (Files.exists(activityPath)) {
+                this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(activityPath.toString()), "UTF-8"));
             } else {
                 throw new Exception(
                         String.format("%s.ctor() - no activity file exists -> %s",
                                 this.getClass().getSimpleName(),
-                                path.toString()));
+                                activityPath.toString()));
             }
         }
 
@@ -104,7 +96,7 @@ public class ActivityRecoveryImpl extends AbstractContextual implements Activity
     private final Consumer<StructData> consumer;
 
     // ctor
-    ActivityRecoveryImpl(AppContext context) throws Exception {
+    public ActivityRecoveryImpl(AppContext context) throws Exception {
         super(context);
         this.activity = new ActivityFileStreamable(this.context());
         this.transform = (Transform<String, StructData>) TransformProvider.provider().getTransform(this.context(), Format.JSON, Format.ActiveNode);

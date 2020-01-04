@@ -40,7 +40,7 @@ public class AggregateDataImpl extends AbstractContextual implements AggregateDa
     private final ObjectType objectType;
     private final ActiveData[] data;
 
-    AggregateDataImpl(ObjectType objectType) {
+    public AggregateDataImpl(ObjectType objectType) {
         super(objectType.context());
         this.objectType = objectType;
         this.data = new ActiveData[this.objectType.activeTypes().size()];

@@ -42,7 +42,7 @@ public class IOConfigImpl extends AbstractContextual implements ActiveIO.Config 
     private final String activityFile;
     private final URI activityURI;
 
-    IOConfigImpl(AppContext context) throws URISyntaxException {
+    public IOConfigImpl(AppContext context) throws URISyntaxException {
         super(context);
         Map<String, Object> configMap = Component.ActiveIO.configMap(context.name());
         String activityFile = null;

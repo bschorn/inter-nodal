@@ -23,12 +23,7 @@
  */
 package org.schorn.ella.impl.load;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
-import org.schorn.ella.context.AppContext;
 import org.schorn.ella.load.ActiveObjectLoad;
 import org.schorn.ella.load.ActiveTabularLoad;
 import org.schorn.ella.load.LoadProvider;
@@ -45,13 +40,6 @@ public class LoadProviderImpl extends AbstractProvider implements LoadProvider {
 
     private static final Logger LGR = LoggerFactory.getLogger(LoadProviderImpl.class);
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 *                                
-	 *                                MEMBERS
-	 *                                
-	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    private List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
-    private List<Class<? extends Renewable<?>>> renewables = new ArrayList<>();
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *                                
@@ -66,36 +54,6 @@ public class LoadProviderImpl extends AbstractProvider implements LoadProvider {
         this.mapInterfaceToImpl(ActiveTabularLoad.ActiveObjectAssembler.class, ActiveObjectAssemblerImpl.class);
         this.mapInterfaceToImpl(ActiveTabularLoad.LoadFromQuery.class, LoadFromQueryImpl.class);
 
-        /*
-		 * Mingletons: one instance per NodeContext.
-         */
-        //his.mingletons.add(XYZ.class);
-        /*
-		 * Renewables: using an instance of an object to create
-		 * subsequent instances (instance factory)
-         */
-        this.renewables.add(ActiveTabularLoad.LoadFromQuery.class);
-
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
-        for (Class<?> classFor : this.mingletons) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
-        for (Class<?> classFor : this.renewables) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
     }
 
 }

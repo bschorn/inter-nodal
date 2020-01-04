@@ -52,11 +52,6 @@ public class ModelProviderImpl extends AbstractProvider implements ModelProvider
     }
 
     @Override
-    public void registerContext(AppContext context) throws Exception {
-
-    }
-
-    @Override
     public void addMember(ActiveModel.ModelObjectType objectType, ActiveModel.ModelMember member) {
 
     }

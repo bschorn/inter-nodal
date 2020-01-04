@@ -51,11 +51,11 @@ public class SynchronizeObjectsExperimentalImpl extends SynchronizeObjectsImpl i
         )
     };
 
-    protected SynchronizeObjectsExperimentalImpl(AppContext context) {
+    public SynchronizeObjectsExperimentalImpl(AppContext context) {
         super(context, RDBMS.Dialects.DB2);
     }
 
-    protected SynchronizeObjectsExperimentalImpl(AppContext context, SQLDialect dialect) {
+    public SynchronizeObjectsExperimentalImpl(AppContext context, SQLDialect dialect) {
         super(context, dialect);
     }
 

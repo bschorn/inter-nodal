@@ -27,6 +27,7 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.schorn.ella.FunctionalAction;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode;
@@ -43,6 +44,17 @@ import org.schorn.ella.node.OpenNode;
  *
  */
 public interface ActiveTransform {
+
+    public interface Config {
+
+        static public Config get(AppContext context) {
+            return TransformProvider.provider().getReusable(Config.class, context.name());
+        }
+        Class<?> lineParserCSV();
+
+        Pattern lineParserCSVPattern();
+
+    }
 
     /**
      * Performance of Transform
@@ -384,7 +396,15 @@ public interface ActiveTransform {
         List<Object> apply(String line);
 
         static public String getLineParserCSV() {
-            return ActiveNode.Config.get(AppContext.Common).lineParserCSVPattern().pattern();
+            ActiveTransform.Config config = ActiveTransform.Config.get(AppContext.Common);
+            if (config != null) {
+                Pattern pattern = config.lineParserCSVPattern();
+                if (pattern != null) {
+                    return pattern.toString();
+                }
+            }
+
+            return null;
         }
     }
 

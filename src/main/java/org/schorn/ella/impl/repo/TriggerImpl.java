@@ -41,7 +41,7 @@ public class TriggerImpl extends AbstractContextual implements ActivityTrigger {
 
     private final EventFlag flag;
 
-    TriggerImpl(AppContext context) {
+    public TriggerImpl(AppContext context) {
         super(context);
         /*
 		 * The flag to use for this event

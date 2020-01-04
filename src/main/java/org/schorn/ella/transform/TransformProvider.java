@@ -23,10 +23,10 @@
  */
 package org.schorn.ella.transform;
 
-import org.schorn.ella.transform.ActiveTransform.Transform;
 import org.schorn.ella.Provider;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.Format;
+import org.schorn.ella.transform.ActiveTransform.Transform;
 
 /**
  * ActiveNode Provider Interface
@@ -38,6 +38,7 @@ public interface TransformProvider extends Provider {
 
     /**
      * Implementation for this interface is retrieved
+     * @return
      */
     static TransformProvider provider() {
         return Provider.Providers.TRANSFORM.getInstance(TransformProvider.class);

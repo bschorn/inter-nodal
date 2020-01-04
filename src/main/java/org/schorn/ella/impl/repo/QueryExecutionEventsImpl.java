@@ -34,7 +34,7 @@ import org.schorn.ella.repo.RepoData;
  */
 public class QueryExecutionEventsImpl extends AbstractQueryImpl implements RepoActions.QueryExecutionEvents {
 
-    QueryExecutionEventsImpl(AppContext context) {
+    public QueryExecutionEventsImpl(AppContext context) {
         super(context, RepoData.TopicsLog.get(context));
     }
 

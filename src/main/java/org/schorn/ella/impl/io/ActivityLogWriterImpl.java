@@ -27,7 +27,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
@@ -57,7 +56,7 @@ public class ActivityLogWriterImpl extends AbstractContextual implements Activit
     public ActivityLogWriterImpl(AppContext context) {
         super(context);
         BufferedWriter bufferedWriter = null;
-        Path path = Paths.get(ActiveIO.Config.get(context).activityURI());
+        Path path = ActiveIO.ActivityFile.get(context).asPath();
         if (path != null) {
             try {
                 if (Files.exists(path)) {

@@ -40,7 +40,7 @@ import org.schorn.ella.sql.RDBMS.TemplateTagsTransducer;
  */
 public class TemplateTagsTransducerImpl extends AbstractContextual implements TemplateTagsTransducer {
 
-    protected TemplateTagsTransducerImpl(AppContext context) {
+    public TemplateTagsTransducerImpl(AppContext context) {
         super(context);
     }
 

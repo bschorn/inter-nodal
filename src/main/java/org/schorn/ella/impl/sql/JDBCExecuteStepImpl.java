@@ -26,7 +26,6 @@ package org.schorn.ella.impl.sql;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.sql.RDBMS.JDBCExecuteStep;
@@ -41,13 +40,13 @@ public class JDBCExecuteStepImpl extends AbstractContextual implements JDBCExecu
     private final StepType stepType;
     private final Object[] parameters;
 
-    JDBCExecuteStepImpl(AppContext context) {
+    public JDBCExecuteStepImpl(AppContext context) {
         super(context);
         this.stepType = null;
         this.parameters = null;
     }
 
-    protected JDBCExecuteStepImpl(AppContext context, StepType stepType, Object[] parameters) {
+    public JDBCExecuteStepImpl(AppContext context, StepType stepType, Object[] parameters) {
         super(context);
         this.stepType = stepType;
         this.parameters = parameters;

@@ -47,7 +47,7 @@ public abstract class StandardConstraintType<T> implements ConstraintType<T> {
     private final DataGroup dataGroup;
     private final Class<T> dataClass;
 
-    StandardConstraintType(String name, DataGroup dataGroup, Class<T> dataClass) {
+    public StandardConstraintType(String name, DataGroup dataGroup, Class<T> dataClass) {
         this.name = name;
         this.dataGroup = dataGroup;
         this.dataClass = dataClass;

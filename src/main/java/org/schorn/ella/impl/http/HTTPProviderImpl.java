@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.http;
 
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.context.AppContext;
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg;
 import org.schorn.ella.http.ActiveHTTP.ActiveMsg.MsgAction;
 import org.schorn.ella.http.ActiveHTTP.ContextServer;
@@ -43,10 +42,6 @@ public class HTTPProviderImpl extends AbstractProvider implements HTTPProvider {
 
     @Override
     public void init() throws Exception {
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
     }
 
     @Override

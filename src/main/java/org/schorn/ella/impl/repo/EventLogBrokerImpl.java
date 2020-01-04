@@ -44,7 +44,7 @@ public class EventLogBrokerImpl extends AbstractContextual implements EventLogBr
 
     static private final Map<AppContext, EventLogBroker> CONTEXT_BROKER = new HashMap<>();
 
-    static EventLogBroker getContextEventLogBroker(AppContext context) {
+    static public EventLogBroker getContextEventLogBroker(AppContext context) {
         return CONTEXT_BROKER.get(context);
     }
 
@@ -52,7 +52,7 @@ public class EventLogBrokerImpl extends AbstractContextual implements EventLogBr
     private final Thread thread;
     private final List<Agent> agents;
 
-    EventLogBrokerImpl(AppContext context) {
+    public EventLogBrokerImpl(AppContext context) {
         super(context);
         this.agents = new CopyOnWriteArrayList<>();
         RepoData.EventLog eventLog = RepoProvider.provider().getMingleton(RepoData.EventLog.class, context);

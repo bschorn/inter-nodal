@@ -31,9 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.schorn.ella.node.NodeProvider;
 import org.schorn.ella.node.ActiveNode.ValueData;
+import org.schorn.ella.node.NodeProvider;
 
 /**
  *
@@ -44,7 +43,7 @@ public class ValueDataImpl extends ActiveDataImpl implements ValueData {
 
     PrimitiveData<?> data;
 
-    protected ValueDataImpl(ValueType valueType, PrimitiveData<?> data) {
+    public ValueDataImpl(ValueType valueType, PrimitiveData<?> data) {
         super(valueType);
         this.data = data;
     }

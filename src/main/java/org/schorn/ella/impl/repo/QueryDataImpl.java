@@ -44,7 +44,7 @@ public class QueryDataImpl extends AbstractContextual implements QueryData {
     private Exception exception;
     private String clientId;
 
-    QueryDataImpl(AppContext context) {
+    public QueryDataImpl(AppContext context) {
         super(context);
         this.arrayData = null;
         this.activeQuery = null;

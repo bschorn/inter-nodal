@@ -42,11 +42,11 @@ public class SynchronizeObjectsStableImpl extends SynchronizeObjectsImpl impleme
         )
     };
 
-    protected SynchronizeObjectsStableImpl(AppContext context) {
+    public SynchronizeObjectsStableImpl(AppContext context) {
         super(context, RDBMS.Dialects.DB2);
     }
 
-    protected SynchronizeObjectsStableImpl(AppContext context, RDBMS.SQLDialect dialect) {
+    public SynchronizeObjectsStableImpl(AppContext context, RDBMS.SQLDialect dialect) {
         super(context, dialect);
     }
 

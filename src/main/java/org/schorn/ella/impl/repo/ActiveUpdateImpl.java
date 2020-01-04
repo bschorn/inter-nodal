@@ -47,13 +47,13 @@ public class ActiveUpdateImpl extends AbstractContextual implements ActiveUpdate
     private final OpenNode updateNode;
     private UpdateData[] updateData = null;
 
-    protected ActiveUpdateImpl(AppContext context) {
+    public ActiveUpdateImpl(AppContext context) {
         super(context);
         this.updateNode = null;
         this.targetType = null;
     }
 
-    private ActiveUpdateImpl(AppContext context, ObjectType targetType, OpenNode updateNode) {
+    public ActiveUpdateImpl(AppContext context, ObjectType targetType, OpenNode updateNode) {
         super(context);
         this.targetType = targetType;
         this.updateNode = updateNode;

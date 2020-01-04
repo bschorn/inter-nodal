@@ -23,12 +23,9 @@
  */
 package org.schorn.ella.impl.event;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.event.ActiveEvent;
 import org.schorn.ella.event.ActiveEvent.DataEventManager;
@@ -48,7 +45,6 @@ public class EventProviderImpl extends AbstractProvider implements EventProvider
     private static final Logger LGR = LoggerFactory.getLogger(EventProviderImpl.class);
 
     private final Map<AppContext, DataEventManager> dataEventManagers = new HashMap<>();
-    private List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
 
     @Override
     public void init() {
@@ -56,7 +52,6 @@ public class EventProviderImpl extends AbstractProvider implements EventProvider
         this.mapInterfaceToImpl(ActiveEvent.ObjectDataEvent.class, ObjectDataEventImpl.class);
         this.mapInterfaceToImpl(ActiveEvent.EventLogListener.class, EventLogListenerImpl.class);
 
-        this.mingletons.add(ActiveEvent.EventLogListener.class);
     }
 
     @Override
@@ -65,16 +60,9 @@ public class EventProviderImpl extends AbstractProvider implements EventProvider
     }
 
     @Override
-    public void registerContext(AppContext context) {
+    public void registerContext(AppContext context) throws Exception {
+        super.registerContext(context);
         try {
-            for (Class<?> classFor : this.mingletons) {
-                this.createReusable(classFor, context);
-                LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
-                        this.getClass().getSimpleName(),
-                        context.name(),
-                        classFor.getSimpleName()
-                ));
-            }
             DataEventManager mgr = this.createInstance(DataEventManager.class, context);
             this.dataEventManagers.put(context, mgr);
             LGR.info(String.format("%s.registerContext('%s') - createInstance of %s",

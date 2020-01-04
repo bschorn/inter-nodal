@@ -26,10 +26,6 @@ package org.schorn.ella.impl.sql;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectData;
@@ -48,6 +44,8 @@ import org.schorn.ella.sql.RDBMS.SQLProgramData;
 import org.schorn.ella.sql.RDBMS.SQLProgramOutput;
 import org.schorn.ella.sql.RDBMS.TemplateTags;
 import org.schorn.ella.sql.RDBMS.TemplateTagsTransducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -66,7 +64,7 @@ public class SQLInterpreterImpl extends AbstractContextual implements SQLInterpr
 
         private final List<JDBCExecuteStep> steps;
 
-        protected SQLProgramOutputImpl(AppContext context) {
+        public SQLProgramOutputImpl(AppContext context) {
             super(context);
             this.steps = new ArrayList<>();
         }
@@ -94,7 +92,7 @@ public class SQLInterpreterImpl extends AbstractContextual implements SQLInterpr
      */
     private final TemplateTagsTransducer transducer;
 
-    protected SQLInterpreterImpl(AppContext context) {
+    public SQLInterpreterImpl(AppContext context) {
         super(context);
         this.transducer = RDBMS.TemplateTagsTransducer.get(this.context());
     }
@@ -109,9 +107,9 @@ public class SQLInterpreterImpl extends AbstractContextual implements SQLInterpr
      * returns the original State instance will still be what it was before DATA
      * was added.
      */
-    static class State {
+    static public class State {
 
-        enum Flag {
+        public enum Flag {
             REVERSE,
             DATA,
             MERGE,
@@ -125,11 +123,11 @@ public class SQLInterpreterImpl extends AbstractContextual implements SQLInterpr
             this.flags = flags;
         }
 
-        static State create(AppContext context) {
+        static public State create(AppContext context) {
             return new State(SQLProgramOutput.create(context), new boolean[Flag.values().length]);
         }
 
-        State call(Flag... addFlags) {
+        public State call(Flag... addFlags) {
             boolean[] flags = new boolean[Flag.values().length];
             System.arraycopy(this.flags, 0, flags, 0, Flag.values().length);
             for (Flag addFlag : addFlags) {
@@ -138,23 +136,23 @@ public class SQLInterpreterImpl extends AbstractContextual implements SQLInterpr
             return new State(this.output, flags);
         }
 
-        void on(Flag flag) {
+        public void on(Flag flag) {
             this.flags[flag.ordinal()] = true;
         }
 
-        void off(Flag flag) {
+        public void off(Flag flag) {
             this.flags[flag.ordinal()] = false;
         }
 
-        boolean is(Flag flag) {
+        public boolean is(Flag flag) {
             return this.flags[flag.ordinal()];
         }
 
-        SQLProgramOutput output() {
+        public SQLProgramOutput output() {
             return this.output;
         }
 
-        void addStep(JDBCExecuteStep step) {
+        public void addStep(JDBCExecuteStep step) {
             ((SQLProgramOutputImpl) this.output).add(step);
         }
     }

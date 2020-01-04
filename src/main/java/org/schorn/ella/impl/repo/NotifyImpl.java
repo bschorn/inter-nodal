@@ -35,7 +35,7 @@ import org.schorn.ella.repo.RepoActions.NotifyOfActivity;
  */
 public class NotifyImpl extends AbstractContextual implements NotifyOfActivity {
 
-    NotifyImpl(AppContext context) {
+    public NotifyImpl(AppContext context) {
         super(context);
     }
 

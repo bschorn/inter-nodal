@@ -45,7 +45,7 @@ public class DataEventManagerImpl implements DataEventManager {
     @SuppressWarnings("rawtypes")
     private final CopyOnWriteArrayList<DataInjector> injectors;
 
-    DataEventManagerImpl(AppContext context) {
+    public DataEventManagerImpl(AppContext context) {
         this.context = context;
         this.injectors = new CopyOnWriteArrayList<>();
     }

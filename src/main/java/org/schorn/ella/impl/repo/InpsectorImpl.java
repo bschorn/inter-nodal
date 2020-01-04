@@ -43,7 +43,7 @@ public class InpsectorImpl extends AbstractContextual implements Inspector {
     private final ActivityActionable actionable;
     private final ActivityEntitled entitled;
 
-    InpsectorImpl(AppContext context) {
+    public InpsectorImpl(AppContext context) {
         super(context);
         this.validate = RepoProvider.provider().getMingleton(ValidateActivity.class, context);
         this.actionable = RepoProvider.provider().getMingleton(ActivityActionable.class, context);

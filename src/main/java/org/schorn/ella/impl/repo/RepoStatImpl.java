@@ -29,22 +29,19 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ObjectData;
-//import org.schorn.ella.node.ActiveNode.ObjectData.SeriesKey;
 import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.MetaTypes;
 import org.schorn.ella.repo.RepoData.EventLogBroker;
 import org.schorn.ella.repo.RepoData.RepoStat;
 import org.schorn.ella.repo.RepoProvider;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Passive Listener for the purpose of collecting stats
@@ -57,7 +54,7 @@ public class RepoStatImpl extends AbstractContextual implements RepoStat {
 
     static final Logger LGR = LoggerFactory.getLogger(RepoStatImpl.class);
 
-    static class Summary {
+    static public class Summary {
 
         ObjectType objectType;
         LocalDateTime min_datetime = LocalDateTime.now();
@@ -81,7 +78,7 @@ public class RepoStatImpl extends AbstractContextual implements RepoStat {
 
     private final Map<ObjectType, Summary> summaryMap;
 
-    RepoStatImpl(AppContext context) {
+    public RepoStatImpl(AppContext context) {
         super(context);
         EventLogBroker broker = RepoProvider.provider().getMingleton(EventLogBroker.class, context);
         broker.join(this);

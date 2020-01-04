@@ -43,7 +43,7 @@ public class ServicesRepoImpl extends AbstractContextual implements ServicesRepo
     private final RepoCoordinators.Responder responder;
     private final RepoCoordinators.Summary summary;
 
-    ServicesRepoImpl(AppContext context) {
+    public ServicesRepoImpl(AppContext context) {
         super(context);
         this.approver = RepoProvider.provider().getMingleton(RepoCoordinators.Inspector.class, context);
         this.storage = RepoProvider.provider().getMingleton(RepoCoordinators.Receiver.class, context);

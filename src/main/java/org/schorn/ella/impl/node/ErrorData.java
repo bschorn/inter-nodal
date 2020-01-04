@@ -25,15 +25,13 @@ package org.schorn.ella.impl.node;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.util.Functions;
 import org.schorn.ella.util.StringCached;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility to create an 'error_data' object
@@ -58,7 +56,7 @@ public class ErrorData {
     private ActiveNode.ActiveData parentData = null;
     private ActiveNode.ActiveData childData = null;
 
-    ErrorData(ActiveNode.ActiveType activeType, Class<?> classOf, Method methodOf) {
+    public ErrorData(ActiveNode.ActiveType activeType, Class<?> classOf, Method methodOf) {
         this.activeType = activeType;
         this.classOf = classOf;
         this.methodOf = methodOf;

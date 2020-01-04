@@ -23,12 +23,7 @@
  */
 package org.schorn.ella.impl.io;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
-import org.schorn.ella.context.AppContext;
 import org.schorn.ella.io.ActiveIO;
 import org.schorn.ella.io.EndPoint;
 import org.schorn.ella.io.IOProvider;
@@ -44,39 +39,14 @@ public class IOProviderImpl extends AbstractProvider implements IOProvider {
 
     private static final Logger LGR = LoggerFactory.getLogger(IOProviderImpl.class);
 
-    private List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
-    private List<Class<? extends Renewable<?>>> renewables = new ArrayList<>();
-
     @Override
     public void init() throws Exception {
         this.mapInterfaceToImpl(ActiveIO.Config.class, IOConfigImpl.class);
+        this.mapInterfaceToImpl(ActiveIO.ActivityFile.class, ActivityFileImpl.class);
         this.mapInterfaceToImpl(ActiveIO.ActivityRecovery.class, ActivityRecoveryImpl.class);
         this.mapInterfaceToImpl(ActiveIO.ActivityRecord.class, ActivityRecordImpl.class);
         this.mapInterfaceToImpl(EndPoint.URIPoint.class, EndPoints.URIPointImpl.class);
         this.mapInterfaceToImpl(EndPoint.FilePoint.class, EndPoints.FilePointImpl.class);
-
-        this.mingletons.add(ActiveIO.ActivityRecovery.class);
-        this.mingletons.add(ActiveIO.ActivityRecord.class);
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
-        for (Class<?> classFor : this.mingletons) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
-        for (Class<?> classFor : this.renewables) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
     }
 
 }

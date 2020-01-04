@@ -25,7 +25,6 @@ package org.schorn.ella.impl.node;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 import org.schorn.ella.format.SupportString;
 import org.schorn.ella.node.ActiveNode.INode;
 
@@ -49,7 +48,7 @@ public class INodeImpl implements INode {
     private Identity modifyId;
     private Identity accessId;
 
-    INodeImpl(ActiveData activeData, Identity identity) {
+    public INodeImpl(ActiveData activeData, Identity identity) {
         this.activeData = activeData;
         this.uuid = UUID.randomUUID();
         this.createTS = LocalDateTime.now();
@@ -60,7 +59,7 @@ public class INodeImpl implements INode {
         this.accessId = identity;
     }
 
-    INodeImpl() {
+    public INodeImpl() {
 
     }
 

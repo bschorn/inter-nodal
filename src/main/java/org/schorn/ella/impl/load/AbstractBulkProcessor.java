@@ -43,7 +43,7 @@ public abstract class AbstractBulkProcessor<T, R> implements BulkProcessor<T, R>
     private final Consumer<R> consumer;
     private Consumer<R> monitor;
 
-    AbstractBulkProcessor(Reader reader, Function<T, R> function, Predicate<R> predicate, Consumer<R> consumer) {
+    public AbstractBulkProcessor(Reader reader, Function<T, R> function, Predicate<R> predicate, Consumer<R> consumer) {
         this.reader = reader;
         this.function = function;
         this.predicate = predicate;

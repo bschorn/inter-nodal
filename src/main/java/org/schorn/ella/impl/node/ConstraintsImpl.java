@@ -29,10 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-
 import org.schorn.ella.format.SupportString;
-import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.node.ActiveNode.Constraints;
+import org.schorn.ella.node.DataGroup;
 
 /**
  *
@@ -75,7 +74,7 @@ public class ConstraintsImpl implements Constraints {
     /*
 	 * 
      */
-    ConstraintsImpl(DataGroup dataGroup, List<ConstraintType<?>> constraintTypes, Map<ConstraintType<?>, ConstraintData> constraintMap) {
+    public ConstraintsImpl(DataGroup dataGroup, List<ConstraintType<?>> constraintTypes, Map<ConstraintType<?>, ConstraintData> constraintMap) {
         this.dataGroup = dataGroup;
         this.constraintTypes = Collections.unmodifiableList(constraintTypes);
         this.constraintMap = constraintMap;

@@ -46,12 +46,12 @@ public class InternalSubscriptionImpl implements InternalSubscription, Consumer<
     private final BlockingQueue<ObjectData> queue;
     private final Predicate<ObjectData> filter;
 
-    InternalSubscriptionImpl(EventLogImpl supplier) {
+    public InternalSubscriptionImpl(EventLogImpl supplier) {
         this.filter = null;
         this.queue = new LinkedBlockingQueue<>();
     }
 
-    InternalSubscriptionImpl(EventLogImpl supplier, Predicate<ObjectData> filter) {
+    public InternalSubscriptionImpl(EventLogImpl supplier, Predicate<ObjectData> filter) {
         this.filter = filter;
         this.queue = new LinkedBlockingQueue<>();
     }

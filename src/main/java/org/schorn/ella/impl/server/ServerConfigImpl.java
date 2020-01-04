@@ -63,13 +63,13 @@ public class ServerConfigImpl implements ActiveServer.Config {
                 }
             }
         }
-        if (map.containsKey("masterServer")) {
+        if (map.get("masterServer") != null) {
             this.masterServer = (Boolean) map.get("masterServer");
         }
-        if (map.containsKey("masterServerAddress")) {
+        if (map.get("masterServerAddress") != null) {
             this.masterServerAddress = new URI((String) map.get("masterServerAddress"));
         }
-        if (map.containsKey("maxIOThreads")) {
+        if (map.get("maxIOThreads") != null) {
             this.maxIOThreads = (Integer) map.get("maxIOThreads");
         }
     }

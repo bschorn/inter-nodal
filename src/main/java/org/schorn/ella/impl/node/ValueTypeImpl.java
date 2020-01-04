@@ -45,7 +45,7 @@ public class ValueTypeImpl extends ActiveTypeImpl implements ValueType {
     private final FieldType fieldType;
     private final long valueFlags;
 
-    protected ValueTypeImpl(AppContext context, String name, FieldType fieldType, Short activeIdx, Long valueFlags) {
+    public ValueTypeImpl(AppContext context, String name, FieldType fieldType, Short activeIdx, Long valueFlags) {
         super(context, name, activeIdx);
         this.fieldType = fieldType;
         this.valueFlags = valueFlags;

@@ -51,11 +51,11 @@ public enum EndPoints {
         return new FilePointImpl(filename, tag);
     }
 
-    static class URIPointImpl implements EndPoint.URIPoint {
+    static public class URIPointImpl implements EndPoint.URIPoint {
 
         private final URI uri;
 
-        URIPointImpl(URI uri) {
+        public URIPointImpl(URI uri) {
             this.uri = uri;
         }
 

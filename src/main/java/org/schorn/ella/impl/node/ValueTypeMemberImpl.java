@@ -23,9 +23,9 @@
  */
 package org.schorn.ella.impl.node;
 
-import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.MemberDef;
+import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueType;
 import org.schorn.ella.node.ActiveNode.ValueTypeMember;
 
@@ -41,12 +41,12 @@ public class ValueTypeMemberImpl implements ValueTypeMember {
     private final ObjectType memberOfType;
     private final MemberDef memberDef;
 
-    ValueTypeMemberImpl(ObjectType memberOfType, MemberDef memberDef) {
+    public ValueTypeMemberImpl(ObjectType memberOfType, MemberDef memberDef) {
         this.memberOfType = memberOfType;
         this.memberDef = memberDef;
     }
 
-    ValueTypeMemberImpl(AppContext context, String valueTypeMemberStr) throws Exception {
+    public ValueTypeMemberImpl(AppContext context, String valueTypeMemberStr) throws Exception {
         String[] parts = valueTypeMemberStr.split("\\.");
         if (parts.length == 2) {
             ObjectType memberOfType = ObjectType.get(context, parts[0]);

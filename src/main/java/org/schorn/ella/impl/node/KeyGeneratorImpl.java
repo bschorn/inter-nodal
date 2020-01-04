@@ -24,17 +24,15 @@
 package org.schorn.ella.impl.node;
 
 import java.util.StringJoiner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
-import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ObjectData.KeyGenerator;
+import org.schorn.ella.node.ActiveNode.ObjectType;
 import org.schorn.ella.node.ActiveNode.ValueData;
 import org.schorn.ella.util.StringCached;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -45,7 +43,7 @@ public class KeyGeneratorImpl extends AbstractContextual implements KeyGenerator
 
     private static final Logger LGR = LoggerFactory.getLogger(KeyGeneratorImpl.class);
 
-    protected KeyGeneratorImpl(AppContext context) {
+    public KeyGeneratorImpl(AppContext context) {
         super(context);
     }
 

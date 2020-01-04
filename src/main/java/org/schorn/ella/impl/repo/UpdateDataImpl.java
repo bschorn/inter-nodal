@@ -64,13 +64,13 @@ public class UpdateDataImpl extends AbstractContextual implements UpdateData {
     private Integer updateVersion = null;
     private ObjectData updatedData = null;
 
-    protected UpdateDataImpl(AppContext context) {
+    public UpdateDataImpl(AppContext context) {
         super(context);
         this.targetType = null;
         this.openNode = null;
     }
 
-    private UpdateDataImpl(AppContext context, ObjectType targetType, OpenNode openNode) {
+    public UpdateDataImpl(AppContext context, ObjectType targetType, OpenNode openNode) {
         super(context);
         this.targetType = targetType;
         this.openNode = openNode;

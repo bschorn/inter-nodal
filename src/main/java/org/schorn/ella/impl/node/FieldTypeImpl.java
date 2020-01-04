@@ -39,7 +39,7 @@ public class FieldTypeImpl extends ActiveTypeImpl implements FieldType {
     private final Integer maxWidth;
 
 
-    FieldTypeImpl(AppContext context, String name, DataType dataType, Constraints constraints, Integer maxWidth, Short activeIdx) {
+    public FieldTypeImpl(AppContext context, String name, DataType dataType, Constraints constraints, Integer maxWidth, Short activeIdx) {
         super(context, name, activeIdx);
         this.dataType = dataType;
         this.constraints = constraints;

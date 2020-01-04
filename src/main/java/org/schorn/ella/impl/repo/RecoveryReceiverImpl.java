@@ -33,7 +33,7 @@ import org.schorn.ella.repo.RepoCoordinators.RecoveryReceiver;
  */
 public class RecoveryReceiverImpl extends ReceiverImpl implements RecoveryReceiver {
 
-    RecoveryReceiverImpl(AppContext context) {
+    public RecoveryReceiverImpl(AppContext context) {
         super(context);
     }
 

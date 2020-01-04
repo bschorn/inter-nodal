@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.node;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.format.SupportString;
 import org.schorn.ella.node.ActiveNode.ActiveData;
@@ -41,7 +40,7 @@ public abstract class ActiveDataImpl implements ActiveData {
     static private ActiveData[] DATA = new ActiveData[DATA_SIZE];
     static private Object LOCK = new Object();
 
-    static ActiveData forActiveId(Integer activeId) {
+    public static ActiveData forActiveId(Integer activeId) {
         if (activeId < DATA_SIZE) {
             return DATA[activeId];
         }
@@ -55,7 +54,7 @@ public abstract class ActiveDataImpl implements ActiveData {
      *
      * @param activeType
      */
-    protected ActiveDataImpl(ActiveType activeType) {
+    public ActiveDataImpl(ActiveType activeType) {
         this.activeType = activeType;
         this.activeId = NEXT_ACTIVE_DATA_ID.getAndIncrement();
         if (this.activeId >= DATA_SIZE) {

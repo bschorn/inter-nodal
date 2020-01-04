@@ -34,7 +34,7 @@ import org.schorn.ella.repo.RepoData;
  */
 public class QueryExecutionStateImpl extends AbstractQueryImpl implements RepoActions.QueryExecutionState {
 
-    QueryExecutionStateImpl(AppContext context) {
+    public QueryExecutionStateImpl(AppContext context) {
         super(context, RepoData.CurrentState.get(context));
     }
 

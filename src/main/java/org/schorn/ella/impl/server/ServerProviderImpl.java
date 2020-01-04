@@ -24,7 +24,6 @@
 package org.schorn.ella.impl.server;
 
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.context.AppContext;
 import org.schorn.ella.server.ActiveServer;
 import org.schorn.ella.server.ActiveServer.AdminServer;
 import org.schorn.ella.server.ServerProvider;
@@ -41,13 +40,6 @@ public class ServerProviderImpl extends AbstractProvider implements ServerProvid
     @Override
     public void init() throws Exception {
         this.mapInterfaceToImpl(ActiveServer.Config.class, ServerConfigImpl.class);
-        //this.adminServer = new AdminServerImpl();
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

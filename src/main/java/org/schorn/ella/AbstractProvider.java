@@ -55,6 +55,7 @@ public abstract class AbstractProvider implements Provider {
      */
     private final Map<String, Object> instanceCache = new ConcurrentHashMap<>();
 
+    private final List<Class<? extends Singleton>> singletons = new CopyOnWriteArrayList<>();
     private final List<Class<? extends Mingleton>> mingletons = new CopyOnWriteArrayList<>();
     private final List<Class<? extends Renewable<?>>> renewables = new CopyOnWriteArrayList<>();
 
@@ -65,7 +66,14 @@ public abstract class AbstractProvider implements Provider {
             this.mingletons.add((Class<? extends Mingleton>) interfaceFor);
         } else if (Renewable.class.isAssignableFrom(interfaceFor)) {
             this.renewables.add((Class<? extends Renewable<?>>) interfaceFor);
+        } else if (Singleton.class.isAssignableFrom(interfaceFor)) {
+            this.singletons.add((Class<? extends Singleton>) interfaceFor);
         }
+    }
+
+    @Override
+    public List<Class<? extends Singleton>> singletons() {
+        return this.singletons;
     }
 
     @Override
@@ -80,22 +88,47 @@ public abstract class AbstractProvider implements Provider {
 
     @Override
     public void registerContext(AppContext context) throws Exception {
-        for (Class<?> classFor : this.mingletons) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
+        for (Class<?> classFor : this.singletons()) {
+            if (registerPreCreateCheck(context, classFor)) {
+                LGR.info("{}.registerContext('{}') - create Singleton: {}",
+                        this.getClass().getSimpleName(),
+                        context.name(),
+                        classFor.getSimpleName()
+                );
+                Object object = this.createReusable(classFor);
+                registerCreateNotification(context, object);
+            }
         }
-        for (Class<?> classFor : this.renewables) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
+        for (Class<?> classFor : this.mingletons()) {
+            if (registerPreCreateCheck(context, classFor)) {
+                LGR.info("{}.registerContext('{}') - create Mingleton: {}",
+                        this.getClass().getSimpleName(),
+                        context.name(),
+                        classFor.getSimpleName()
+                );
+                Object object = this.createReusable(classFor, context);
+                registerCreateNotification(context, object);
+            }
         }
+        for (Class<?> classFor : this.renewables()) {
+            if (registerPreCreateCheck(context, classFor)) {
+                LGR.info("{}.registerContext('{}') - create Renewable: {}",
+                        this.getClass().getSimpleName(),
+                        context.name(),
+                        classFor.getSimpleName()
+                );
+                Object object = this.createReusable(classFor, context);
+                registerCreateNotification(context, object);
+            }
+        }
+    }
+
+    protected boolean registerPreCreateCheck(AppContext context, Class<?> interfaceOf) {
+        return true;
+    }
+
+    protected void registerCreateNotification(AppContext context, Object registeredObj) {
+
     }
 
     /**
@@ -138,7 +171,15 @@ public abstract class AbstractProvider implements Provider {
             }
             if (constructor != null) {
                 try {
-                    newInstance = (T) constructor.newInstance(params);
+                    LGR.info("{}.createInstance() - {} -> {}",
+                            this.getClass().getSimpleName(),
+                            classFor.getSimpleName(),
+                            constructor.getName());
+                    if (ctr.getParameterCount() == 0) {
+                        newInstance = (T) constructor.newInstance();
+                    } else {
+                        newInstance = (T) constructor.newInstance(params);
+                    }
                 } catch (InvocationTargetException ite) {
                     LGR.error(Functions.getStackTraceAsString(ite));
                 }

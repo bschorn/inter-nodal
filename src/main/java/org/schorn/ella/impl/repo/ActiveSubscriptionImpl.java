@@ -51,7 +51,7 @@ public class ActiveSubscriptionImpl extends AbstractContextual implements Active
     private ActiveQuery activeQuery = null;
     private boolean closed = false;
 
-    ActiveSubscriptionImpl(AppContext context, ObjectType objectType) {
+    public ActiveSubscriptionImpl(AppContext context, ObjectType objectType) {
         super(context);
         this.objectType = objectType;
     }

@@ -92,7 +92,7 @@ public class ActiveQueryImpl implements ActiveQuery {
     /*
 	 * 
      */
-    ActiveQueryImpl(AppContext context,
+    public ActiveQueryImpl(AppContext context,
             String name,
             ValueType[] select,
             ValueTypeMember[] selectValueTypeMember,
@@ -294,7 +294,7 @@ public class ActiveQueryImpl implements ActiveQuery {
      *
      *
      */
-    static class BuilderImpl implements ActiveQuery.Builder {
+    static public class BuilderImpl implements ActiveQuery.Builder {
 
         AppContext context;
         String name;

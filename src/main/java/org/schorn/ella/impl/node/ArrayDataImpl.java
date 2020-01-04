@@ -47,7 +47,7 @@ public class ArrayDataImpl extends StructDataImpl implements ArrayData {
     //private final List<ActiveData> rows;
     private final Set<Integer> ids;
 
-    protected ArrayDataImpl(ArrayType arrayType) {
+    public ArrayDataImpl(ArrayType arrayType) {
         super(arrayType, new ArrayList<ActiveData>(100));
         //this.rows = new ArrayList<>(100);
         this.ids = new HashSet<>(100);

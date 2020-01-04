@@ -55,7 +55,7 @@ public class ObjectTypeBuilderImpl implements Builder {
     private final List<ObjectType> baseTypes;
     private ObjectType dynamicType = null;
 
-    ObjectTypeBuilderImpl(AppContext context, String name, List<TypeAttribute> attributes, List<ObjectType> baseTypes) {
+    public ObjectTypeBuilderImpl(AppContext context, String name, List<TypeAttribute> attributes, List<ObjectType> baseTypes) {
         this.context = context;
         this.name = name;
         this.members = new ArrayList<>(10);
@@ -63,14 +63,14 @@ public class ObjectTypeBuilderImpl implements Builder {
         this.baseTypes = baseTypes;
     }
 
-    ObjectTypeBuilderImpl(AppContext context, String name, List<TypeAttribute> attributes) {
+    public ObjectTypeBuilderImpl(AppContext context, String name, List<TypeAttribute> attributes) {
         this.context = context;
         this.name = name;
         this.members = new ArrayList<>(10);
         this.attributes = attributes;
         this.baseTypes = new ArrayList<>();
     }
-    ObjectTypeBuilderImpl(AppContext context, String name) {
+    public ObjectTypeBuilderImpl(AppContext context, String name) {
         this.context = context;
         this.name = name;
         this.members = new ArrayList<>(10);

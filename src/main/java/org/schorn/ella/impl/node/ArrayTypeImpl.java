@@ -38,7 +38,7 @@ public class ArrayTypeImpl extends ActiveTypeImpl implements ArrayType {
     private MemberDef memberDef;
     private boolean dynamic;
 
-    protected ArrayTypeImpl(AppContext context, String name, MemberDef memberDef, Short activeIdx) {
+    public ArrayTypeImpl(AppContext context, String name, MemberDef memberDef, Short activeIdx) {
         super(context, name, activeIdx);
         if (memberDef == null) {
             this.dynamic = true;

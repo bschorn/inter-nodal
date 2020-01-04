@@ -54,10 +54,16 @@ public abstract class SynchronizeObjectsImpl extends AbstractContextual implemen
     private final Deque<ObjectType> reversedTypeList;
     private final Map<ObjectType, List<ObjectData>> orderedDataLists;
 
-    /*
-	 * Keep track of the order that the objects come in
-     */
-    protected SynchronizeObjectsImpl(AppContext context, RDBMS.SQLDialect dialect) {
+    public SynchronizeObjectsImpl(AppContext context) {
+        super(context);
+        this.dialect = RDBMS.Dialects.DB2;
+        this.interpreter = RDBMS.SQLInterpreter.create(this.context());
+        this.orderedTypeList = new ArrayList<>();
+        this.reversedTypeList = new LinkedList<>();
+        this.orderedDataLists = new HashMap<>();
+    }
+
+    public SynchronizeObjectsImpl(AppContext context, RDBMS.SQLDialect dialect) {
         super(context);
         this.dialect = dialect;
         this.interpreter = RDBMS.SQLInterpreter.create(this.context());

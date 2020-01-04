@@ -64,7 +64,7 @@ public abstract class AbstractQueryImpl extends AbstractContextual implements Re
 
     private final RepoData.EventLogBroker.Agent dataAgent;
 
-    AbstractQueryImpl(AppContext context, RepoData.EventLogBroker.Agent dataAgent) {
+    public AbstractQueryImpl(AppContext context, RepoData.EventLogBroker.Agent dataAgent) {
         super(context);
         this.dataAgent = dataAgent;
     }

@@ -23,12 +23,7 @@
  */
 package org.schorn.ella.impl.sql;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.schorn.ella.AbstractProvider;
-import org.schorn.ella.Mingleton;
-import org.schorn.ella.Renewable;
-import org.schorn.ella.context.AppContext;
 import org.schorn.ella.sql.ActiveSQL;
 import org.schorn.ella.sql.RDBMS;
 import org.schorn.ella.sql.SQLProvider;
@@ -46,53 +41,19 @@ public class SQLProviderImpl extends AbstractProvider implements SQLProvider {
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *                                
-	 *                                MEMBERS
-	 *                                
-	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    private final List<Class<? extends Mingleton>> mingletons = new ArrayList<>();
-    private final List<Class<? extends Renewable<?>>> renewables = new ArrayList<>();
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 *                                
 	 *                                METHODS
 	 *                                
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     @Override
     public void init() throws Exception {
-        this.mapInterfaceToImpl(ActiveSQL.SynchronizeObjects.class, SynchronizeObjectsImpl.class);
-        this.mapInterfaceToImpl(ActiveSQL.SynchronizeObjects.Stable.class, SynchronizeObjectsStableImpl.class);
-        this.mapInterfaceToImpl(ActiveSQL.SynchronizeObjects.Experimental.class, SynchronizeObjectsExperimentalImpl.class);
+        this.mapInterfaceToImpl(ActiveSQL.SynchronizeObjects.class, SynchronizeObjectsExperimentalImpl.class);
+        //this.mapInterfaceToImpl(ActiveSQL.SynchronizeObjects.Stable.class, SynchronizeObjectsStableImpl.class);
+        //this.mapInterfaceToImpl(ActiveSQL.SynchronizeObjects.Experimental.class, SynchronizeObjectsExperimentalImpl.class);
         this.mapInterfaceToImpl(RDBMS.TemplateTagsTransducer.class, TemplateTagsTransducerImpl.class);
         this.mapInterfaceToImpl(RDBMS.SQLInterpreter.class, SQLInterpreterImpl.class);
         this.mapInterfaceToImpl(RDBMS.JDBCExecuteStep.class, JDBCExecuteStepImpl.class);
         this.mapInterfaceToImpl(RDBMS.SQLProgramOutput.class, SQLInterpreterImpl.SQLProgramOutputImpl.class);
 
-        this.mingletons.add(RDBMS.SQLInterpreter.class);
-
-        this.renewables.add(ActiveSQL.SynchronizeObjects.Stable.class);
-        this.renewables.add(ActiveSQL.SynchronizeObjects.Experimental.class);
-        this.renewables.add(RDBMS.SQLProgramOutput.class);
-        this.renewables.add(RDBMS.JDBCExecuteStep.class);
-    }
-
-    @Override
-    public void registerContext(AppContext context) throws Exception {
-        for (Class<?> classFor : this.mingletons) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Mingleton: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
-        for (Class<?> classFor : this.renewables) {
-            this.createReusable(classFor, context);
-            LGR.info(String.format("%s.registerContext('%s') - create Renewable: %s",
-                    this.getClass().getSimpleName(),
-                    context.name(),
-                    classFor.getSimpleName()
-            ));
-        }
     }
 
 }

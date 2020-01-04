@@ -57,7 +57,7 @@ public class SummaryImpl extends AbstractContextual implements Summary {
     private ArrayType typeSummaryTable;
     private ObjectType typeSummaryRow;
 
-    SummaryImpl(AppContext context) {
+    public SummaryImpl(AppContext context) {
         super(context);
         this.current = RepoData.CurrentState.get(this.context());
         List<ValueType> valueTypes = new ArrayList<>();
@@ -113,7 +113,7 @@ public class SummaryImpl extends AbstractContextual implements Summary {
         return ArrayData.empty("BadRepoSummary");
     }
 
-    static class Stats {
+    static public class Stats {
 
         final ObjectType objectType;
         int objectCount = 0;
