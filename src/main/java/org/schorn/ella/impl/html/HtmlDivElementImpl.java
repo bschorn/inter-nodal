@@ -32,7 +32,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlDivElement;
  */
 public class HtmlDivElementImpl extends HtmlElementImpl implements HtmlDivElement {
 
-    HtmlDivElementImpl() {
+    public HtmlDivElementImpl() {
         super("div");
     }
 

@@ -52,17 +52,17 @@ public class HtmlElementImpl implements HtmlElement {
     protected List<HtmlElement> children = new ArrayList<>();
     protected List<HtmlAttribute> attributes = new ArrayList<>();
 
-    HtmlElementImpl() {
+    public HtmlElementImpl() {
         this.parent = this;
         this.tag = "root";
     }
 
-    HtmlElementImpl(String tag) {
+    public HtmlElementImpl(String tag) {
         this.parent = this;
         this.tag = tag;
     }
 
-    HtmlElementImpl(HtmlTag html) throws Exception {
+    public HtmlElementImpl(HtmlTag html) throws Exception {
         this.parent = this;
         this.tag = html.tag();
         if (html instanceof HtmlTag.Tag) {

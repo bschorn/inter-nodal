@@ -64,7 +64,7 @@ public final class InputBuilderImpl implements InputBuilder {
     private String name;
     private String id;
 
-    InputBuilderImpl(ObjectType compositeType, ValueType valueType) {
+    public InputBuilderImpl(ObjectType compositeType, ValueType valueType) {
         this.objectType = compositeType;
         this.valueType = valueType;
         if (ValueFlag.getEnumSetFromLong(valueType.valueFlags()).contains(ValueFlag.HIDDEN)) {

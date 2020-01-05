@@ -67,7 +67,7 @@ public class SelectBuilderImpl implements SelectBuilder {
     /**
      *
      */
-    SelectBuilderImpl() {
+    public SelectBuilderImpl() {
         // For inheritance
     }
 

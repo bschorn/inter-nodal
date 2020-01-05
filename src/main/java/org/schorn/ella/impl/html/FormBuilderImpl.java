@@ -41,7 +41,7 @@ public class FormBuilderImpl implements FormBuilder {
     private String id = null;
     private List<HtmlElement> inputs = new ArrayList<>();
 
-    FormBuilderImpl(String id, String name) {
+    public FormBuilderImpl(String id, String name) {
         this.id = id;
         this.name = name;
     }

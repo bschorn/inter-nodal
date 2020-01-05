@@ -30,7 +30,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlBodyElement;
  * @author bschorn
  */
 public class HtmlBodyElementImpl extends HtmlElementImpl implements HtmlBodyElement {
-    HtmlBodyElementImpl() {
+    public HtmlBodyElementImpl() {
         super("body");
 
     }

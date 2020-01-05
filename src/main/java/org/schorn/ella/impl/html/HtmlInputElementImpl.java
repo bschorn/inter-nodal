@@ -33,11 +33,11 @@ import org.schorn.ella.html.ActiveHtml.HtmlInputElement;
  */
 public class HtmlInputElementImpl extends HtmlElementImpl implements HtmlInputElement {
 
-    HtmlInputElementImpl() {
+    public HtmlInputElementImpl() {
         super("input");
     }
 
-    HtmlInputElementImpl(HtmlInputElement.Type inputType) throws Exception {
+    public HtmlInputElementImpl(HtmlInputElement.Type inputType) throws Exception {
         super("input");
         this.addAttribute0(HtmlAttribute.create("type", inputType.value()));
     }

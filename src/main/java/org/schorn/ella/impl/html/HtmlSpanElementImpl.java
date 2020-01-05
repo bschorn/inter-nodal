@@ -32,7 +32,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlSpanElement;
  */
 public class HtmlSpanElementImpl extends HtmlElementImpl implements HtmlSpanElement {
 
-    HtmlSpanElementImpl() {
+    public HtmlSpanElementImpl() {
         super("span");
     }
 

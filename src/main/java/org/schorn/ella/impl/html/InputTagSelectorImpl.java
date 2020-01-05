@@ -23,6 +23,7 @@
  */
 package org.schorn.ella.impl.html;
 
+import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.InputTagSelector;
 import org.schorn.ella.node.ActiveNode.ValueType;
@@ -34,6 +35,10 @@ import org.schorn.ella.node.ValueFlag;
  * @author bschorn
  */
 public class InputTagSelectorImpl implements InputTagSelector {
+
+    public InputTagSelectorImpl(AppContext appContext) {
+
+    }
 
     @Override
     public ActiveHtml.HtmlInputElement.Type apply(ValueType valueType) {

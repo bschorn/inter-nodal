@@ -48,8 +48,7 @@ public interface ActiveLabel {
         if (this instanceof ActiveType) {
             ActiveType activeType = (ActiveType) this;
             try {
-                //return ActiveHtml.HtmlLabeler.get().get(activeType);
-                return HtmlProvider.provider().labeler().get(activeType);
+                return HtmlProvider.provider().labeler(activeType.context()).get(activeType);
             } catch (Exception e) {
                 return activeType.name();
             }

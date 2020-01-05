@@ -43,7 +43,7 @@ public class HtmlPageElementImpl extends HtmlElementImpl implements HtmlPageElem
     private final HtmlHeadElement htmlHead;
     private final HtmlBodyElement htmlBody;
 
-    HtmlPageElementImpl() {
+    public HtmlPageElementImpl() {
         super("html");
         HtmlHeadElement htmlHead0 = null;
         HtmlBodyElement htmlBody0 = null;

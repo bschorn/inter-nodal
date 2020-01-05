@@ -39,7 +39,7 @@ public class HtmlMetaElementImpl extends HtmlSingleElementImpl implements HtmlMe
     protected String value = null;
 
 
-    HtmlMetaElementImpl(MetaRules.Attribute attribute) {
+    public HtmlMetaElementImpl(MetaRules.Attribute attribute) {
         super("meta");
         this.attribute = attribute;
     }

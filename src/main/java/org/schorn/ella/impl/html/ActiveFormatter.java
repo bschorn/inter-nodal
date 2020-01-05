@@ -27,16 +27,14 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.node.ActiveNode.ActiveData;
 import org.schorn.ella.node.ActiveNode.ArrayData;
 import org.schorn.ella.node.ActiveNode.ObjectData;
 import org.schorn.ella.node.ActiveNode.ValueData;
+import org.schorn.ella.node.DataGroup;
 import org.schorn.ella.util.Functions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is incomplete but functional.
@@ -51,7 +49,7 @@ public class ActiveFormatter {
     static String DECIMAL_FORMAT_PATTERN = "#,###.##";
     static Map<Long, DecimalFormat> MAP_DECIMAL_FORMAT = new HashMap<>();
 
-    static DecimalFormat getDecimalFormat() {
+    static public DecimalFormat getDecimalFormat() {
         DecimalFormat decimalFormat = MAP_DECIMAL_FORMAT.get(Thread.currentThread().getId());
         if (decimalFormat == null) {
             synchronized (MAP_DECIMAL_FORMAT) {
@@ -65,7 +63,7 @@ public class ActiveFormatter {
     static String INTEGER_FORMAT_PATTERN = "#,###";
     static Map<Long, DecimalFormat> MAP_INTEGER_FORMAT = new HashMap<>();
 
-    static NumberFormat getNumberFormat() {
+    static public NumberFormat getNumberFormat() {
         DecimalFormat decimalFormat = MAP_INTEGER_FORMAT.get(Thread.currentThread().getId());
         if (decimalFormat == null) {
             synchronized (MAP_INTEGER_FORMAT) {

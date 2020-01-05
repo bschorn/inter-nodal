@@ -49,7 +49,7 @@ public class EnumListBuilderImpl extends SelectBuilderImpl implements SelectBuil
         return new EnumListBuilderImpl(valueType);
     }
 
-    EnumListBuilderImpl(ValueType valueType) {
+    public EnumListBuilderImpl(ValueType valueType) {
         this.valueType = valueType;
         List<ConstraintType<?>> constraintTypes = this.valueType.fieldType().constraints().constraintTypes();
         for (ConstraintType constraintType : constraintTypes) {

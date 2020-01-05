@@ -34,7 +34,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlLabelElement;
  */
 public class HtmlLabelElementImpl extends HtmlElementImpl implements HtmlLabelElement {
 
-    HtmlLabelElementImpl() {
+    public HtmlLabelElementImpl() {
         super("label");
     }
 

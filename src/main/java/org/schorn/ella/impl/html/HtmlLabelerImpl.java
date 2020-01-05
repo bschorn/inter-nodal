@@ -24,18 +24,13 @@
 package org.schorn.ella.impl.html;
 
 import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import org.schorn.ella.app.ActiveApp;
 import org.schorn.ella.context.AbstractContextual;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.html.ActiveHtml;
 import org.schorn.ella.html.ActiveHtml.HtmlLabeler;
-import org.schorn.ella.html.HtmlProvider;
 import org.schorn.ella.io.ResourceReader;
 import org.schorn.ella.node.ActiveNode;
 import org.schorn.ella.node.ActiveNode.ActiveType;
@@ -49,18 +44,17 @@ import org.slf4j.LoggerFactory;
  * @author schorn
  *
  */
-public class HtmlLabelerImpl extends AbstractContextual implements HtmlLabeler {
+public class HtmlLabelerImpl extends AbstractContextual implements HtmlLabeler, Consumer<String> {
 
     private static final Logger LGR = LoggerFactory.getLogger(HtmlLabelerImpl.class);
 
     Map<ActiveType, String> typeMap = new HashMap<>();
     Map<ActiveType, Map<ActiveType, String>> objectMap = new HashMap<>();
 
-    HtmlLabelerImpl(AppContext context) throws Exception {
+    public HtmlLabelerImpl(AppContext context) throws Exception {
         super(context);
         URI labelsURI = ActiveHtml.Config.get(context).htmlLabels();
-        String language = ActiveApp.Config.get().language();
-        this.loadLabels(context, labelsURI.toURL(), language);
+        ResourceReader.readLines(labelsURI.toURL(), this);
     }
 
     @Override
@@ -159,73 +153,35 @@ public class HtmlLabelerImpl extends AbstractContextual implements HtmlLabeler {
         return this;
     }
 
-    private void loadLabels(AppContext context, URL url, String language) throws Exception {
-        /*
-         * RR Callback
-         */
-        List<String[]> lines = new ArrayList<>();
-        Consumer<String> callback = line -> {
-            try {
-                lines.add(line.split("\\|"));
-            } catch (Exception ex) {
-                LGR.error("{}.initLabels({}) -  Caught Exception: {}",
-                        context.name(),
-                        Functions.stackTraceToString(ex));
-            }
-        };
-        /*
-         * ResourceReader
-         */
-        ResourceReader.readLines(url, callback);
-        if (!lines.isEmpty()) {
-            String[] header = lines.get(0);
-            int langCol = -1;
-            for (int i = 0; i < header.length; i++) {
-                if (header[i].equalsIgnoreCase(language)) {
-                    langCol = i;
-                    break;
-                }
-            }
-            if (langCol == -1) {
-                LGR.error("{}.loadLabels({}) - language '{}' was not found in '%s'",
-                        context.name(),
-                        this.getClass().getSimpleName(),
-                        language,
-                        url.toString());
-                return;
-            }
-            for (int j = 1; j < lines.size(); j++) {
-                String[] fields = lines.get(j);
-                if (fields.length > langCol) {
-                    String label = fields[langCol];
-                    String[] typeParts = fields[0].split("\\.");
-                    if (typeParts.length != 2) {
-                        LGR.error("{}.loadLabels({}) - LabeledType '{}' was not in a proper format.",
-                                context.name(),
-                                fields[0]);
-                        continue;
-                    }
+    @Override
+    public void accept(String line) {
+        try {
+            String[] fields = line.split("\\|");
+            if (fields.length == 2) {
+                String label = fields[1];
+                String[] typeParts = fields[0].split("\\.");
+                if (typeParts.length == 2) {
                     String firstPart = typeParts[0];
                     String secondPart = typeParts[1];
                     ActiveNode.ActiveType labeledType;
                     ActiveNode.ActiveType parentType = null;
                     switch (firstPart) {
                         case "ValueType":
-                            labeledType = ActiveNode.ValueType.get(context, secondPart);
+                            labeledType = ActiveNode.ValueType.get(this.context(), secondPart);
                             break;
                         case "ObjectType":
-                            labeledType = ActiveNode.ObjectType.get(context, secondPart);
+                            labeledType = ActiveNode.ObjectType.get(this.context(), secondPart);
                             break;
                         default:
-                            parentType = ActiveNode.ObjectType.get(context, firstPart);
-                            labeledType = ActiveNode.ValueType.get(context, secondPart);
+                            parentType = ActiveNode.ObjectType.get(this.context(), firstPart);
+                            labeledType = ActiveNode.ValueType.get(this.context(), secondPart);
                             break;
                     }
                     try {
                         if (parentType != null && labeledType != null && label != null) {
-                            HtmlProvider.provider().labeler().set(parentType, labeledType, label);
+                            this.set(parentType, labeledType, label);
                         } else if (labeledType != null && label != null) {
-                            HtmlProvider.provider().labeler().set(labeledType, label);
+                            this.set(labeledType, label);
                         }
                     } catch (Exception ex) {
                         LGR.error("{}.loadLabels({}) - Caught Exception: {}",
@@ -233,6 +189,10 @@ public class HtmlLabelerImpl extends AbstractContextual implements HtmlLabeler {
                     }
                 }
             }
+        } catch (Exception ex) {
+            LGR.error("{}.initLabels({}) -  Caught Exception: {}",
+                    this.context().name(),
+                    Functions.stackTraceToString(ex));
         }
     }
 

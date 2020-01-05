@@ -33,13 +33,13 @@ import org.schorn.ella.html.ActiveHtml.HtmlTableElement;
  */
 public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableElement {
 
-    HtmlTableElementImpl() {
+    public HtmlTableElementImpl() {
         super("table");
     }
 
-    static class HtmlCaptionElementImpl extends HtmlElementImpl implements HtmlCaptionElement {
+    static public class HtmlCaptionElementImpl extends HtmlElementImpl implements HtmlCaptionElement {
 
-        HtmlCaptionElementImpl() {
+        public HtmlCaptionElementImpl() {
             super("caption");
         }
     }
@@ -47,9 +47,9 @@ public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableEl
     /*
 	 * 
      */
-    static class HtmlTHeadElementImpl extends HtmlElementImpl implements HtmlTHeadElement {
+    static public class HtmlTHeadElementImpl extends HtmlElementImpl implements HtmlTHeadElement {
 
-        HtmlTHeadElementImpl() {
+        public HtmlTHeadElementImpl() {
             super("thead");
         }
     }
@@ -57,9 +57,9 @@ public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableEl
     /*
 	 * 
      */
-    static class HtmlTFootElementImpl extends HtmlElementImpl implements HtmlTFootElement {
+    static public class HtmlTFootElementImpl extends HtmlElementImpl implements HtmlTFootElement {
 
-        HtmlTFootElementImpl() {
+        public HtmlTFootElementImpl() {
             super("tfoot");
         }
     }
@@ -67,9 +67,9 @@ public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableEl
     /*
      * 
      */
-    static class HtmlTBodyElementImpl extends HtmlElementImpl implements HtmlTBodyElement {
+    static public class HtmlTBodyElementImpl extends HtmlElementImpl implements HtmlTBodyElement {
 
-        HtmlTBodyElementImpl() {
+        public HtmlTBodyElementImpl() {
             super("tbody");
         }
     }
@@ -77,9 +77,9 @@ public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableEl
     /*
      * 
      */
-    static class HtmlTrElementImpl extends HtmlElementImpl implements HtmlTrElement {
+    static public class HtmlTrElementImpl extends HtmlElementImpl implements HtmlTrElement {
 
-        HtmlTrElementImpl() {
+        public HtmlTrElementImpl() {
             super("tr");
         }
     }
@@ -87,7 +87,7 @@ public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableEl
     /*
      * 
      */
-    static class HtmlThElementImpl extends HtmlElementImpl implements HtmlThElement {
+    static public class HtmlThElementImpl extends HtmlElementImpl implements HtmlThElement {
 
         public enum Scope {
             row,
@@ -98,7 +98,7 @@ public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableEl
         }
         int colspan;
 
-        HtmlThElementImpl() {
+        public HtmlThElementImpl() {
             super("th");
             this.colspan = 1;
         }
@@ -116,11 +116,11 @@ public class HtmlTableElementImpl extends HtmlElementImpl implements HtmlTableEl
     /*
      * 
      */
-    static class HtmlTdElementImpl extends HtmlElementImpl implements HtmlTdElement {
+    static public class HtmlTdElementImpl extends HtmlElementImpl implements HtmlTdElement {
 
         int colspan;
 
-        HtmlTdElementImpl() {
+        public HtmlTdElementImpl() {
             super("td");
             this.colspan = 1;
         }

@@ -122,9 +122,9 @@ public class ActiveLang {
                     }
                     try {
                         if (parentType != null && labeledType != null && label != null) {
-                            HtmlProvider.provider().labeler().set(parentType, labeledType, label);
+                            HtmlProvider.provider().labeler(context).set(parentType, labeledType, label);
                         } else if (labeledType != null && label != null) {
-                            HtmlProvider.provider().labeler().set(labeledType, label);
+                            HtmlProvider.provider().labeler(context).set(labeledType, label);
                         }
                     } catch (Exception ex) {
                         LGR.error("{}.loadLabels({}) - Caught Exception: {}",

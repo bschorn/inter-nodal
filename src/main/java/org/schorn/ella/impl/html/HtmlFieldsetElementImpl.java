@@ -41,7 +41,7 @@ public class HtmlFieldsetElementImpl extends HtmlElementImpl implements HtmlFiel
     HtmlDivElement divElement;
     HtmlElement legendElement;
 
-    HtmlFieldsetElementImpl(HtmlTag.InputType inputType) throws Exception {
+    public HtmlFieldsetElementImpl(HtmlTag.InputType inputType) throws Exception {
         super("fieldset");
         this.inputType = inputType;
         this.legendElement = ActiveHtml.HtmlElement.create("legend");

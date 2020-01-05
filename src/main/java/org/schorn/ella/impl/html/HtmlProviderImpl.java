@@ -138,8 +138,8 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     }
 
     @Override
-    public HtmlLabeler labeler() throws Exception {
-        return this.createReusable(HtmlLabeler.class);
+    public HtmlLabeler labeler(AppContext context) throws Exception {
+        return this.createReusable(HtmlLabeler.class, context);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     public HtmlElement html_form(ActiveNode.ObjectType objectType) throws Exception {
         String form_id = objectType.name();
         String form_name = objectType.name();
-        String form_label = HtmlProvider.provider().labeler().get(objectType, null);
+        String form_label = HtmlProvider.provider().labeler(objectType.context()).get(objectType, null);
         if (form_label == null) {
             form_label = objectType.name();
         }
@@ -296,9 +296,9 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         enumListBuilder.setId(String.format("%s-%s", objectType.name(), valueType.name()));
         enumListBuilder.setName(valueType.name());
         //enumListBuilder.setLabel(String.format("%s.%s", objectType.label(), valueType.label()));
-        String label = HtmlProvider.provider().labeler().get(objectType, valueType);
+        String label = HtmlProvider.provider().labeler(objectType.context()).get(objectType, valueType);
         if (label == null) {
-            label = HtmlProvider.provider().labeler().get(valueType);
+            label = HtmlProvider.provider().labeler(objectType.context()).get(valueType);
         }
         if (label == null) {
             enumListBuilder.setLabel(String.format("%s", valueType.label()));

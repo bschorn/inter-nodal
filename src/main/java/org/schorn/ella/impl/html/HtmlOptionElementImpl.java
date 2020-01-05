@@ -40,7 +40,7 @@ public class HtmlOptionElementImpl extends HtmlElementImpl implements HtmlOption
 
     private Boolean selected = false;
 
-    HtmlOptionElementImpl() {
+    public HtmlOptionElementImpl() {
         super("option");
     }
 

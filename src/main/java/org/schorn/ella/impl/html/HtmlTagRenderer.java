@@ -57,7 +57,7 @@ public class HtmlTagRenderer {
      * @return
      * @throws Exception
      */
-    static HtmlElement form(HtmlTag.FormTag formTag, List<HtmlTag.InputTag> inputs, String instanceUUID) throws Exception {
+    static public HtmlElement form(HtmlTag.FormTag formTag, List<HtmlTag.InputTag> inputs, String instanceUUID) throws Exception {
         FormId formId = FormId.create(formTag.id(), instanceUUID);
 
         HtmlDivElement divElement = ActiveHtml.HtmlDivElement.create();
@@ -89,7 +89,7 @@ public class HtmlTagRenderer {
      * @return
      * @throws Exception
      */
-    static HtmlElement select(HtmlTag.InputTag inputTag, String parentId, String instanceID, String value) throws Exception {
+    static public HtmlElement select(HtmlTag.InputTag inputTag, String parentId, String instanceID, String value) throws Exception {
         InputId inputId = InputId.create(parentId, inputTag.id(), instanceID);
 
         HtmlElement divElement = ActiveHtml.HtmlDivElement.create();
@@ -134,7 +134,7 @@ public class HtmlTagRenderer {
      * @return
      * @throws Exception
      */
-    static HtmlElement input(HtmlTag.InputTag inputTag, String parentId, String instanceID, String value) throws Exception {
+    static public HtmlElement input(HtmlTag.InputTag inputTag, String parentId, String instanceID, String value) throws Exception {
         if (inputTag.type().equals(HtmlTag.InputType.LIST)) {
             return select(inputTag, parentId, instanceID, value);
         }
@@ -168,7 +168,7 @@ public class HtmlTagRenderer {
      * Utility FormId
      *
      */
-    static class FormId {
+    static public class FormId {
 
         String id;
         String instanceUUID;
@@ -181,12 +181,12 @@ public class HtmlTagRenderer {
             return new FormId(inputId);
         }
 
-        FormId(String id, String instanceUUID) {
+        public FormId(String id, String instanceUUID) {
             this.id = id;
             this.instanceUUID = instanceUUID;
         }
 
-        FormId(String inputId) {
+        public FormId(String inputId) {
             String[] token = inputId.split("_");
             if (token.length == 2) {
                 this.id = token[0];
@@ -204,7 +204,7 @@ public class HtmlTagRenderer {
      * Utility InputId
      *
      */
-    static class InputId {
+    static public class InputId {
 
         String parentId;
         String id;
@@ -218,13 +218,13 @@ public class HtmlTagRenderer {
             return new InputId(inputId);
         }
 
-        InputId(String parentId, String id, String instanceUUID) {
+        public InputId(String parentId, String id, String instanceUUID) {
             this.parentId = parentId;
             this.id = id;
             this.instanceUUID = instanceUUID;
         }
 
-        InputId(String inputId) {
+        public InputId(String inputId) {
             String[] token = inputId.split("_");
             if (token.length == 3) {
                 this.parentId = token[0];

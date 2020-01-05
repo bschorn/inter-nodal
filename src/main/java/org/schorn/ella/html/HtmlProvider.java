@@ -54,7 +54,7 @@ public interface HtmlProvider extends Provider {
      *
      * @return
      */
-    public HtmlLabeler labeler() throws Exception;
+    public HtmlLabeler labeler(AppContext context) throws Exception;
 
     /**
      *

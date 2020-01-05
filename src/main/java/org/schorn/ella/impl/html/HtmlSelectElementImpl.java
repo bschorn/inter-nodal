@@ -94,11 +94,11 @@ public class HtmlSelectElementImpl extends HtmlElementImpl implements HtmlSelect
 
     List<HtmlOptionElement> options = new ArrayList<>();
 
-    HtmlSelectElementImpl() {
+    public HtmlSelectElementImpl() {
         super("select");
     }
 
-    HtmlSelectElementImpl(HtmlTag html) throws Exception {
+    public HtmlSelectElementImpl(HtmlTag html) throws Exception {
         super(html);
     }
 

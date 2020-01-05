@@ -33,7 +33,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlFormElement;
  */
 public class HtmlFormElementImpl extends HtmlElementImpl implements HtmlFormElement {
 
-    HtmlFormElementImpl() {
+    public HtmlFormElementImpl() {
         super("form");
     }
 

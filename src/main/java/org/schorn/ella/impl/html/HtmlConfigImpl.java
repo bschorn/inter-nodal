@@ -25,7 +25,7 @@ package org.schorn.ella.impl.html;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.format.DateTimeFormatter;
+import java.nio.file.Paths;
 import java.util.Map;
 import org.schorn.ella.Component;
 import org.schorn.ella.app.ActiveApp;
@@ -55,20 +55,22 @@ public class HtmlConfigImpl extends AbstractContextual implements ActiveHtml.Con
     private String htmlTableTColClass = "node-table-tcol";
     private String htmlTableSmallCaptionClass = "active-table-caption-small";
 
-    HtmlConfigImpl(AppContext context) throws URISyntaxException, ClassNotFoundException {
+    public HtmlConfigImpl(AppContext context) throws URISyntaxException, ClassNotFoundException {
         super(context);
-        Map<String, Object> map = Component.ActiveHtml.configMap();
+        Map<String, Object> map = Component.ActiveHtml.configMap(context.name());
         String labelsFile = null;
         URI labelsURI = null;
         if (map.containsKey("labels")) {
             labelsFile = (String) map.get("labels");
-            labelsFile = labelsFile.replace("{Date}",
-                    ActiveApp.Config.get().date().format(DateTimeFormatter.BASIC_ISO_DATE));
+            labelsFile = labelsFile.replace("{RootPath}",
+                    ActiveApp.Config.get().rootPath());
+            labelsFile = labelsFile.replace("{Language}",
+                    ActiveApp.Config.get().language());
             labelsFile = labelsFile.replace("{Context}",
                     context.name());
             labelsURI = URI.create(labelsFile);
         }
-        this.labelsFile = labelsFile;
+        this.labelsFile = Paths.get(labelsURI).toString();
         this.labelsURI = labelsURI;
     }
 

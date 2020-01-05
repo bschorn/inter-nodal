@@ -48,7 +48,7 @@ public class HtmlTagCreator {
      * @param objectType
      * @return
      */
-    static HtmlTag.FormTag createFormTag(ObjectType objectType) {
+    static public HtmlTag.FormTag createFormTag(ObjectType objectType) {
         HtmlTag.FormTag.Builder builder = HtmlTag.FormTag.builder();
         builder.add(HtmlTag.FormAttribute.ID, objectType.name());
         builder.add(HtmlTag.FormAttribute.NAME, objectType.name());
@@ -64,7 +64,7 @@ public class HtmlTagCreator {
      * @param valueType
      * @return
      */
-    static HtmlTag.InputTag createInputTag(ObjectType objectType, ValueType valueType) {
+    static public HtmlTag.InputTag createInputTag(ObjectType objectType, ValueType valueType) {
         HtmlTag.InputTag.Builder builder = builder(objectType, valueType);
         //builder.label(HtmlProvider.provider().labeler().get(objectType, valueType));
         // builder.label(objectType.name());

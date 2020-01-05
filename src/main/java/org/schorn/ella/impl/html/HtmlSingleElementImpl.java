@@ -32,11 +32,11 @@ import org.schorn.ella.html.ActiveHtml.HtmlSingleElement;
  */
 public class HtmlSingleElementImpl extends HtmlElementImpl implements HtmlSingleElement {
 
-    HtmlSingleElementImpl(String tag) {
+    public HtmlSingleElementImpl(String tag) {
         super(tag);
     }
 
-    HtmlSingleElementImpl(HtmlTag html) throws Exception {
+    public HtmlSingleElementImpl(HtmlTag html) throws Exception {
         super(html);
     }
 

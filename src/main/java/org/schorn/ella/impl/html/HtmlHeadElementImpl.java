@@ -30,7 +30,7 @@ import org.schorn.ella.html.ActiveHtml.HtmlHeadElement;
  * @author bschorn
  */
 public class HtmlHeadElementImpl extends HtmlElementImpl implements HtmlHeadElement {
-    HtmlHeadElementImpl() {
+    public HtmlHeadElementImpl() {
         super("head");
     }
 }

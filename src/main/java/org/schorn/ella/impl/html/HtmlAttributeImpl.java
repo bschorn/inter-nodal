@@ -42,7 +42,7 @@ public class HtmlAttributeImpl implements HtmlAttribute {
     protected Object value;
     String rendered = null;
 
-    HtmlAttributeImpl(String name, Object value) {
+    public HtmlAttributeImpl(String name, Object value) {
         this.name = name;
         this.value = value;
         this.setValue0(this.value);
