@@ -58,20 +58,24 @@ public class HtmlConfigImpl extends AbstractContextual implements ActiveHtml.Con
     public HtmlConfigImpl(AppContext context) throws URISyntaxException, ClassNotFoundException {
         super(context);
         Map<String, Object> map = Component.ActiveHtml.configMap(context.name());
-        String labelsFile = null;
-        URI labelsURI = null;
+        String labelsFile0 = null;
+        URI labelsURI0 = null;
         if (map.containsKey("labels")) {
-            labelsFile = (String) map.get("labels");
-            labelsFile = labelsFile.replace("{RootPath}",
+            labelsFile0 = (String) map.get("labels");
+            labelsFile0 = labelsFile0.replace("{RootPath}",
                     ActiveApp.Config.get().rootPath());
-            labelsFile = labelsFile.replace("{Language}",
+            labelsFile0 = labelsFile0.replace("{Language}",
                     ActiveApp.Config.get().language());
-            labelsFile = labelsFile.replace("{Context}",
+            labelsFile0 = labelsFile0.replace("{Context}",
                     context.name());
-            labelsURI = URI.create(labelsFile);
+            labelsURI0 = URI.create(labelsFile0);
         }
-        this.labelsFile = Paths.get(labelsURI).toString();
-        this.labelsURI = labelsURI;
+        if (labelsURI0 != null) {
+            this.labelsFile = Paths.get(labelsURI0).toString();
+        } else {
+            this.labelsFile = null;
+        }
+        this.labelsURI = labelsURI0;
     }
 
     @Override

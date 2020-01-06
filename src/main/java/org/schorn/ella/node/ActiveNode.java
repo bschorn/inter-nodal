@@ -50,7 +50,6 @@ import org.schorn.ella.extension.ActiveDataExt;
 import org.schorn.ella.extension.ActiveFamily;
 import org.schorn.ella.extension.ActiveFind;
 import org.schorn.ella.extension.ActiveJson;
-import org.schorn.ella.extension.ActiveLabel;
 import org.schorn.ella.extension.ActiveLink;
 import org.schorn.ella.extension.ActiveMatch;
 import org.schorn.ella.extension.ActiveMeta;
@@ -248,7 +247,7 @@ public interface ActiveNode {
      *
      * Base class for ValueType, ObjectType, ArrayType
      */
-    interface ActiveType extends ActiveNode, Contextual, ActiveRole, Bytes, ActiveId, ActiveLabel,
+    interface ActiveType extends ActiveNode, Contextual, ActiveRole, Bytes, ActiveId,
             Comparable<ActiveType>, Transient, ActiveMeta {
 
         static ActiveType get(AppContext context, String active_type) {

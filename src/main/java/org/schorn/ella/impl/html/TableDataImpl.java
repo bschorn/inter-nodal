@@ -38,7 +38,7 @@ public class TableDataImpl implements TableData {
     private final ArrayData resultData;
     private final String caption;
 
-    public TableDataImpl() {
+    public TableDataImpl(AppContext context) {
         this.resultData = null;
         this.caption = null;
     }

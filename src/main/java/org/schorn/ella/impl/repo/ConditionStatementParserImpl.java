@@ -46,6 +46,11 @@ public class ConditionStatementParserImpl extends AbstractContextual implements 
      */
     private final ActiveOperator[] activeOperators;
 
+    public ConditionStatementParserImpl(AppContext context) {
+        super(context);
+        this.activeOperators = new ActiveOperator[0];
+    }
+
     public ConditionStatementParserImpl(AppContext context, ActiveOperator... activeOperators) {
         super(context);
         this.activeOperators = activeOperators;

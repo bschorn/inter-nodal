@@ -54,7 +54,9 @@ public class HtmlLabelerImpl extends AbstractContextual implements HtmlLabeler, 
     public HtmlLabelerImpl(AppContext context) throws Exception {
         super(context);
         URI labelsURI = ActiveHtml.Config.get(context).htmlLabels();
-        ResourceReader.readLines(labelsURI.toURL(), this);
+        if (labelsURI != null) {
+            ResourceReader.readLines(labelsURI.toURL(), this);
+        }
     }
 
     @Override
@@ -78,7 +80,7 @@ public class HtmlLabelerImpl extends AbstractContextual implements HtmlLabeler, 
     @Override
     public String get(ActiveType parentType,
             ActiveType labelType) {
-        String label = null;
+        String label;
         if (parentType == null && labelType == null) {
             return null;
         } else if (parentType == null && labelType != null) {

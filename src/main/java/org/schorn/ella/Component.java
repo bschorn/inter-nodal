@@ -107,8 +107,10 @@ public enum Component implements ClassLocator {
                     }
                 }
             }
+        } else {
+            return componentMap;
         }
-        return componentMap;
+        return new HashMap<>();
     }
 
     @Override

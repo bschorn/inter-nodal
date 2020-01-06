@@ -633,7 +633,7 @@ public interface ActiveHtml {
     /**
      *
      */
-    interface HtmlLabeler extends Contextual {
+    interface HtmlLabeler extends Contextual, Mingleton {
 
         static public HtmlLabeler get(AppContext context) throws Exception {
             return HtmlProvider.provider().getReusable(HtmlLabeler.class, context);

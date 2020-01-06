@@ -171,10 +171,21 @@ public abstract class AbstractProvider implements Provider {
             }
             if (constructor != null) {
                 try {
-                    LGR.info("{}.createInstance() - {} -> {}",
+                    StringJoiner paramJoiner = new StringJoiner(",", "[", "]");
+                    for (int x = 0; x < params.length; x++) {
+                        if (params[x] != null) {
+                            paramJoiner.add(String.format("(%s) %s",
+                                    params[x].getClass().getSimpleName(),
+                                    params[x].toString()));
+                        } else {
+                            paramJoiner.add("(?) null");
+                        }
+                    }
+                    LGR.info("{}.createInstance() - {} -> {} : {}",
                             this.getClass().getSimpleName(),
                             classFor.getSimpleName(),
-                            constructor.getName());
+                            constructor.getName(),
+                            paramJoiner.toString());
                     if (ctr.getParameterCount() == 0) {
                         newInstance = (T) constructor.newInstance();
                     } else {

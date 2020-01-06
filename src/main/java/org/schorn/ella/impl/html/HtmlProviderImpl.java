@@ -74,8 +74,6 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     final Map<ActiveNode.ObjectType, HtmlTag.FormTag> forms = new HashMap<>();
     final Map<ActiveNode.ObjectType, List<HtmlTag.InputTag>> formTags = new HashMap<>();
 
-    private HtmlLabeler labeler;
-
     @Override
     public void init() throws Exception {
         this.mapInterfaceToImpl(ActiveHtml.Config.class, HtmlConfigImpl.class);
@@ -116,6 +114,15 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     }
 
     @Override
+    protected boolean registerPreCreateCheck(AppContext context, Class<?> interfaceOf) {
+        if (interfaceOf.equals(ActiveHtml.HtmlLabeler.class)) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+    @Override
     public void registerContext(AppContext context) throws Exception {
         if (context.equals(AppContext.Common)) {
             for (Class<?> classFor : this.mingletons()) {
@@ -136,9 +143,10 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
             }
         }
     }
+     */
 
     @Override
-    public HtmlLabeler labeler(AppContext context) throws Exception {
+    public HtmlLabeler html_labeler(AppContext context) throws Exception {
         return this.createReusable(HtmlLabeler.class, context);
     }
 
@@ -153,7 +161,7 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
     public HtmlElement html_form(ActiveNode.ObjectType objectType) throws Exception {
         String form_id = objectType.name();
         String form_name = objectType.name();
-        String form_label = HtmlProvider.provider().labeler(objectType.context()).get(objectType, null);
+        String form_label = html_labeler(objectType.context()).get(objectType, null);
         if (form_label == null) {
             form_label = objectType.name();
         }
@@ -295,13 +303,12 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
         SelectBuilder enumListBuilder = EnumListBuilderImpl.enum_builder(valueType);
         enumListBuilder.setId(String.format("%s-%s", objectType.name(), valueType.name()));
         enumListBuilder.setName(valueType.name());
-        //enumListBuilder.setLabel(String.format("%s.%s", objectType.label(), valueType.label()));
-        String label = HtmlProvider.provider().labeler(objectType.context()).get(objectType, valueType);
+        String label = html_labeler(objectType.context()).get(objectType, valueType);
         if (label == null) {
-            label = HtmlProvider.provider().labeler(objectType.context()).get(valueType);
+            label = html_labeler(objectType.context()).get(valueType);
         }
         if (label == null) {
-            enumListBuilder.setLabel(String.format("%s", valueType.label()));
+            enumListBuilder.setLabel(String.format("%s", valueType.name()));
         } else {
             enumListBuilder.setLabel(label);
         }
@@ -329,8 +336,8 @@ public class HtmlProviderImpl extends AbstractProvider implements HtmlProvider {
          */
         String input_id = String.format("%s-%s", objectType.name(), valueType.name());
         String input_name = valueType.name();
-        //String input_label = String.format("%s.%s", objectType.label(), valueType.label());
-        String input_label = String.format("%s", valueType.label());
+        String label_name = html_labeler(objectType.context()).get(objectType, valueType);
+        String input_label = String.format("%s", label_name);
 
         HtmlElement divElement = ActiveHtml.HtmlDivElement.create();
         divElement.addClass(objectType.name());
