@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2019 Bryan Schorn.
+ * Copyright 2020 bschorn.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,31 @@
  */
 package org.schorn.ella.services;
 
-import org.schorn.ella.Provider;
-
 /**
  *
- * @author schorn
- *
+ * @author bschorn
  */
-public interface ServicesProvider extends Provider {
+public interface ContentTypeOutput {
 
+    String getHTMLPre(String content);
+
+    String getHTMLForm(String context_str, String object_type);
+
+    String getHTMLSelect(Object object, String composite_type, String value_type);
+
+    String getHTMLTable(String context_str, Object object);
+
+    String getHTMLTables(String context_str, Object object);
+
+    String getHTMLFormInPage(String context_str, String object_type);
+
+    String getHTMLAppInPage(String context_str, String object_type);
     /**
-     * Implementation for this interface is retrieved
+     *
+     * @param object
      * @return
      */
-    static ServicesProvider provider() {
-        return Provider.Providers.SERVICES.getInstance(ServicesProvider.class);
-    }
+    String getJSONString(Object object);
 
+    String getHTMLInputDiv(String context_str, String composite_type, String value_type, Object value);
 }

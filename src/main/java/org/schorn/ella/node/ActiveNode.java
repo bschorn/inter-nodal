@@ -517,6 +517,7 @@ public interface ActiveNode {
      */
     interface ValueTypeMember extends MemberType<ValueType> {
 
+        @Override
         ValueType memberType();
 
         String asValueTypeMemberStr();

@@ -185,8 +185,10 @@ public interface NodeProvider extends Provider {
      * @param object_type
      * @return
      */
+    @Deprecated
     ObjectType getObjectType(AppContext context, String object_type);
 
+    @Deprecated
     ValueType getValueType(AppContext context, String value_type);
 
     ValueTypeMember createValueMemberType(ObjectType objectType, MemberDef memberDef) throws Exception;

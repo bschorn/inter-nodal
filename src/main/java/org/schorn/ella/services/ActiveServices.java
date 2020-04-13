@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.schorn.ella.Mingleton;
 import org.schorn.ella.context.AppContext;
+import org.schorn.ella.node.ActiveNode;
+import org.schorn.ella.repo.RepoSupport;
 import org.schorn.ella.server.ActiveServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,31 +197,44 @@ public interface ActiveServices extends Mingleton {
     }
 
     /**
+     * Creates Named Query using real types (previously created).
      *
+     * @param context
+     * @param name
+     * @param description
+     * @param selectValueTypes
+     * @param fromType
+     * @param toType
+     * @param queryFlags
+     * @param orderBy
+     * @param options
+     * @param filters
+     * @return
+     * @throws Exception
      */
-    public interface ContentTypeOutput {
+    public NamedQuery createNamedQuery(AppContext context, String name, String description, ActiveNode.ValueTypeMember[] selectValueTypes,
+            ActiveNode.ObjectType[] fromType, ActiveNode.ObjectType[] toType, RepoSupport.ActiveQuery.QueryFlag[] queryFlags, ActiveNode.ValueType[] orderBy, String[] options,
+            String[] filters) throws Exception;
 
-        String getHTMLPre(String content);
-
-        String getHTMLForm(String context_str, String object_type);
-
-        String getHTMLSelect(Object object, String composite_type, String value_type);
-
-        String getHTMLTable(String context_str, Object object);
-
-        String getHTMLTables(String context_str, Object object);
-
-        String getHTMLFormInPage(String context_str, String object_type);
-
-
-        /**
-         *
-         * @param object
-         * @return
-         */
-        String getJSONString(Object object);
-
-        String getHTMLInputDiv(String context_str, String composite_type, String value_type, Object value);
-    }
+    /**
+     * Creates Named Query using string descriptions of types. They will have to
+     * be converted to real types.
+     *
+     * @param context_str
+     * @param name
+     * @param description
+     * @param select_types
+     * @param from_types
+     * @param to_types
+     * @param query_flags
+     * @param order_by_value_types
+     * @param options
+     * @param filters
+     * @return
+     * @throws Exception
+     */
+    public NamedQuery createNamedQuery(String context_str, String name, String description, String[] select_types,
+            String[] from_types, String[] to_types, String[] query_flags, String[] order_by_value_types, String[] options,
+            String[] filters) throws Exception;
 
 }

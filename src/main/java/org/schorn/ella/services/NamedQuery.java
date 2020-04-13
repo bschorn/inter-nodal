@@ -24,7 +24,6 @@
 package org.schorn.ella.services;
 
 import java.util.List;
-
 import org.schorn.ella.FunctionalException;
 import org.schorn.ella.context.AppContext;
 import org.schorn.ella.node.ActiveNode.ObjectType;
@@ -87,7 +86,7 @@ public interface NamedQuery extends FunctionalException {
             String[] order_by_value_type,
             String[] options,
             String[] filters) throws Exception {
-        return ServicesProvider.provider().createNamedQuery(context_str, query_name, description, select_type, from_type, to_type, query_flags, order_by_value_type, options, filters);
+        return ActiveServices.provider().createNamedQuery(context_str, query_name, description, select_type, from_type, to_type, query_flags, order_by_value_type, options, filters);
     }
 
     /**
@@ -117,7 +116,7 @@ public interface NamedQuery extends FunctionalException {
             ValueType[] orderBy,
             String[] options,
             String[] filters) throws Exception {
-        return ServicesProvider.provider().createNamedQuery(context, name, description, selectValueTypeMembers, fromType, toType, queryFlags, orderBy, options, filters);
+        return ActiveServices.provider().createNamedQuery(context, name, description, selectValueTypeMembers, fromType, toType, queryFlags, orderBy, options, filters);
     }
 
 }
